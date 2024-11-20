@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [ControllerLogowanie::class, 'formularz']);
+Route::get('/test', [ControllerLogowanie::class, 'testowy']);
