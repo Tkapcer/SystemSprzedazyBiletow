@@ -13,6 +13,10 @@ class ControllerLogowanie extends Controller
     {
         return view('Logowanie');
     }
+    public function testowy()
+    {
+        return view('testowy');
+    }
 
     public function login(Request $request)
     {
