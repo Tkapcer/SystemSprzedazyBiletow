@@ -14,3 +14,7 @@ Route::get('/test', [ControllerLogowanie::class, 'testowy']);
 Route::get('/rejestracja', [ControllerRejestracja::class, 'stronaRejestracji']);
 Route::post('/rejestracja', [ControllerRejestracja::class, 'rejestracja']);
 //Route::get('/rejestracja', function (){return "cos";});
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
