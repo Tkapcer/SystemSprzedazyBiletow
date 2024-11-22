@@ -8,7 +8,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/login', [ControllerLogowanie::class, 'formularz']);
+Route::get('/logowanie', [ControllerLogowanie::class, 'formularz']);
 Route::get('/test', [ControllerLogowanie::class, 'testowy']);
 
 Route::get('/rejestracja', [ControllerRejestracja::class, 'stronaRejestracji']);
