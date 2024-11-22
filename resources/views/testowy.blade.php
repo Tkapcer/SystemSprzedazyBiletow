@@ -63,16 +63,37 @@
         aby używać external CSS, w <head> należy dołączyć: <link rel="stylesheet" href="styles.css">
         <style> określone CSS </style> - do pisania style internal (w pliku HTML)
         <sccript> Javascript </script> - do pisania kodu Javascriptu bezpośrednio w pliku HTML
+        <nonscript> Tekst alternatywny. </nonscript> - wyświetla tekst alternatywny w przypadku braku możliwości wykonania skryptów
         href może wskazywać na id (daje to możliwość np przeskakiwania do danego rodziału)
+-->
+<!--
+    Scieżki do plików:
+        "pliczek.txt" - plik znajduje się w tym samym folderze co dana strona
+        "ello/pliczek.txt" - plik znajduje się w folderze ello, który jest w folderze co dana strona
+        "../pliczek.txt" - plik znajduje się jeden folder wyżej niż ten gdzie jest dana strona
+        "/pliczek.txt" - znajduje się w root strony, czy jakoś tak
 -->
 <!-- Początek kodu. -->
 <html lang="pl">
 <!-- Nagłówek strony. -->
     <head>
-        <!-- Nazwa strony wyświetlana jako nazwa karty. -->
+        <!-- Nazwa strony wyświetlana jako nazwa karty. Tylko tekst. Musi występować w plikach HTML. -->
         <title>Strona testowa</title>
-        <!-- "favicon" - To małe logo przy nazwie stronki w karcie. -->
+        <!-- "favicon" - To małe logo przy nazwie stronki w karcie.
+                link może także służyć do podłączania plików CSS do HTML, np:
+                <link rel="stylesheet" href="mystyle.css">
+        -->
         <link rel="icon" type="image/x-icon" href="https://img.freepik.com/darmowe-wektory/abstrakcyjna-niebieski-okrag-na-przejrzystym-tle_1035-9079.jpg?t=st=1732141824~exp=1732145424~hmac=a9a6d1db6c17521d595025e94238de7d9c5577e117831fb58043625635fc1754&w=740">
+        <!--
+        W magłówku można umieścić także znacznik <meta>, ma takie atrybuty jak:
+            charset - wyznacza kodowanie znaków, np: UTF-8
+            name - dekalruje jakiś element + content - definiuje go, np:
+                name="description" content="Nasza stronka"
+                name="author" content="Imię Nazwisko"
+            http-equiv="refresh" content="wartość" - wyznacza odświeżanie strony na co ileś sekund
+            name="viewport" content="width=device-width, initial-scale=1.0" - sprawia, że strona wygląda dobrze na wszystkich urządzeniach
+        -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <!-- Ciało stronki. -->
