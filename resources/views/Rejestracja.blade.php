@@ -39,7 +39,7 @@
         <div style="display:grid; grid-template-columns: auto auto; justify-content: space-evenly;">
             <div>
                 <form action="{{ url('/rejestracja') }}" method="post">
-                    @csrf
+                    <!-- @csrf   <- po co to? -->
                     <fieldset>
                         <legend>Dane osobowe:</legend>
                         <label for="imie">Imię i nazwisko:</label>
@@ -70,7 +70,7 @@
 
             <div>
                 <form action="{{ url('/rejestracja') }}" method="post">
-                    @csrf
+                    <!-- @csrf   <- po co to? -->
                     <fieldset>
                         <legend>Dane firmy:</legend>
                         <label for="nazwa">Nazwa firmy:</label>
