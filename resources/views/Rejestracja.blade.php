@@ -4,6 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Rejestracja</title>
     </head>
 
     <body>
@@ -38,7 +39,7 @@
         -->
         <div style="display:grid; grid-template-columns: auto auto; justify-content: space-evenly;">
             <div>
-                <form action="{{ url('/rejestracja') }}" method="post">
+                <form action="{{ url('/login') }}" method="post">
                     <!-- @csrf   <- po co to? -->
                     <fieldset>
                         <legend>Dane osobowe:</legend>
@@ -69,7 +70,7 @@
             </div>
 
             <div>
-                <form action="{{ url('/rejestracja') }}" method="post">
+                <form action="{{ url('/login') }}" method="post">
                     <!-- @csrf   <- po co to? -->
                     <fieldset>
                         <legend>Dane firmy:</legend>
@@ -94,7 +95,7 @@
                         <br>
                         <br>
 
-                        <button type="submit">Zarejestruj się</button>
+                        <button type="submit">Wyślij prośbę o utworzenie konta</button>
                     </fieldset>
                 </form>
             </div>
