@@ -22,3 +22,6 @@ yarn-error.log
 /.zed
 /.vs
 /database/database.sqlite
+/database/database.sqlite
+/laravel
+/database/database.sqlite
