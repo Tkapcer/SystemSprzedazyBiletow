@@ -1,4 +1,4 @@
-<?php
+<?php /** Do wyrzucenia potem. */
 
 namespace App\Http\Controllers\Auth;
 
