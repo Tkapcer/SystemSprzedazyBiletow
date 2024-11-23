@@ -1,0 +1,99 @@
+@startuml
+' Definicja klas
+
+class User {
+    + id: int
+    + name: string
+    + email: string
+    + password: string
+    + role: enum {admin, organizer, client}
+    + balance: float
+}
+
+' Kontrolery uwierzytelniania tego chyba by można nie dawać
+class LoginController {
+    + showLoginForm(): void
+    + login(Request): void
+    + logout(Request): void
+}
+
+class RegisterController {
+    + showRegistrationForm(): void
+    + register(Request): void
+}
+
+class ForgotPasswordController {
+    + showLinkRequestForm(): void
+    + sendResetLinkEmail(Request): void
+}
+
+class ResetPasswordController {
+    + showResetForm(Request): void
+    + reset(Request): void
+}
+
+' Middleware
+class AuthMiddleware {
+    + handle(Request, Closure): Response
+}
+
+class GuestMiddleware {
+    + handle(Request, Closure): Response
+}
+
+' Relacje
+User "1" --o "1" LoginController
+User "1" --o "1" RegisterController
+
+' Do tąd, reszta z głównego systemu
+
+class Admin {
+    + id: int
+    + name: string
+    + email: string
+    + password: string
+}
+
+class Event {
+    + id: int
+    + name: string
+    + description: text
+    + location: string
+    + date: datetime
+    + organizer_id: int
+}
+
+class Sector {
+    + id: int
+    + name: string
+    + capacity: int
+    + price: float
+    + event_id: int
+}
+
+class Ticket {
+    + id: int
+    + code: string
+    + status: enum {reserved, purchased}
+    + user_id: int
+    + sector_id: int
+}
+
+class Reservation {
+    + id: int
+    + user_id: int
+    + event_id: int
+    + expiration: datetime
+}
+
+' Relacje między klasami
+User "1" --o "0..*" Ticket : posiada
+User "1" --o "0..*" Reservation : tworzy
+User "1" --o "0..*" Event : organizuje {dla organizatorów}
+Event "1" --o "1..*" Sector : posiada
+Sector "1" --o "0..*" Ticket : sprzedaje
+Reservation "1" --o "1" User : należy do
+Reservation "1" --o "1" Event : dotyczy
+Admin "1" --o "0..*" User : zarządza
+
+@enduml
