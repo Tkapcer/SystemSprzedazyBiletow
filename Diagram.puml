@@ -96,4 +96,49 @@ Reservation "1" --o "1" User : należy do
 Reservation "1" --o "1" Event : dotyczy
 Admin "1" --o "0..*" User : zarządza
 
+' Kontrolery
+class LoginController {
+    + showLoginForm(): void
+    + login(Request): void
+    + logout(Request): void
+}
+
+class RegisterController {
+    + showRegistrationForm(): void
+    + register(Request): void
+}
+
+class EventController {
+    + index(): void
+    + show(eventId: int): void
+    + store(Request): void
+    + update(eventId: int, Request): void
+    + destroy(eventId: int): void
+}
+
+class SectorController {
+    + index(): void
+    + store(Request): void
+    + destroy(sectorId: int): void
+}
+
+class TicketController {
+    + reserve(sectorId: int): void
+    + purchase(sectorId: int): void
+}
+
+class ReservationController {
+    + index(): void
+    + cancel(reservationId: int): void
+}
+
+' Relacje między kontrolerami a modelami
+LoginController --> User
+RegisterController --> User
+EventController --> Event
+SectorController --> Sector
+TicketController --> Ticket
+ReservationController --> Reservation
+
+
 @enduml
