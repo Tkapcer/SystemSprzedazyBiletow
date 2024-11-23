@@ -22,11 +22,6 @@ yarn-error.log
 /.zed
 /.vs
 /database/database.sqlite
-<<<<<<< HEAD
-=======
 /database/database.sqlite
 /laravel
-/database/database.sqlite
-/database/database.sqlite
->>>>>>> gitignore
 /database/database.sqlite
