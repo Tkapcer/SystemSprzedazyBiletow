@@ -22,24 +22,24 @@ class RegisterController {
     + register(Request): void
 }
 
-class ForgotPasswordController {
-    + showLinkRequestForm(): void
-    + sendResetLinkEmail(Request): void
-}
+'class ForgotPasswordController {
+'    + showLinkRequestForm(): void
+'    + sendResetLinkEmail(Request): void
+'}
 
-class ResetPasswordController {
-    + showResetForm(Request): void
-    + reset(Request): void
-}
-
-' Middleware
-class AuthMiddleware {
-    + handle(Request, Closure): Response
-}
-
-class GuestMiddleware {
-    + handle(Request, Closure): Response
-}
+'class ResetPasswordController {
+'    + showResetForm(Request): void
+'    + reset(Request): void
+'}
+'
+'' Middleware
+'class AuthMiddleware {
+'    + handle(Request, Closure): Response
+'}
+'
+'class GuestMiddleware {
+'    + handle(Request, Closure): Response
+'}
 
 ' Relacje
 User "1" --o "1" LoginController
@@ -47,12 +47,12 @@ User "1" --o "1" RegisterController
 
 ' Do tąd, reszta z głównego systemu
 
-class Admin {
-    + id: int
-    + name: string
-    + email: string
-    + password: string
-}
+'class Admin {
+'    + id: int
+'    + name: string
+'    + email: string
+'    + password: string
+'}
 
 class Event {
     + id: int
@@ -94,7 +94,8 @@ Event "1" --o "1..*" Sector : posiada
 Sector "1" --o "0..*" Ticket : sprzedaje
 Reservation "1" --o "1" User : należy do
 Reservation "1" --o "1" Event : dotyczy
-Admin "1" --o "0..*" User : zarządza
+'Admin "1" --o "0..*" User : zarządza
+'Admin "1" --o "1..*" Event : nadzoruje
 
 ' Kontrolery
 class LoginController {
