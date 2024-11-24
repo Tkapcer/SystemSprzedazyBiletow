@@ -10,6 +10,11 @@ class User {
     + balance: float
 }
 
+class UserController {
+    + showUserPanel(): void
+    + logout(): void
+}
+
 ' Kontrolery uwierzytelniania tego chyba by można nie dawać
 class LoginController {
     + showLoginForm(): void
@@ -131,9 +136,11 @@ class TicketController {
 class ReservationController {
     + index(): void
     + cancel(reservationId: int): void
+    + paid(reservationId: int): void
 }
 
 ' Relacje między kontrolerami a modelami
+UserController --> User
 LoginController --> User
 RegisterController --> User
 EventController --> Event
@@ -141,5 +148,38 @@ SectorController --> Sector
 TicketController --> Ticket
 ReservationController --> Reservation
 
+class User #Lightblue
+class Event #Lightblue
+class Sector #Lightblue
+class Ticket #Lightblue
+class Reservation #Lightblue
+
+note left of UserController
+ Home.blade.php
+end note
+
+note top of LoginController
+ login.blade.php
+end note
+
+note bottom of RegisterController
+ register.blade.php
+end note
+
+'note bottom of SectorController
+' sector.blade.php
+'end note
+
+note top of EventController
+ event.blade.php
+end note
+
+note right of ReservationController
+ reservation.blade.php
+end note
+
+note right of TicketController
+ ticket.blade.php
+end note
 
 @enduml
