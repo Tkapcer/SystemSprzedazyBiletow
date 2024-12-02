@@ -1,0 +1,37 @@
+@startuml
+actor Użytkownik
+boundary RegisterForm   /'Zewnętrzny interfejs systemu'/
+control RegisterController  /'Element kontrolujący przepływ danych i logikę biznesową'/
+entity RegisterRequest  /'Jednostka danych'/
+entity User
+database Database
+
+Użytkownik -> RegisterForm: Wypełnienie i wysłanie formularza
+activate RegisterForm
+RegisterForm -> RegisterController: POST /register
+deactivate RegisterForm
+activate RegisterController
+RegisterController -> RegisterRequest: Walidacja danych
+
+alt Poprawne dane przekazane przez użytkownika
+    activate RegisterRequest
+    RegisterRequest -> RegisterController: Dane po walidacji
+    RegisterController -> User: Stworzenie nowego
+    activate User
+    User -> Database: INSERT INTO users
+    activate Database
+    Database --> User: Potwierdzenie
+    deactivate Database
+    User --> RegisterController: Nowa instancja klasy Użytkownik
+    deactivate User
+    RegisterController -> Użytkownik: Przeniesienie na stronę główną jako zalogowanego użytkownika
+else Niepoprawne dane przekazane przez użytkownika
+    RegisterRequest -> RegisterController: Komunikaty o błędach walidacji
+    deactivate RegisterRequest
+    RegisterController -> RegisterForm: Komunikaty o błędach walidacji
+    deactivate RegisterController
+    activate RegisterForm
+    RegisterForm -> Użytkownik: Wyświetlenie komunikatów o błędach
+    deactivate RegisterForm
+end
+@enduml
