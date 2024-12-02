@@ -15,8 +15,8 @@ RegisterController -> RegisterRequest: Walidacja danych
 
 alt Poprawne dane przekazane przez użytkownika
     activate RegisterRequest
-    RegisterRequest -> RegisterController: Dane po walidacji
-    RegisterController -> User: Stworzenie nowego
+    RegisterRequest --> RegisterController: Dane po walidacji
+    RegisterController --> User: Stworzenie nowego
     activate User
     User -> Database: INSERT INTO users
     activate Database
@@ -24,14 +24,14 @@ alt Poprawne dane przekazane przez użytkownika
     deactivate Database
     User --> RegisterController: Nowa instancja klasy Użytkownik
     deactivate User
-    RegisterController -> Użytkownik: Przeniesienie na stronę główną jako zalogowanego użytkownika
+    RegisterController --> Użytkownik: Przeniesienie na stronę główną jako zalogowanego użytkownika
 else Niepoprawne dane przekazane przez użytkownika
-    RegisterRequest -> RegisterController: Komunikaty o błędach walidacji
+    RegisterRequest --> RegisterController: Komunikaty o błędach walidacji
     deactivate RegisterRequest
-    RegisterController -> RegisterForm: Komunikaty o błędach walidacji
+    RegisterController --> RegisterForm: Komunikaty o błędach walidacji
     deactivate RegisterController
     activate RegisterForm
-    RegisterForm -> Użytkownik: Wyświetlenie komunikatów o błędach
+    RegisterForm --> Użytkownik: Wyświetlenie komunikatów o błędach
     deactivate RegisterForm
 end
 @enduml
