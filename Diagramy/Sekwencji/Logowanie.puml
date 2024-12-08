@@ -1,0 +1,43 @@
+@startuml
+actor Użytkownik
+boundary LoginForm   /'Zewnętrzny interfejs systemu'/
+control LoginController  /'Element kontrolujący przepływ danych i logikę biznesową'/
+entity User
+database Database
+
+Użytkownik -> LoginForm: Wypełnienie i wysłanie formularza
+activate LoginForm
+LoginForm -> LoginController: POST /login
+deactivate LoginForm
+activate LoginController
+LoginController -> LoginController: Walidacja danych
+'note right: Głównie dla zabezpieczeniem przed atakami (np. SQL injection)
+
+alt Poprawne dane przekazane przez użytkownika
+    LoginController -> Database: Pobranie użytkownika o podanym e-mailu
+    activate Database
+    Database --> LoginController: Dane użytkownika o podanym e-mail
+    deactivate Database
+    LoginController -> LoginController: Porównanie haseł
+
+    alt Poprawne dane logowania
+        LoginController -> User: Utworzenie instancji klasy User
+        activate User
+        User --> LoginController: Instancja klasy User
+        deactivate User
+        LoginController --> Użytkownik: Przeniesienie na stronę główną jako zalogowanego użytkownika
+    else Niepoprawne dane logowania
+        LoginController --> LoginForm: Komunikat o niepoprawnych danych logowania
+        activate LoginForm
+        LoginForm --> Użytkownik: Wyświetlenie komunikatu
+        deactivate LoginForm
+    end
+
+else Niepoprawne dane przekazane przez użytkownika
+    LoginController --> LoginForm: Komunikat o błędnych danych
+    deactivate LoginController
+    activate LoginForm
+    LoginForm --> Użytkownik: Wyświetlenie komunikatu
+    deactivate LoginForm
+end
+@enduml
