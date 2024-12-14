@@ -25,6 +25,7 @@ alt Poprawne dane przekazane przez użytkownika
         activate User
         User --> LoginController: Instancja klasy User
         deactivate User
+        LoginController -> LoginController: Zapisanie obiektu User w sesji
         LoginController --> Użytkownik: Przeniesienie na stronę główną jako zalogowanego użytkownika
     else Niepoprawne dane logowania
         LoginController --> LoginForm: Komunikat o niepoprawnych danych logowania

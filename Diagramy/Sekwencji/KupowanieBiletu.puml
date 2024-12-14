@@ -43,7 +43,7 @@
         deactivate Database
         TicketController --> Klient: Wysłanie potwierdzenia zakupu
         else Brak środków
-        UserController -> TicketController: Brak wymaganych środków na koncie
+        UserController --> TicketController: Brak wymaganych środków na koncie
         deactivate UserController
         TicketController --> Klient: Odmowa zakupu
         deactivate TicketController

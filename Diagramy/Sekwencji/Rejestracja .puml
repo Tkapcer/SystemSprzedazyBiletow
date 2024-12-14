@@ -18,12 +18,14 @@ alt Poprawne dane przekazane przez użytkownika
     RegisterRequest --> RegisterController: Dane po walidacji
     RegisterController --> User: Stworzenie nowego
     activate User
-    User -> Database: INSERT INTO users
-    activate Database
-    Database --> User: Potwierdzenie
-    deactivate Database
+
     User --> RegisterController: Nowa instancja klasy User
     deactivate User
+    RegisterController -> Database: INSERT INTO users
+    activate Database
+    Database --> RegisterController: Potwierdzenie
+    deactivate Database
+    RegisterController -> RegisterController: Zapis obiektu User w sesji
     RegisterController --> Użytkownik: Przeniesienie na stronę główną jako zalogowanego użytkownika
 else Niepoprawne dane przekazane przez użytkownika
     RegisterRequest --> RegisterController: Komunikaty o błędach walidacji
