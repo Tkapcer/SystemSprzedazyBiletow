@@ -1,0 +1,56 @@
+    @startuml
+    actor Klient
+    boundary EventForm
+    control EventController
+    control UserController
+    entity Event
+    control TicketController
+    entity Ticket
+    database Database
+
+    Klient -> EventController: Otworzenie strony wydarzenia
+    activate EventController
+    EventController -> Database: Pobranie danych o wydarzeniu
+    activate Database
+    Database --> EventController: Dane o wydarzeniu
+    deactivate Database
+    EventController -> Event: Utworzenie obiektu Event
+    activate Event
+    Event --> EventController: Przekazanie obiektu
+    deactivate Event
+    EventController --> EventForm: Utworzenie strony wydarzenia
+    activate EventForm
+    Klient -> EventForm: kliknięcie "kup bilet"
+    EventForm -> EventController: POST/event[id]
+    deactivate EventForm
+    EventController -> EventController: sprawdzenie dostepnosci miejsc
+
+    alt Miejsca dostępne
+        EventController -> TicketController: przekazanie danych o bilecie
+        TicketController -> UserController: Zmiana salda klienta
+        activate TicketController
+
+    alt Wystarczające środki
+        activate UserController
+        UserController --> TicketController: Potwierdzenie zmiany salda
+        TicketController -> Ticket: Utworzenie obiektu Ticket
+        activate Ticket
+        Ticket --> TicketController: Przekazanie obiektu
+        deactivate Ticket
+        TicketController -> Database: Zapisanie biletu
+        activate Database
+        Database --> TicketController: Potwierdzenia utworzenia
+        deactivate Database
+        TicketController --> Klient: Wysłanie potwierdzenia zakupu
+        else Brak środków
+        UserController -> TicketController: Brak wymaganych środków na koncie
+        deactivate UserController
+        TicketController --> Klient: Odmowa zakupu
+        deactivate TicketController
+        end
+
+    else Miejsca niedostępne
+        EventController --> Klient: Informacja o niedostępnych miejscach
+        deactivate EventController
+    end
+    @enduml

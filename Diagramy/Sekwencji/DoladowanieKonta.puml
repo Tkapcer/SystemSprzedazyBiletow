@@ -1,0 +1,29 @@
+@startuml
+actor Klient
+boundary UserAccountForm
+control UserController
+boundary AddMoneyForm
+database Database
+
+Klient -> UserAccountForm: Wyświetlenie konta klienta
+activate UserAccountForm
+UserAccountForm -> UserController: Sprawdź stan konta
+activate UserController
+UserController -> UserController: Pobranie aktualnego salda
+UserController --> UserAccountForm: Wyświetlenie salda
+Klient -> UserAccountForm: Kliknięcie "Doładuj"
+UserAccountForm -> AddMoneyForm: Przejście do formularza doładowania
+deactivate UserAccountForm
+activate AddMoneyForm
+Klient -> AddMoneyForm: Wpisanie kwoty doładowania
+AddMoneyForm -> UserController: Wysłanie kwoty do doładowania
+deactivate AddMoneyForm
+UserController -> UserController: Aktualizacja salda użytkownika
+UserController -> Database: Zapis aktualizacji do bazy danych
+activate Database
+Database --> UserController: Potwierdzenie aktualizacji
+deactivate Database
+UserController --> Klient: Wyświetlenie nowego salda
+deactivate UserController
+
+@enduml
