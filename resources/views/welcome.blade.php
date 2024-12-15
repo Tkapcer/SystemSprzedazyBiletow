@@ -5,41 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>System Sprzedaży Biletów</title>
     @vite(['resources/css/app.css'])
-
 </head>
 <body>
 
-    <div class="header">
+    <!-- Nagłówek -->
+    <header class="header">
         <h1>System Sprzedaży Biletów</h1>
-        <a href="/login">Logowanie</a>
-        <a href="/register">Rejestracja</a>
-    </div>
+        <nav>
+            <a href="/login">Logowanie</a>
+            <a href="/register">Rejestracja</a>
+        </nav>
+    </header>
 
-    <div class="main-container">
-        <!-- Wydarzenie 1 -->
+    <!-- Sekcja główna z wydarzeniami -->
+    <main class="main-container">
+        <h2 class="section-title">Nadchodzące Wydarzenia</h2>
+
         <div class="event-card">
-            <img src="https://via.placeholder.com/300x200" alt="Wydarzenie 1">
+            <img src="https://via.placeholder.com/300x200" alt="Koncert Zespołu XYZ">
             <h3>Koncert Zespołu XYZ</h3>
             <p>Data: 20 grudnia 2024<br>Godzina: 19:00<br>Miejsce: Hala Widowiskowa</p>
-            <a href="/event/1">Zobacz szczegóły</a>
+            <a href="/event/1" class="btn-details">Zobacz szczegóły</a>
         </div>
 
-        <!-- Wydarzenie 2 -->
         <div class="event-card">
-            <img src="https://via.placeholder.com/300x200" alt="Wydarzenie 2">
+            <img src="https://via.placeholder.com/300x200" alt="Spektakl Teatralny ABC">
             <h3>Spektakl Teatralny ABC</h3>
             <p>Data: 25 grudnia 2024<br>Godzina: 18:00<br>Miejsce: Teatr Miejski</p>
-            <a href="/event/2">Zobacz szczegóły</a>
+            <a href="/event/2" class="btn-details">Zobacz szczegóły</a>
         </div>
 
-        <!-- Wydarzenie 3 -->
         <div class="event-card">
-            <img src="https://via.placeholder.com/300x200" alt="Wydarzenie 3">
+            <img src="https://via.placeholder.com/300x200" alt="Występ Kabaretu 123">
             <h3>Występ Kabaretu 123</h3>
             <p>Data: 30 grudnia 2024<br>Godzina: 20:00<br>Miejsce: Sala Koncertowa</p>
-            <a href="/event/3">Zobacz szczegóły</a>
+            <a href="/event/3" class="btn-details">Zobacz szczegóły</a>
         </div>
-    </div>
+    </main>
 
 </body>
 </html>

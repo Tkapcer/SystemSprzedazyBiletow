@@ -8,6 +8,16 @@
 </head>
 <body>
 
+    <!-- Sekcja nagłówka -->
+    <header class="header">
+        <h1>System Sprzedaży Biletów</h1>
+        <nav>
+            <a href="/">Wstecz</a>
+            <a href="/login">Logowanie</a>
+        </nav>
+    </header>
+
+    <!-- Sekcja formularza rejestracji -->
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
