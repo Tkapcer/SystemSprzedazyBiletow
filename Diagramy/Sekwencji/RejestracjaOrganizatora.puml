@@ -1,0 +1,38 @@
+@startuml
+actor Użytkownik
+boundary RegisterOrganizerForm   /'Formularz wniosku o utworzenie konta organizera'/ 
+control RegisterOrganizerController  /'Kontroler odpowiedzialny za przepływ danych i logikę biznesową'/ 
+entity RegisterRequest  /'Jednostka danych wniosku o konto organizera'/ 
+entity Organizer
+database Database
+
+Użytkownik -> RegisterOrganizerForm: Wypełnienie i wysłanie formularza wniosku
+activate RegisterOrganizerForm
+RegisterOrganizerForm -> RegisterOrganizerController: POST /registerOrganizer
+deactivate RegisterOrganizerForm
+activate RegisterOrganizerController
+RegisterOrganizerController -> RegisterRequest: Walidacja danych
+
+alt Poprawne dane wniosku
+    activate RegisterRequest
+    RegisterRequest --> RegisterOrganizerController: Dane po walidacji
+    RegisterOrganizerController --> Organizer: Utworzenie nowego konta organizatora
+    activate Organizer
+
+    Organizer --> RegisterOrganizerController: Nowa instancja klasy Organizer
+    deactivate Organizer
+    RegisterOrganizerController -> Database: INSERT INTO USERS???????
+    activate Database
+    Database --> RegisterOrganizerController: Potwierdzenie zapisu
+    deactivate Database
+    RegisterOrganizerController --> Użytkownik: Powiadomienie o przekazaniu danych do akceptacji przez administratora
+else Niepoprawne dane wniosku
+    RegisterRequest --> RegisterOrganizerController: Komunikaty o błędach walidacji
+    deactivate RegisterRequest
+    RegisterOrganizerController --> RegisterOrganizerForm: Komunikaty o błędach walidacji
+    deactivate RegisterOrganizerController
+    activate RegisterOrganizerForm
+    RegisterOrganizerForm --> Użytkownik: Wyświetlenie komunikatów o błędach
+    deactivate RegisterOrganizerForm
+end
+@enduml

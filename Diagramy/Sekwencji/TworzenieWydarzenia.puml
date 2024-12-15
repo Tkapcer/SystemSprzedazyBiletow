@@ -1,0 +1,32 @@
+@startuml
+actor Organizator
+boundary EventForm  /'Formularz wydarzenia'/ 
+control EventController  /'Kontroler zarządzający logiką wydarzenia'/ 
+entity EventValidator  /'Walidator danych wydarzenia'/ 
+database Database
+
+Organizator -> EventForm: Wypełnienie i wysłanie formularza
+activate EventForm
+EventForm -> EventController: POST /createEvent
+deactivate EventForm
+activate EventController
+EventController -> EventValidator: Walidacja danych
+activate EventValidator
+
+alt Poprawne dane wydarzenia
+    EventValidator --> EventController: Dane poprawne
+    deactivate EventValidator
+    EventController -> Database: Zapisanie danych wydarzenia
+    activate Database
+    Database --> EventController: Potwierdzenie zapisu
+    deactivate Database
+    EventController --> Organizator: Potwierdzenie wysłania danych do zatwierdzenia
+else Niepoprawne dane wydarzenia
+    EventValidator --> EventController: Dane niepoprawne
+    deactivate EventValidator
+    EventController --> EventForm: Komunikat o błędnych danych
+    activate EventForm
+    EventForm --> Organizator: Wyświetlenie komunikatu o błędnych danych
+    deactivate EventForm
+end
+@enduml
