@@ -1,0 +1,27 @@
+@startuml
+Actor Użytkownik
+Boundary ReservationForm
+Control ReservationController
+Entity Reservation
+Control ReservationTimer
+Użytkownik -> ReservationForm : Zarezerwowanie biletu
+Activate ReservationForm
+ReservationForm -> ReservationController: Informacja że zarezerwowano bilet
+Deactivate ReservationForm
+Activate ReservationController
+ReservationController -> Reservation : Stworzenie instancji klasy rezerwacja
+Activate Reservation
+Reservation --> Użytkownik: Komunikat i termin opłacenia rezerwacji
+Reservation -> ReservationTimer: Podanie terminu opłacenia
+activate ReservationTimer
+ReservationTimer -> ReservationController: Mija czas na opłacenie
+deactivate ReservationTimer
+ReservationController -> Reservation: POST /cancel
+Reservation --> ReservationController : Usunięcie nieopłaconej rezerwacji
+Deactivate Reservation
+ReservationController --> ReservationForm: Komunikat o przedawnieniu rezerwacji
+Deactivate ReservationController
+Activate ReservationForm
+ReservationForm --> Użytkownik: Komunikat o przedawnieniu rezerwacji
+deactivate ReservationForm
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+Actor Użytkownik
+Boundary TicketForm
+Control TicketController
+Control UserController
+Database Database
+Użytkownik -> TicketForm : Wejście w zwrot biletów
+Activate TicketForm
+TicketForm -> TicketController : POST /returnTicket
+Deactivate TicketForm
+Activate TicketController
+TicketController -> Database : Znalezenie kwoty biletu;\nUsunięcie biletu
+Activate Database
+Database --> TicketController : Kwota + potwierdzenie usunięcia
+Deactivate Database
+TicketController -> TicketController : Usunięcie kopii lokalnej
+TicketController -> UserController: Oddanie pieniędzy za bilet
+Activate UserController
+UserController -> Database : Aktualizacja salda w bazie
+Activate Database
+Database --> UserController : Potwierdzenie
+Deactivate Database
+UserController --> TicketController : Potwierdzenie
+Deactivate UserController
+TicketController --> TicketForm : Komunikat o zwrocie biletu
+Deactivate TicketController
+Activate TicketForm
+TicketForm --> Użytkownik: Komunikat o zwrocie biletu
+Deactivate TicketForm
+@enduml
