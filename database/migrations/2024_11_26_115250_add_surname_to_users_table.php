@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('surname')->default('')->after('name'); // Dodaj kolumnę surname po kolumnie name
+            $table->string('surname')->after('name')->nullable(); // Dodaj kolumnę surname po kolumnie name
         });
     }
 
