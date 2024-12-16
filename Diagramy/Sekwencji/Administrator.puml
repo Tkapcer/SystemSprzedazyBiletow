@@ -1,17 +1,15 @@
 @startuml
 actor Administrator
-boundary LoginForm   /'Formularz logowania administratora'/
+participant "Funkcjonalność logowania" as Logowanie
 control UpdateController  /'Kontroler odpowiedzialny za zarządzanie aktualizacjami'/
 database Database
 
-Administrator -> LoginForm: Wypełnienie i wysłanie formularza logowania
-activate LoginForm
-LoginForm -> UpdateController: POST /loginAdmin
-deactivate LoginForm
+Administrator -> Logowanie: Logowanie
+activate Logowanie
+Logowanie -> UpdateController: Administrator zalogowany
+deactivate Logowanie
 activate UpdateController
-UpdateController -> UpdateController: Walidacja danych logowania
 
-alt Poprawne dane logowania
     UpdateController -> Database: Pobranie nowych elementów do zatwierdzenia
     activate Database
     Database --> UpdateController: Nowe elementy do zatwierdzenia
@@ -32,13 +30,7 @@ alt Poprawne dane logowania
         Database --> UpdateController: Potwierdzenie aktualizacji
         deactivate Database
         UpdateController --> Administrator: Potwierdzenie odrzucenia danych
+        deactivate UpdateController
     end
 
-else Niepoprawne dane logowania
-    UpdateController --> LoginForm: Komunikat o błędnych danych logowania
-    deactivate UpdateController
-    activate LoginForm
-    LoginForm --> Administrator: Wyświetlenie komunikatu
-    deactivate LoginForm
-end
 @enduml
