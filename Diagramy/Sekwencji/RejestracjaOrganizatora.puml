@@ -1,9 +1,9 @@
 @startuml
 actor Użytkownik
-boundary RegisterOrganizerForm   /'Formularz wniosku o utworzenie konta organizera'/ 
-control RegisterOrganizerController  /'Kontroler odpowiedzialny za przepływ danych i logikę biznesową'/ 
-entity RegisterRequest  /'Jednostka danych wniosku o konto organizera'/ 
-entity Organizer
+boundary RegisterOrganizerForm   /'Formularz wniosku o utworzenie konta organizera'/
+control RegisterOrganizerController  /'Kontroler odpowiedzialny za przepływ danych i logikę biznesową'/
+entity RegisterRequest  /'Jednostka danych wniosku o konto organizera'/
+entity User
 database Database
 
 Użytkownik -> RegisterOrganizerForm: Wypełnienie i wysłanie formularza wniosku
@@ -16,12 +16,12 @@ RegisterOrganizerController -> RegisterRequest: Walidacja danych
 alt Poprawne dane wniosku
     activate RegisterRequest
     RegisterRequest --> RegisterOrganizerController: Dane po walidacji
-    RegisterOrganizerController --> Organizer: Utworzenie nowego konta organizatora
-    activate Organizer
+    RegisterOrganizerController -> User: Utworzenie nowego konta organizatora
+    activate User
 
-    Organizer --> RegisterOrganizerController: Nowa instancja klasy Organizer
-    deactivate Organizer
-    RegisterOrganizerController -> Database: INSERT INTO USERS???????
+    User --> RegisterOrganizerController: Nowa instancja klasy User
+    deactivate User
+    RegisterOrganizerController -> Database: INSERT INTO USERS
     activate Database
     Database --> RegisterOrganizerController: Potwierdzenie zapisu
     deactivate Database

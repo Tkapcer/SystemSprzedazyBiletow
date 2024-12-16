@@ -1,8 +1,8 @@
 @startuml
 actor Organizator
-boundary EventForm  /'Formularz edycji wydarzenia'/ 
-control EventController  /'Kontroler zarządzający logiką edycji wydarzenia'/ 
-entity EventValidator  /'Walidator danych wydarzenia'/ 
+boundary EventForm  /'Formularz edycji wydarzenia'/
+control EventController  /'Kontroler zarządzający logiką edycji wydarzenia'/
+entity EventValidator  /'Walidator danych wydarzenia'/
 database Database
 
 Organizator -> EventForm: Wypełnienie i wysłanie formularza edycji
@@ -15,7 +15,6 @@ activate EventValidator
 
 alt Poprawne dane wydarzenia
     EventValidator --> EventController: Dane poprawne
-    deactivate EventValidator
     EventController -> Database: Zapisanie zaktualizowanych danych wydarzenia
     activate Database
     Database --> EventController: Potwierdzenie zapisu
@@ -25,6 +24,7 @@ else Niepoprawne dane wydarzenia
     EventValidator --> EventController: Dane niepoprawne
     deactivate EventValidator
     EventController --> EventForm: Komunikat o błędnych danych
+    deactivate EventController
     activate EventForm
     EventForm --> Organizator: Wyświetlenie komunikatu o błędnych danych
     deactivate EventForm
