@@ -7,8 +7,10 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use PHPUnit\Metadata\Uses;
 
 class RegisterController extends Controller
 {
@@ -42,6 +44,11 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+/*    public function redirect() {
+        if(auth()->user()->type == "user") { return redirect('/home');
+        } else if (auth()->user()->type == "organizer") { return redirect('/welcome'); }
+    }*/
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -66,17 +73,25 @@ class RegisterController extends Controller
 //    protected function create(array $data)
     protected function register(RegisterRequest $request)
     {
-/*        return User::create([
-            'name' => $data['name'],
-//            'surname' => $data['surname'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);*/
-        return User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if ($request->has('organizerForm')) {
+            $user = User::create([
+                'companyName' => $request->comapanyName,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'type' => "organizer",
+                'organizerStatus' => "waiting",
+            ]);
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+//        Ja już nie wiem trzeba będzie to chyba jakoś inaczej zrobić
+        Auth::login($user);
+        return redirect($this->redirectTo);
     }
 }
