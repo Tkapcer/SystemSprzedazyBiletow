@@ -75,7 +75,7 @@ class RegisterController extends Controller
     {
         if ($request->has('organizerForm')) {
             $user = User::create([
-                'companyName' => $request->comapanyName,
+                'companyName' => $request->companyName,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'type' => "organizer",

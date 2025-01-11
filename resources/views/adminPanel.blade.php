@@ -14,7 +14,41 @@
                         </div>
                     @endif
 
-                    {{ __('You are logged in!') }}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th scope="col">companyName</th>
+                            <th scope="col">email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $user)
+                                <tr>
+                                    <th scope="row">{{ $user->companyName }}</th>
+                                    <th scope="row">{{ $user->email }}</th>
+                                    <th scope="row">{{ $user->organizerStatus }}</th>
+
+                                    @if($user->organizerStatus == 'waiting' || $user->organizerStatus == 'rejected')
+                                        <th scope="row">
+                                            <form action="{{ route('admin.confirm', $user->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-success">Confirm</button>
+                                            </form>
+                                        </th>
+                                    @endif
+
+                                    @if ($user->organizerStatus == 'confirmed' || $user->organizerStatus == 'waiting')
+                                        <th scope="row">
+                                            <form action="{{ route('admin.reject', $user->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Reject</button>
+                                            </form>
+                                        </th>
+                                    @endif
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
