@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckOrganizerConfirmed;
+use App\Http\Middleware\CheckOrganizerNotConfirmed;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ControllerLogowanie;
 use App\Http\Controllers\ControllerRejestracja;
@@ -38,6 +41,20 @@ Route::middleware(CheckAdmin::class)->group(function () {
 
 //    Akceptacja rejestracji jako organizator
     Route::post('/admin/confirm/{id}', [App\Http\Controllers\AdminController::class, 'confirmOrganizer'])->name('admin.confirm');
+});
+
+//  Przeniesienie niepotwierdzonego organizatora
+Route::get('/organizerStatusInfo', [App\Http\Controllers\OrganizerController::class, 'indexNotConfirmed'])
+    ->middleware(CheckOrganizerNotConfirmed::class)
+    ->name('statusInfo');
+
+
+Route::middleware(CheckOrganizerConfirmed::class)->group(function () {
+    Route::get('/organizerPanel', [App\Http\Controllers\OrganizerController::class, 'indexConfirmed'])->name('panel');
+
+    Route::get('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
+
+    Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
 });
 
 

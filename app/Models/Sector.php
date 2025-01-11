@@ -9,4 +9,10 @@ class Sector extends Model
 {
     /** @use HasFactory<\Database\Factories\SectorFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function event() {
+        return $this->belongsTo(Event::class);
+    }
 }

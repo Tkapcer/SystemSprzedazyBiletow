@@ -47,6 +47,12 @@ class LoginController extends Controller
             return '/adminPanel';
         } else if ($user->type == 'user') {
             return 'home';
+        } else if ($user->type == 'organizer') {
+            if ($user->organizerStatus == 'confirmed') {
+                return '/organizerPanel';
+            } else {
+                return '/organizerStatusInfo';
+            }
         }
 
         return '/';

@@ -14,7 +14,16 @@ class AdminController extends Controller
     {
         return view('adminPanel', [
 //            'users' => User::where('type', 'organizer')->where('organizerStatus', 'waiting')->get()
-            'users' => User::where('type', 'organizer')->get()
+            'users' => User::where('type', 'organizer')
+                ->orderByRaw("
+                CASE
+                    WHEN organizerStatus = 'waiting' THEN 1
+                    WHEN organizerStatus = 'confirmed' THEN 2
+                    WHEN organizerStatus = 'rejected' THEN 3
+                    ELSE 4
+                END
+            ")
+                ->get()
         ]);/*return view('adminPanel', [
             'users' => User::all()
         ]);*/

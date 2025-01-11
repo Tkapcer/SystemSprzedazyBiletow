@@ -9,4 +9,10 @@ class Event extends Model
 {
     /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function sectors() {
+        return $this->hasMany(Sector::class);
+    }
 }

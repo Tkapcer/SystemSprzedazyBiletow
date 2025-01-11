@@ -28,7 +28,13 @@ class SectorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'seats' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        Sector::create($validated);
     }
 
     /**
