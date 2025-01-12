@@ -21,7 +21,7 @@
             @endif
         @else
             <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {{ Auth::user()->name }}
                 </a>
 
@@ -43,6 +43,19 @@
     <!-- Sekcja główna z wydarzeniami -->
     <main class="main-container">
         <h2 class="section-title">Nadchodzące Wydarzenia</h2>
+
+        @foreach ($events as $event)
+            <div class="event-card">
+                <img src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
+                <h3>{{ $event->name }}</h3>
+                <p>
+                    Data: {{ date('d F Y', strtotime($event->event_date)) }}<br>
+                    Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>
+                    Miejsce: {{ $event->location }}
+                </p>
+                <a href="/event/{{ $event->id }}" class="btn-details">Zobacz szczegóły</a>
+            </div>
+        @endforeach
 
         <div class="event-card">
             <img src="https://via.placeholder.com/300x200" alt="Koncert Zespołu XYZ">

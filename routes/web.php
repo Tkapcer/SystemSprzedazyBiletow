@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckOrganizerConfirmed;
 use App\Http\Middleware\CheckOrganizerNotConfirmed;
@@ -11,6 +12,8 @@ use App\Http\Controllers\ControllerRejestracja;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/', [EventController::class, 'index'])->name('events.index');
 
 Route::get('/logowanie', [ControllerLogowanie::class, 'formularz']);
 Route::get('/test', [ControllerLogowanie::class, 'testowy']);

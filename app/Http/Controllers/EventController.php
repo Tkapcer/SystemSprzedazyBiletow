@@ -12,7 +12,10 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $approvedEvents = Event::where('status', 'approved')->orderBy('event_date')->get();
+        return view('welcome', [
+            'events' => $approvedEvents
+        ]);
     }
 
     /**
