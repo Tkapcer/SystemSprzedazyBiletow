@@ -30,7 +30,7 @@ class EventController extends Controller
     {
         // Walidacja danych
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
@@ -49,7 +49,7 @@ class EventController extends Controller
 
         // Tworzenie wydarzenia
         $event = Event::create([
-            'name' => $validated['title'],
+            'name' => $validated['name'],
             'location' => $validated['location'],
             'description' => $validated['description'],
             'event_date' => $validated['event_date'],

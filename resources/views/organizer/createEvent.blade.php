@@ -32,8 +32,8 @@
                             <form action="{{ route('organizer.storeEvent') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="title" class="form-label">Tytuł</label>
-                                    <input type="text" class="form-control" id="title" name="title" required>
+                                    <label for="name" class="form-label">Tytuł</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="location" class="form-label">Lokalizacja</label>

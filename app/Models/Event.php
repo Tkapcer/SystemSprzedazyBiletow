@@ -15,4 +15,8 @@ class Event extends Model
     public function sectors() {
         return $this->hasMany(Sector::class);
     }
+
+    public function organizers() {
+        return $this->belongsTo(Organizer::class);
+    }
 }

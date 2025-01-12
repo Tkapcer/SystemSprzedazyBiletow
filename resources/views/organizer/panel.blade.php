@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('createEvent') }}" method="GET">
+                    <form action="{{ route('createEvent') }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-primary">Create Event</button>
                     </form>

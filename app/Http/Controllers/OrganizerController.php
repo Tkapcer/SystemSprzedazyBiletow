@@ -19,10 +19,12 @@ class OrganizerController extends Controller
 
     public function indexNotConfirmed()
     {
-        $user = auth()->user();
+        $organizer = auth()->guard('organizer')->user();
+
+//        $user = auth()->user();
 
         return view('organizer.statusInfo', [
-            'status' => $user->organizerStatus
+            'status' => $organizer->status
         ]);
     }
 
@@ -39,9 +41,8 @@ class OrganizerController extends Controller
      */
     public function storeEvent(Request $request)
     {
-//        pozmieniać title na name - wszędzie
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
@@ -59,19 +60,22 @@ class OrganizerController extends Controller
             $imagePath = $imageFile->store('uploads', 'public');
         }
 
-        $event = Event::create([
-            'name' => $validated['title'],
+        $organizer = auth()->guard('organizer')->user();
+
+        $event = $organizer->events()->create([
+            'name' => $validated['name'],
             'location' => $validated['location'],
             'description' => $validated['description'],
             'event_date' => $validated['event_date'],
-            'image_path' => $imagePath
+            'image_path' => $imagePath,
+            'status' => 'waiting'
         ]);
 
         foreach ($validated['sectors'] as $sectorData) {
             $event->sectors()->create($sectorData);
         }
 
-        return redirect()->back();
+        return redirect()->route('organizer.panel');
     }
 
     /**

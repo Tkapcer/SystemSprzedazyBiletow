@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Organizer;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Foundation\Http\FormRequest;
@@ -74,13 +75,15 @@ class RegisterController extends Controller
     protected function register(RegisterRequest $request)
     {
         if ($request->has('organizerForm')) {
-            $user = User::create([
-                'companyName' => $request->companyName,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'type' => "organizer",
-                'organizerStatus' => "waiting",
+            $organizer = Organizer::create([
+               'companyName' => $request->companyName,
+               'email' => $request->email,
+               'password' => Hash::make($request->password),
+                'status' => 'waiting'
             ]);
+
+            Auth::guard('organizer')->login($organizer);
+            return redirect('/organizerStatusInfo');
         } else {
             $user = User::create([
                 'name' => $request->name,
@@ -88,10 +91,9 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-        }
 
-//        Ja już nie wiem trzeba będzie to chyba jakoś inaczej zrobić
-        Auth::login($user);
-        return redirect($this->redirectTo);
+            Auth::login($user);
+            return redirect('/home');
+        }
     }
 }

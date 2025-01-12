@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Organizer;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -14,33 +16,54 @@ class AdminController extends Controller
     {
         return view('adminPanel', [
 //            'users' => User::where('type', 'organizer')->where('organizerStatus', 'waiting')->get()
-            'users' => User::where('type', 'organizer')
-                ->orderByRaw("
+            'organizers' => Organizer::orderByRaw("
                 CASE
-                    WHEN organizerStatus = 'waiting' THEN 1
-                    WHEN organizerStatus = 'confirmed' THEN 2
-                    WHEN organizerStatus = 'rejected' THEN 3
+                    WHEN status = 'waiting' THEN 1
+                    WHEN status = 'approved' THEN 2
+                    WHEN status = 'rejected' THEN 3
                     ELSE 4
                 END
-            ")
-                ->get()
+            ")->get(),
+            'events' => Event::orderByRaw("
+                CASE
+                    WHEN status = 'waiting' THEN 1
+                    WHEN status = 'approved' THEN 2
+                    WHEN status = 'rejected' THEN 3
+                    WHEN status = 'expired' THEN 4
+                    ELSE 5
+                END
+            ")->get()
         ]);/*return view('adminPanel', [
             'users' => User::all()
         ]);*/
     }
 
     public function confirmOrganizer($id) {
-        $user = User::findOrFail($id);
-        $user->organizerStatus = 'confirmed';
-        $user->save();
+        $organizer = Organizer::findOrFail($id);
+        $organizer->status = 'approved';
+        $organizer->save();
         return redirect()->back();
     }
 
     public function rejectOrganizer($id) {
-        $user = User::findOrFail($id);
-        $user->organizerStatus = 'rejected';
-        $user->save();
+        $organizer = Organizer::findOrFail($id);
+        $organizer->status = 'rejected';
+        $organizer->save();
         return redirect()->back()->with("Odmowa");
+    }
+
+    public function approveEvent($id) {
+        $event = Event::findOrFail($id);
+        $event->status = 'approved';
+        $event->save();
+        return redirect()->back();
+    }
+
+    public function rejectEvent($id) {
+        $event = Event::findOrFail($id);
+        $event->status = 'rejected';
+        $event->save();
+        return redirect()->back();
     }
 
     /**

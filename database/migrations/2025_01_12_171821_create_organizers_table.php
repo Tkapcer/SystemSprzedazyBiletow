@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('uzytkownicy', function (Blueprint $table) {
+        Schema::create('organizers', function (Blueprint $table) {
             $table->id();
-            $table->string('email');
-            $table->string('haslo');
-            $table->string('imie_nazwisko_firma');
-            $table->char('typ_konta'); // A - admin; O - organizator,  K - klient
-//            $table->timestamps();
+            $table->string('companyName');
+            $table->string('email')->unique();
+            $table->string('password');
+            $table->enum('status', ['waiting', 'approved', 'rejected']);
+            $table->timestamps();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('uzytkownicy');
+        Schema::dropIfExists('organizers');
     }
 };

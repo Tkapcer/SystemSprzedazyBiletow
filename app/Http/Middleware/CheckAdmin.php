@@ -19,7 +19,7 @@ class CheckAdmin
         if (Auth::check() && Auth::user()->type == 'admin') {
             return $next($request);
         } else {
-            return redirect()->route('login');
+            return redirect()->route('home');
         }
     }
 }

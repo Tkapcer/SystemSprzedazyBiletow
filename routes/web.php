@@ -41,6 +41,12 @@ Route::middleware(CheckAdmin::class)->group(function () {
 
 //    Akceptacja rejestracji jako organizator
     Route::post('/admin/confirm/{id}', [App\Http\Controllers\AdminController::class, 'confirmOrganizer'])->name('admin.confirm');
+
+//    Akceptacja wydarzenia
+    Route::post('admin/approveEvent/{id}', [App\Http\Controllers\AdminController::class, 'approveEvent'])->name('admin.approveEvent');
+
+//    Odmowa wydarzenia
+    Route::post('admin/rejectEvent/{id}', [App\Http\Controllers\AdminController::class, 'rejectEvent'])->name('admin.rejectEvent');
 });
 
 //  Przeniesienie niepotwierdzonego organizatora
@@ -50,7 +56,9 @@ Route::get('/organizerStatusInfo', [App\Http\Controllers\OrganizerController::cl
 
 
 Route::middleware(CheckOrganizerConfirmed::class)->group(function () {
-    Route::get('/organizerPanel', [App\Http\Controllers\OrganizerController::class, 'indexConfirmed'])->name('panel');
+    Route::get('/organizerPanel', [App\Http\Controllers\OrganizerController::class, 'indexConfirmed'])->name('organizer.panel');
+
+    Route::post('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
 
     Route::get('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
 

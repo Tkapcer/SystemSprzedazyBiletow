@@ -16,10 +16,15 @@ class CheckOrganizerNotConfirmed
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->type == 'organizer' && Auth::user()->organizerStatus != 'confirmed') {
+        /*if (Auth::check() && Auth::user()->type == 'organizer' && Auth::user()->organizerStatus != 'confirmed') {
             return $next($request);
         } else {
             return redirect()->route('login');
+        }*/
+
+        if (Auth::guard('organizer')->check() && Auth::guard('organizer')->user()->status != 'approved') {
+            return $next($request);
         }
+        return redirect()->route('organizer.panel');
     }
 }

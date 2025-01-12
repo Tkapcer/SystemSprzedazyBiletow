@@ -30,7 +30,7 @@
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="organizerForm" class="col-md-4 col-form-label text-md-end">{{ __('Chcę założyć konto organizatora') }}</label> {{--Tak wgl to te __ w tym miejscy są potrzebne do obsługi wielojęzykowości ale teraz to i taj=k już to posułem xd więc można je z czasem olać i pisać wgl bez tych klamer--}}
+                                <label for="organizerForm" class="col-md-4 col-form-label text-md-end">{{ __('Chcę założyć konto organizatora') }}</label> {{--Tak wgl to te __ w tym miejscy są potrzebne do obsługi wielojęzykowości ale teraz to i taj=k już to posułem xd więc można je z czasem olać i pisać wgl bez tych __()--}}
 
                                 <div class="col-md-6">
                                     <input id="organizerForm" type="checkbox" class="form-control" name="organizerForm" v-model="customizeForm">
