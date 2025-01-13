@@ -53,7 +53,7 @@
                     Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>
                     Miejsce: {{ $event->location }}
                 </p>
-                <a href="/event/{{ $event->id }}" class="btn-details">Zobacz szczegóły</a>
+                <a href="{{ route('event.show', $event->id) }}" class="btn-details">Zobacz szczegóły</a>
             </div>
         @endforeach
 

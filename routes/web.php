@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ControllerLogowanie;
 use App\Http\Controllers\ControllerRejestracja;
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
-});
+});*/
 
 Route::get('/', [EventController::class, 'index'])->name('events.index');
 
@@ -33,6 +33,8 @@ Auth::routes();
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/event/{event}', [EventController::class, 'show'])->name('event.show');
 
 
 Route::middleware(CheckAdmin::class)->group(function () {
