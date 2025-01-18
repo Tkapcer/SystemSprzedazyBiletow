@@ -37,7 +37,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->middleware('auth')->only('logout');
+        $this->middleware('auth:admin,web,organizer')->only('logout');
     }
 
     public function login(Request $request)
@@ -50,12 +50,17 @@ class LoginController extends Controller
 
         // Próba logowania usera
         if (Auth::guard('web')->attempt($credentials, $request->filled('remember'))) {
-//            to też kidyś na bool
-            if (Auth::user()->type == 'admin') {
+            $user = Auth::guard('web')->user();
+
+//            Próba logowania admina
+            if ($user->type == 'admin') {
+                Auth::guard('web')->logout();
+                Auth::guard('admin')->login($user);
                 return redirect()->intended(route('adminPanel'));
-            } else {
-                return redirect()->intended(route('home'));
             }
+
+            return redirect()->intended(route('home'));
+
         }
 
         // Próba logowania organizatora
@@ -76,6 +81,10 @@ class LoginController extends Controller
 
         if (Auth::guard('organizer')->check()) {
             Auth::guard('organizer')->logout();
+        }
+
+        if (Auth::guard('admin')->check()) {
+            Auth::guard('admin')->logout();
         }
 
         return redirect('/');

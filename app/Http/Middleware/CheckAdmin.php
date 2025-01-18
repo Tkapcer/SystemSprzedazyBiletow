@@ -16,10 +16,10 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->type == 'admin') {
+        if (Auth::guard('admin')->check()) {
             return $next($request);
-        } else {
-            return redirect()->route('home');
         }
+//        abort(403, 'Access denied.');
+        return redirect()->route('events.index');
     }
 }

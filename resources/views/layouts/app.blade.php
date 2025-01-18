@@ -36,7 +36,7 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
-                        @if(!auth('web')->check() && !auth('organizer')->check())
+                        @if(!auth('web')->check() && !auth('organizer')->check() && !auth('admin'))
                             @if (Route::has('login'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>

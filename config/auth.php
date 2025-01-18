@@ -44,6 +44,11 @@ return [
         'organizer' => [
             'driver' => 'session',
             'provider' => 'organizers',
+        ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'users',
         ]
     ],
 
