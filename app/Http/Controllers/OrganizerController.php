@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Sector;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrganizerController extends Controller
 {
@@ -14,7 +15,9 @@ class OrganizerController extends Controller
      */
     public function indexConfirmed()
     {
-        return view('organizer.panel');
+        $events = Event::where('organizer_id', Auth::guard('organizer')->user()->id)->orderBy('event_date', 'desc')->get();
+
+        return view('organizer.panel', compact('events'));
     }
 
     public function indexNotConfirmed()

@@ -12,6 +12,10 @@ class Event extends Model
 
     protected $guarded = [];
 
+    protected $casts = [
+        'event_date' => 'datetime', // Automatyczna konwersja na obiekt Carbon
+    ];
+
     public function sectors() {
         return $this->hasMany(Sector::class);
     }

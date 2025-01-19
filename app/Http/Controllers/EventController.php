@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class EventController extends Controller
 {
@@ -61,7 +63,7 @@ class EventController extends Controller
 
         // Tworzenie sektorów przypisanych do wydarzenia
         foreach ($validated['sectors'] as $sectorData) {
-            $event->sectors()->create($sectorData); // Używamy relacji sectors()
+            $event->sectors()->create($sectorData);
         }
 
         return redirect()->back();
@@ -84,7 +86,7 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        return view('organizer.editEvent', compact('event'));
     }
 
     /**
@@ -92,7 +94,95 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        //
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+            'event_date' => 'required|date',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+
+            'sectors' => 'required|array|min:1',
+            'sectors.*.id' => 'nullable|integer',
+            'sectors.*.name' => 'required|string|max:255',
+            'sectors.*.seats' => 'required|integer|min:1',
+            'sectors.*.price' => 'required|numeric|min:0',
+        ]);
+
+        DB::transaction(function () use ($validated, $event, $request) {
+            // Obsługa obrazu
+            $imagePath = $event->image_path;
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('uploads', 'public');
+            }
+
+            // Aktualizowanie danych wydarzenia
+            $event->update([
+                'name' => $validated['name'],
+                'location' => $validated['location'],
+                'description' => $validated['description'],
+                'event_date' => $validated['event_date'],
+                'image_path' => $imagePath,
+                // Status automatycznie ustawiany na "waiting"
+                'status' => 'waiting'
+            ]);
+
+            // Identyfikatory sektorów z żądania
+            $newSectorIds = collect($validated['sectors'])->pluck('id')->filter();
+
+            // Obsługa istniejących sektorów
+            foreach ($event->sectors as $sector) {
+                // Jeśli ID sektora nie znajduje się w żądaniu, oznacza próbę usunięcia
+                if (!$newSectorIds->contains($sector->id)) {
+                    $reservedSeats = $sector->tickets->sum('number_of_seats'); // Liczba sprzedanych miejsc
+
+                    if ($reservedSeats > 0) {
+                        throw ValidationException::withMessages([
+                            'sectors' => "Sektor '{$sector->name}' nie może zostać usunięty, ponieważ sprzedano w nim {$reservedSeats} miejsc.",
+                        ]);
+                    }
+
+                    // Można usunąć sektor
+                    $sector->delete();
+                } else {
+                    // Sektor istnieje – sprawdzamy poprawność danych
+                    $updatedSector = collect($validated['sectors'])->firstWhere('id', $sector->id);
+
+                    if ($updatedSector) {
+                        $reservedSeats = $sector->tickets->sum('number_of_seats'); // Liczba sprzedanych miejsc
+
+                        // Liczba miejsc nie może być mniejsza niż sprzedane miejsca
+                        if ($updatedSector['seats'] < $reservedSeats) {
+                            throw ValidationException::withMessages([
+                                'sectors' => "Liczba miejsc w sektorze '{$sector->name}' nie może być mniejsza niż {$reservedSeats}, ponieważ tyle miejsc zostało już sprzedanych.",
+                            ]);
+                        }
+
+                        // Sprawdź, czy dane sektora zostały zmienione
+                        $changesDetected = (
+                            $updatedSector['name'] != $sector->name ||
+                            $updatedSector['price'] != $sector->price ||
+                            $updatedSector['seats'] != $sector->seats
+                        );
+
+                        // Jeśli wykryto zmiany, zaktualizuj sektor
+                        if ($changesDetected) {
+                            $sector->update($updatedSector);
+                        }
+                    }
+                }
+            }
+
+            // Dodawanie nowych sektorów
+            foreach ($validated['sectors'] as $sectorData) {
+                if (!isset($sectorData['id'])) {
+                    // Sektor nie ma ID – dodajemy go jako nowy
+                    $event->sectors()->create($sectorData);
+                }
+            }
+        });
+
+        return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało zaktualizowane.');
     }
 
     /**
