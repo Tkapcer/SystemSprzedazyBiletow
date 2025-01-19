@@ -14,6 +14,19 @@
                         </div>
                     @endif
 
+                        <form action="{{ route('addMoney') }}" method="POST" class="p-3 bg-light rounded shadow-sm">
+                            @csrf
+
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Kwota doładowania</label>
+                                <input type="number" step="0.01" name="amount" id="amount" class="form-control" placeholder="Wprowadź kwotę" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Dodaj środki</button>
+                        </form>
+
+{{--                        @dump($errors)--}}
+
                     {{ __('You are logged in!') }}
 
                         @if (session('success'))
