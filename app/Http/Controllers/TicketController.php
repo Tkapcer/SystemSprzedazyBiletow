@@ -117,6 +117,7 @@ class TicketController extends Controller
            $user->balance -= $ticket->number_of_seats * $ticket->sector->price;
            $user->save();
            $ticket->status = 'purchased';
+           $ticket->code = strtoupper(Str::random(10));
            $ticket->save();
         });
 
