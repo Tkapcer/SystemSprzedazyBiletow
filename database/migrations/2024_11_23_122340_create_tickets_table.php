@@ -20,6 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sector_id');
             $table->foreign('sector_id')->references('id')->on('sectors');
             $table->string('code');
+            $table->integer('number_of_seats')->default(1);
         });
     }
 
@@ -37,6 +38,7 @@ return new class extends Migration
             $table->dropForeign(['sector_id']);
             $table->dropColumn('sector_id');
             $table->dropColumn('code');
+            $table->dropColumn('number_of_seats');
         });
     }
 };

@@ -9,4 +9,15 @@ class Ticket extends Model
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
     use HasFactory;
+
+    protected $guarded = [];
+
+    public function sector()
+    {
+        return $this->belongsTo(Sector::class);
+    }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }
