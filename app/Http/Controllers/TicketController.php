@@ -6,6 +6,7 @@ use App\Models\Sector;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TicketController extends Controller
@@ -15,6 +16,9 @@ class TicketController extends Controller
      */
     public function index(\App\Models\Event $event)
     {
+        /*$sectors = $event->sectors->filter(function ($sector) {
+            return $sector->availableSeats() > 0;
+        });*/
         $sectors = $event->sectors;
         return view('ticket.index', compact('event', 'sectors'));
     }
@@ -49,16 +53,74 @@ class TicketController extends Controller
             return back()->withErrors('Brak wystarczającej liczby wolnych miejsc w wybranym sektorze.');
         }
 
+        if ($user->balance >= $request->number_of_seats * $sector->price) {
+            $user->balance -= $request->number_of_seats * $sector->price;
+            $user->save();
+        } else {
+            return back()->withErrors('Brak wystarczających środków na koncie.');
+        }
+
         Ticket::create([
             'status' => $request->status,
             'user_id' => $user->id,
             'sector_id' => $sector->id,
             'number_of_seats' => $request->number_of_seats,
-            'code' => strtoupper(Str::random(10))
+            'code' => $request->status == 'purchased' ? strtoupper(Str::random(10)) : "",
         ]);
 
         $message = $request->status == 'purchased' ? 'Zakupiono bilet' : 'Zarezerwowano miejsce';
-        return redirect()->route('events.index', $sector->event)->with('success', $message);
+        return redirect()->route('home', $sector->event)->with('success', $message);
+    }
+
+    public function cancel(Request $request) {
+        $user = Auth::guard('web')->user();
+        $ticket = Ticket::where('id', $request->id)->where('user_id', $user->id)->first();
+
+        if (!$ticket) {
+            return redirect()->back()->withErrors('Nie masz tej rezerwacji.');
+        }
+
+        $ticket->delete();
+        return redirect()->back()->with('success', 'Anulowano rezerwację');
+    }
+
+    public function return(Request $request) {
+        $user = Auth::guard('web')->user();
+        $ticket = Ticket::where('id', $request->id)->where('user_id', $user->id)->first();
+
+        if (!$ticket) {
+            return redirect()->back()->withErrors('Nie masz tego biletu.');
+        }
+
+        DB::transaction(function () use ($ticket, $user) {
+            $user->balance += $ticket->number_of_seats * $ticket->sector->price;
+            $user->save();
+            $ticket->delete();
+        });
+
+        return redirect()->back()->with('success', 'Zwrócono bilet i zwrócono środki.');
+    }
+
+    public function pay(Request $request) {
+        $user = Auth::guard('web')->user();
+        $ticket = Ticket::where('id', $request->id)->where('user_id', $user->id)->first();
+
+        if (!$ticket) {
+            return redirect()->back()->withErrors('Nie masz tej rezerwacji.');
+        }
+
+        if ($user->balance < $ticket->number_of_seats * $ticket->sector->price) {
+            return back()->withErrors('Brak wystarczających środków na koncie.');
+        }
+
+        DB::transaction(function () use ($ticket, $user) {
+           $user->balance -= $ticket->number_of_seats * $ticket->sector->price;
+           $user->save();
+           $ticket->status = 'purchased';
+           $ticket->save();
+        });
+
+        return redirect()->back()->with('success', 'Opłacono bilet.');
     }
 
     /**

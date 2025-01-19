@@ -25,6 +25,7 @@ class User extends Authenticatable
         'companyName',
         'type',
         'organizerStatus',
+        'balance'
     ];
 
     /**

@@ -13,7 +13,7 @@
                 <select name="sector_id" id="sector_id" class="form-control" required>
                     @foreach($sectors as $sector)
                         <option value="{{ $sector->id }}">
-                            {{ $sector->name }} (Miejsca: {{ $sector->seats }}, Cena: {{ $sector->price }} zł)
+                            {{ $sector->name }} (Dostępne miejsca: {{ $sector->availableSeats() }}, Cena: {{ $sector->price }} zł)
                         </option>
                     @endforeach
                 </select>

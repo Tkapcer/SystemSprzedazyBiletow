@@ -6,21 +6,13 @@ use App\Http\Middleware\CheckOrganizerConfirmed;
 use App\Http\Middleware\CheckOrganizerNotConfirmed;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ControllerLogowanie;
-use App\Http\Controllers\ControllerRejestracja;
+
 
 /*Route::get('/', function () {
     return view('welcome');
 });*/
 
 Route::get('/', [EventController::class, 'index'])->name('events.index');
-
-Route::get('/logowanie', [ControllerLogowanie::class, 'formularz']);
-Route::get('/test', [ControllerLogowanie::class, 'testowy']);
-
-Route::get('/rejestracja', [ControllerRejestracja::class, 'stronaRejestracji']);
-Route::post('/rejestracja', [ControllerRejestracja::class, 'rejestracja']);
-//Route::get('/rejestracja', function (){return "cos";});
 
 Auth::routes();
 
@@ -31,12 +23,24 @@ Auth::routes();
 //Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 //Route::post('register', [RegisterController::class, 'register']);
 
+//    Zalogowany jako user
 Route::middleware('auth')->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+//    Strona z zakupem biletu
     Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
 
+//    Zapis biletu
     Route::post('/ticket/store', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
+
+//    Anulowanie rezerwacji
+    Route::post('/ticket/cancel/{id}', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
+
+//    Opłacenie biletu
+    Route::post('/ticket/pay/{id}', [App\Http\Controllers\TicketController::class, 'pay'])->name('ticket.pay');
+
+//    Zwracanie biletu
+    Route::post('/ticket/return/{id}', [App\Http\Controllers\TicketController::class, 'return'])->name('ticket.return');
 });
 
 
