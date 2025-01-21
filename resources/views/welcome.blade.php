@@ -8,8 +8,8 @@
         <div class="sort-options">
             <label for="sort-select">Sortuj według:</label>
             <select id="sort-select" onchange="sortEvents()">
-                <option value="date-asc">Od najstarszych</option>
-                <option value="date-desc">Od najnowszych</option>
+                <option value="date-asc">Od najbliższych</option>
+                <option value="date-desc">Od najdalszych</option>
                 <option value="name-asc">Alfabetycznie A-Z</option>
                 <option value="name-desc">Alfabetycznie Z-A</option>
             </select>
@@ -19,22 +19,22 @@
             // Przykładowe dane wydarzeń
             $events = [
                 [
-                    'name' => 'Koncert Zespołu XYZ',
+                    'name' => 'C Występ Kabaretu 123',
+                    'event_date' => '2024-12-15 20:00:00',
+                    'location' => 'Sala Koncertowa',
+                    'image_path' => 'images_for_testing/o3.png'
+                ],
+                [
+                    'name' => 'A Koncert Zespołu XYZ',
                     'event_date' => '2024-12-20 19:00:00',
                     'location' => 'Hala Widowiskowa',
                     'image_path' => 'images_for_testing/o1.png'
                 ],
                 [
-                    'name' => 'Spektakl Teatralny ABC',
+                    'name' => 'B Spektakl Teatralny ABC',
                     'event_date' => '2024-12-25 18:00:00',
                     'location' => 'Teatr Miejski',
                     'image_path' => 'images_for_testing/o2.png'
-                ],
-                [
-                    'name' => 'Występ Kabaretu 123',
-                    'event_date' => '2024-12-30 20:00:00',
-                    'location' => 'Sala Koncertowa',
-                    'image_path' => 'images_for_testing/o3.png'
                 ],
             ];
         @endphp
