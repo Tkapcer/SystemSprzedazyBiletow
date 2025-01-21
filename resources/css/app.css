@@ -19,152 +19,89 @@ a {
         text-decoration: underline;
     }
 
-/* Stylowanie nagłówka */
-        .header {
-            background-color: #333;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .header .title {
-            margin: 0;
-            font-size: 2em;
-            font-family: 'Poppins', sans-serif;
-            color: #ffd700;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        }
-        .header nav a {
-            color: #ffd700;
-            margin: 0 10px;
+/* Pasek nawigacyjny */
+.navbar {
+    background-color: #f8f9fa; /* Jasny kolor tła */
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+    .navbar .navbar-brand {
+        color: #007bff;
+        font-size: 1.5em;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .navbar .navbar-nav {
+        display: flex;
+        align-items: center;
+        list-style-type: none;
+        margin-left: auto;
+    }
+
+        .navbar .navbar-nav .nav-link {
+            color: #333;
+            margin: 0 15px;
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s ease;
         }
-        .header nav a:hover {
-            color: #ffdd57;
-        }
-    .header a {
-        color: #ffd700;
-        margin: 0 10px;
-    }
 
-        .header a:hover {
-            text-decoration: underline;
+            .navbar .navbar-nav .nav-link:hover {
+                color: #007bff;
+            }
+
+        .navbar .navbar-nav .user-info {
+            display: flex;
+            align-items: center;
         }
 
-/* Ogólny kontener */
-.container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+            .navbar .navbar-nav .user-info .user-name {
+                font-weight: bold;
+                margin-right: 15px;
+            }
 
-/* Karta */
-.card {
-    background-color: #fff;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
+            .navbar .navbar-nav .user-info .user-saldo {
+                font-size: 0.9em;
+                margin-right: 15px;
+            }
 
-.card-header {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
+            .navbar .navbar-nav .user-info .btn-logout {
+                padding: 5px 10px;
+                background-color: #dc3545;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 0.9em;
+                text-transform: uppercase;
+                transition: background-color 0.3s ease;
+            }
+
+                .navbar .navbar-nav .user-info .btn-logout:hover {
+                    background-color: #c82333;
+                }
+
+/* Stylowanie nagłówka */
+.header {
+    background-color: #f8f9fa;
     color: #333;
-}
-
-/* Formularz */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-    form label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #555;
-    }
-
-    form input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1em;
-        box-sizing: border-box;
-    }
-
-        form input:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-/* Stylowanie dla checkboxa Remember Me */
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.form-check-input {
-    width: 18px;
-    height: 18px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-    .form-check-input:checked {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-.form-check-label {
-    font-size: 1em;
-    color: #555;
-    cursor: pointer;
-}
-
-/* Przycisk */
-button, .btn-primary {
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    text-transform: uppercase;
+    padding: 10px 0;
     text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-    button:hover, .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-/* Linki dodatkowe */
-.btn-link {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    color: #007bff;
-    text-decoration: none;
-}
-
-    .btn-link:hover {
-        text-decoration: underline;
-        color: #0056b3;
+    .header .title {
+        margin: 0;
+        font-size: 2em;
+        font-family: 'Poppins', sans-serif;
+        color: #007bff;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
     }
 
 /* Karty wydarzeń */
@@ -271,4 +208,70 @@ button, .btn-primary {
     color: red;
     font-size: 0.9em;
     margin-top: 5px;
+}
+
+/* Ogólny kontener */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Formularz */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+    form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    form input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+        box-sizing: border-box;
+    }
+
+        form input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+/* Stylowanie dla checkboxa Remember Me */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .form-check-input:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+.form-check-label {
+    font-size: 1em;
+    color: #555;
+    cursor: pointer;
 }
