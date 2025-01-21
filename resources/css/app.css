@@ -210,11 +210,22 @@ button, .btn-primary {
 
 /* Sortowanie: pełna szerokość */
 .sort-options {
-    width: 100%; 
-    display: flex; 
+    width: 100%;
+    display: flex;
     justify-content: flex-start;
-    gap: 10px; 
+    gap: 10px;
+    font-size: 1em;
+    align-items: center;
 }
+
+    /* Okienko wyboru sortowania */
+    .sort-options select {
+        border-radius: 12px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        transition: border-color 0.3s ease;
+    }
 
 /* Kontener na wydarzenia */
 .events-container {

@@ -7,7 +7,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'System biletowy') }}</title>
+    <!-- Dynamiczny tytuł strony -->
+    <title>@yield('title', 'System Biletowy')</title>
 
     <!-- Linki do fontów -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
