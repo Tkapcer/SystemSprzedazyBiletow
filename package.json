@@ -18,5 +18,8 @@
         "tailwindcss": "^3.4.13",
         "vite": "^5.0",
         "vue": "^3.2.37"
+    },
+    "dependencies": {
+        "colorthief": "^2.6.0"
     }
 }

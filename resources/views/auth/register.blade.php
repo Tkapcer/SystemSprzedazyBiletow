@@ -5,13 +5,15 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
+                    <!-- Nagłówek formularza rejestracji -->
                     <div class="card-header">{{ __('Rejestracja') }}</div>
 
                     <div class="card-body">
+                        <!-- Formularz rejestracji -->
                         <form method="POST" action="{{ route('register') }}">
-                            @csrf
+                            @csrf <!-- Token CSRF dla zabezpieczenia formularza -->
 
-                            <!-- Checkbox do wyboru organizatora -->
+                            <!-- Checkbox do wyboru, czy użytkownik chce założyć konto organizatora -->
                             <div class="row mb-3">
                                 <label for="organizerForm" class="col-md-4 col-form-label text-md-end">{{ __('Chcę założyć konto organizatora') }}</label>
 
@@ -25,13 +27,14 @@
                                 </div>
                             </div>
 
-                            <!-- Formularz użytkownika -->
+                            <!-- Pole do wpisania imienia użytkownika -->
                             <div class="row mb-3 user-field">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Imię') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
+                                    <!-- Błąd walidacji dla imienia -->
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -40,12 +43,14 @@
                                 </div>
                             </div>
 
+                            <!-- Pole do wpisania nazwiska użytkownika -->
                             <div class="row mb-3 user-field">
                                 <label for="surname" class="col-md-4 col-form-label text-md-end">{{ __('Nazwisko') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="surname" type="text" class="form-control @error('surname') is-invalid @enderror" name="surname" value="{{ old('surname') }}" required autocomplete="surname">
 
+                                    <!-- Błąd walidacji dla nazwiska -->
                                     @error('surname')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -54,13 +59,14 @@
                                 </div>
                             </div>
 
-                            <!-- Formularz organizatora (pola ukryte domyślnie) -->
+                            <!-- Formularz dla organizatora (pola ukryte, gdy użytkownik nie jest organizatorem) -->
                             <div class="row mb-3 organizer-field" style="display: none;">
                                 <label for="companyName" class="col-md-4 col-form-label text-md-end">{{ __('Nazwa Firmy') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="companyName" type="text" class="form-control @error('companyName') is-invalid @enderror" name="companyName" value="{{ old('companyName') }}" required autocomplete="companyName">
 
+                                    <!-- Błąd walidacji dla nazwy firmy -->
                                     @error('companyName')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -69,12 +75,14 @@
                                 </div>
                             </div>
 
+                            <!-- Pole do wpisania adresu e-mail -->
                             <div class="row mb-3">
                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('E-mail') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
 
+                                    <!-- Błąd walidacji dla e-maila -->
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -83,12 +91,14 @@
                                 </div>
                             </div>
 
+                            <!-- Pole do wpisania hasła -->
                             <div class="row mb-3">
                                 <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Hasło') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
 
+                                    <!-- Błąd walidacji dla hasła -->
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -97,6 +107,7 @@
                                 </div>
                             </div>
 
+                            <!-- Pole do potwierdzenia hasła -->
                             <div class="row mb-3">
                                 <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Powtórz hasło') }}</label>
 
@@ -105,6 +116,7 @@
                                 </div>
                             </div>
 
+                            <!-- Przycisk rejestracji -->
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
@@ -119,6 +131,7 @@
         </div>
     </div>
 @endsection
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

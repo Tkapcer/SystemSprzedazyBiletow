@@ -12,16 +12,15 @@ body {
 
 a {
     text-decoration: none;
-    color: #007bff;
 }
 
+    /* Usunięcie podkreślenia przy najechaniu na link */
     a:hover {
-        text-decoration: underline;
     }
 
 /* Pasek nawigacyjny */
 .navbar {
-    background-color: #f8f9fa; /* Jasny kolor tła */
+    background-color: #f8f9fa;
     color: #333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 15px 0;
@@ -33,12 +32,7 @@ a {
     align-items: center;
 }
 
-    /* Usuwamy rozbieżności w stylach - Strona Główna i reszta elementów */
-    .navbar .navbar-brand {
-        display: none; /* Ukryjemy tę klasę, bo zmieniliśmy ją na nav-link */
-    }
-
-    /* Zastosowanie do wszystkich linków w nawigacji */
+    /* Linki nawigacyjne */
     .navbar .nav-link {
         color: #333;
         margin: 0 15px;
@@ -52,22 +46,25 @@ a {
             color: #007bff;
         }
 
-    /* Użytkownik i konto */
+    /* Informacje o użytkowniku w nawigacji */
     .navbar .navbar-nav .user-info {
         display: flex;
         align-items: center;
     }
 
+        /* Nazwa użytkownika */
         .navbar .navbar-nav .user-info .user-name {
             font-weight: bold;
             margin-right: 15px;
         }
 
+        /* Saldo użytkownika */
         .navbar .navbar-nav .user-info .user-saldo {
             font-size: 0.9em;
             margin-right: 15px;
         }
 
+        /* Przycisk wylogowania */
         .navbar .navbar-nav .user-info .nav-link.logout {
             padding: 5px 10px;
             background-color: #dc3545;
@@ -79,6 +76,7 @@ a {
             transition: background-color 0.3s ease;
         }
 
+            /* Efekt hover dla przycisku wylogowania */
             .navbar .navbar-nav .user-info .nav-link.logout:hover {
                 background-color: #c82333;
             }
@@ -103,14 +101,6 @@ a {
     padding: 20px;
 }
 
-.card-header {
-    font-size: 1.5em;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
 /* Formularz */
 form {
     display: flex;
@@ -133,12 +123,14 @@ form {
         box-sizing: border-box;
     }
 
+        /* Formularz input focus */
         form input:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
+/* Sprawdzanie poprawności formularza */
 .form-check {
     display: flex;
     align-items: center;
@@ -146,6 +138,7 @@ form {
     margin-top: 10px;
 }
 
+/* Pole wyboru formularza */
 .form-check-input {
     width: 18px;
     height: 18px;
@@ -154,15 +147,19 @@ form {
     cursor: pointer;
 }
 
+    /* Zaznaczone pole wyboru */
     .form-check-input:checked {
         background-color: #007bff;
         border-color: #007bff;
     }
 
-.form-check-label {
-    font-size: 1em;
-    color: #555;
-    cursor: pointer;
+/* Nagłówek karty */
+.card-header {
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em; /* Możesz dostosować rozmiar czcionki */
+    color: #333; /* Kolor tekstu, można dostosować */
+    padding: 10px 0; /* Dodaje przestrzeń wewnętrzną */
 }
 
 /* Przycisk */
@@ -179,10 +176,12 @@ button, .btn-primary {
     text-transform: uppercase;
 }
 
+    /* Efekt hover przycisków */
     button:hover, .btn-primary:hover {
         background-color: #0056b3;
     }
 
+/* Przycisk szczegółów */
 .btn-details {
     display: inline-block;
     margin: 15px 0;
@@ -195,10 +194,12 @@ button, .btn-primary {
     transition: background-color 0.3s ease;
 }
 
+    /* Efekt hover dla przycisku szczegółów */
     .btn-details:hover {
         background-color: #0056b3;
     }
 
+/* Główny kontener na stronie */
 .main-container {
     display: flex;
     flex-wrap: wrap;
@@ -207,6 +208,23 @@ button, .btn-primary {
     padding: 20px;
 }
 
+/* Sortowanie: pełna szerokość */
+.sort-options {
+    width: 100%; 
+    display: flex; 
+    justify-content: flex-start;
+    gap: 10px; 
+}
+
+/* Kontener na wydarzenia */
+.events-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Tytuł sekcji */
 .section-title {
     width: 100%;
     text-align: center;
@@ -215,6 +233,7 @@ button, .btn-primary {
     margin-bottom: 20px;
 }
 
+/* Karta wydarzenia */
 .event-card {
     background-color: white;
     border: 1px solid #ddd;
@@ -224,12 +243,16 @@ button, .btn-primary {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.2s ease-in-out;
+    background-size: cover;
+    background-position: center;
 }
 
+    /* Efekt powiększenia karty przy najechaniu */
     .event-card:hover {
         transform: scale(1.05);
     }
 
+    /* Obrazek w karcie wydarzenia */
     .event-card img {
         width: 100%;
         height: 200px;
@@ -237,30 +260,38 @@ button, .btn-primary {
         object-fit: cover;
     }
 
+    /* Nagłówek w karcie wydarzenia */
     .event-card h3 {
         margin: 15px 0 10px;
         font-size: 1.5em;
-        color: #333;
+        color: #ffffff;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
     }
 
+    /* Opis wydarzenia w karcie */
     .event-card p {
         font-size: 0.9em;
-        color: #555;
+        color: #ffffff;
         margin: 10px 0;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
     }
 
+
+    /* Link w karcie wydarzenia */
     .event-card a {
         display: inline-block;
         margin-top: 10px;
         padding: 10px 20px;
-        background-color: #007bff;
+        background-color: white;
         color: white;
         border-radius: 4px;
         transition: background-color 0.3s;
+        text-decoration: none;
     }
 
+        /* Efekt hover dla linku */
         .event-card a:hover {
-            background-color: #0056b3;
+            background-color: none;
         }
 
 /* Informacje o błędach */
