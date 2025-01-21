@@ -28,83 +28,177 @@ a {
     position: sticky;
     top: 0;
     z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+    /* Usuwamy rozbieżności w stylach - Strona Główna i reszta elementów */
     .navbar .navbar-brand {
-        color: #007bff;
-        font-size: 1.5em;
-        font-weight: bold;
-        text-transform: uppercase;
+        display: none; /* Ukryjemy tę klasę, bo zmieniliśmy ją na nav-link */
     }
 
-    .navbar .navbar-nav {
+    /* Zastosowanie do wszystkich linków w nawigacji */
+    .navbar .nav-link {
+        color: #333;
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+        /* Efekt hover dla linków */
+        .navbar .nav-link:hover {
+            color: #007bff;
+        }
+
+    /* Użytkownik i konto */
+    .navbar .navbar-nav .user-info {
         display: flex;
         align-items: center;
-        list-style-type: none;
-        margin-left: auto;
     }
 
-        .navbar .navbar-nav .nav-link {
-            color: #333;
-            margin: 0 15px;
-            text-decoration: none;
+        .navbar .navbar-nav .user-info .user-name {
             font-weight: bold;
-            transition: color 0.3s ease;
+            margin-right: 15px;
         }
 
-            .navbar .navbar-nav .nav-link:hover {
-                color: #007bff;
-            }
-
-        .navbar .navbar-nav .user-info {
-            display: flex;
-            align-items: center;
+        .navbar .navbar-nav .user-info .user-saldo {
+            font-size: 0.9em;
+            margin-right: 15px;
         }
 
-            .navbar .navbar-nav .user-info .user-name {
-                font-weight: bold;
-                margin-right: 15px;
+        .navbar .navbar-nav .user-info .nav-link.logout {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+            .navbar .navbar-nav .user-info .nav-link.logout:hover {
+                background-color: #c82333;
             }
 
-            .navbar .navbar-nav .user-info .user-saldo {
-                font-size: 0.9em;
-                margin-right: 15px;
-            }
-
-            .navbar .navbar-nav .user-info .btn-logout {
-                padding: 5px 10px;
-                background-color: #dc3545;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 0.9em;
-                text-transform: uppercase;
-                transition: background-color 0.3s ease;
-            }
-
-                .navbar .navbar-nav .user-info .btn-logout:hover {
-                    background-color: #c82333;
-                }
-
-/* Stylowanie nagłówka */
-.header {
-    background-color: #f8f9fa;
-    color: #333;
-    padding: 10px 0;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Ogólny kontener */
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-    .header .title {
-        margin: 0;
-        font-size: 2em;
-        font-family: 'Poppins', sans-serif;
-        color: #007bff;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+/* Karta */
+.card {
+    background-color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Formularz */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+    form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #555;
     }
 
-/* Karty wydarzeń */
+    form input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+        box-sizing: border-box;
+    }
+
+        form input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .form-check-input:checked {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+.form-check-label {
+    font-size: 1em;
+    color: #555;
+    cursor: pointer;
+}
+
+/* Przycisk */
+button, .btn-primary {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+    button:hover, .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.btn-details {
+    display: inline-block;
+    margin: 15px 0;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+    .btn-details:hover {
+        background-color: #0056b3;
+    }
+
 .main-container {
     display: flex;
     flex-wrap: wrap;
@@ -169,109 +263,9 @@ a {
             background-color: #0056b3;
         }
 
-/* Przycisk */
-button, .btn-primary {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1em;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-    button:hover, .btn-primary:hover {
-        background-color: #0056b3;
-    }
-
-.btn-details {
-    display: inline-block;
-    margin: 15px 0;
-    padding: 10px 15px;
-    background-color: #007bff;
-    color: white;
-    text-transform: uppercase;
-    font-size: 0.9em;
-    border-radius: 6px;
-    transition: background-color 0.3s ease;
-}
-
-    .btn-details:hover {
-        background-color: #0056b3;
-    }
-
 /* Informacje o błędach */
 .invalid-feedback {
     color: red;
     font-size: 0.9em;
     margin-top: 5px;
-}
-
-/* Ogólny kontener */
-.container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Formularz */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-    form label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #555;
-    }
-
-    form input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1em;
-        box-sizing: border-box;
-    }
-
-        form input:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
-
-/* Stylowanie dla checkboxa Remember Me */
-.form-check {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.form-check-input {
-    width: 18px;
-    height: 18px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-    .form-check-input:checked {
-        background-color: #007bff;
-        border-color: #007bff;
-    }
-
-.form-check-label {
-    font-size: 1em;
-    color: #555;
-    cursor: pointer;
 }
