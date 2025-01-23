@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Dynamiczny tytuł strony -->
-    <title>@yield('title', 'System Biletowy')</title>
+    <title>@yield('title', 'Viva La Billete')</title>
 
     <!-- Linki do fontów -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -25,6 +25,7 @@
         <!-- Pasek nawigacyjny -->
         <nav class="navbar">
             <a class="nav-link" href="/">Strona Główna</a>
+            <div class="navbar-title">Viva La Billete</div>
             <div class="navbar-nav">
                 @guest
                     <a class="nav-link" href="{{ route('register') }}">Rejestracja</a>
@@ -45,7 +46,17 @@
                     @auth('organizer')
                         <span class="user-info">
                             <span class="user-name">{{ Auth::user()->company_name }}</span>
-                            <a class="nav-link" href="{{ route('panel') }}">Panel</a>
+                            <a class="nav-link" href="{{ route('panel') }}">Konto</a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="nav-link logout" style="background: none; border: none; color: inherit; padding: 5px 10px;">Wyloguj</button>
+                            </form>
+                        </span>
+                    @endauth
+                    @auth('admin')
+                        <span class="user-info">
+                            <span class="user-name">{{ Auth::user()->company_name }}</span>
+                            <a class="nav-link" href="{{ route('adminPanel') }}">Panel</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="nav-link logout" style="background: none; border: none; color: inherit; padding: 5px 10px;">Wyloguj</button>
