@@ -15,8 +15,8 @@
             </select>
         </div>
 
+        <!-- Dane do testowania -->
         @php
-            // Przykładowe dane wydarzeń
             $events = [
                 [
                     'name' => 'C Występ Kabaretu 123',
