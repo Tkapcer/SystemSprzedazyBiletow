@@ -46,7 +46,7 @@
                     @auth('organizer')
                         <span class="user-info">
                             <span class="user-name">{{ Auth::user()->company_name }}</span>
-                            <a class="nav-link" href="{{ route('panel') }}">Konto</a>
+                            <a class="nav-link" href="{{ route('organizer.panel') }}">Konto</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" class="nav-link logout" style="background: none; border: none; color: inherit; padding: 5px 10px;">Wyloguj</button>
