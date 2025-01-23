@@ -190,6 +190,34 @@ button, .btn-primary {
         background-color: #0056b3;
     }
 
+.ticket-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+    .ticket-buttons button {
+        width: 50%;
+        background-color: #007bff;
+        color: white;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .ticket-buttons button:hover {
+            background-color: #0056b3;
+        }
+
+
+/* Styl dla przycisków obok siebie */
+button[type="button"] {
+    display: inline-block; 
+    margin-right: 10px; 
+    width: auto; 
+}
+
+
 /* Przycisk szczegółów */
 .btn-details {
     display: inline-block;

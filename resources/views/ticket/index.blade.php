@@ -31,8 +31,8 @@
         <img src="{{ asset($event['image_path']) }}" alt="Image for {{ $event['name'] }}" class="img-fluid">
     </div>
 
-    <!-- Formularz do zakupu/rezerwacji biletu -->
-    <form action="{{ route('ticket.store') }}" method="POST">
+    <!-- Formularz do wyboru biletów -->
+    <form action="{{ route('home') }}" method="POST">
         @csrf
 
         <!-- Tabela wyboru biletów -->
@@ -65,12 +65,40 @@
         </table>
 
         <!-- Dwa przyciski do wyboru akcji -->
-        <div class="mt-3">
-            <button type="submit" name="status" value="purchased" class="btn btn-success">
-                Kup bilet
+       <div class="mt-3 flex justify-between gap-2">
+            <button type="submit" name="status" value="purchased" class="btn btn-success w-1/2">
+                Kup
             </button>
-            <button type="submit" name="status" value="reserved" class="btn btn-warning">
-                Zarezerwuj bilet
+            <button type="submit" name="status" value="reserved" class="btn btn-warning w-1/2">
+                Zarezerwuj
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="container">
+    <!-- Nagłówek formularza zakupu biletów -->
+    <h1 class="text-center mb-4">Wybór biletów</h1>
+
+    <!-- Informacje o wydarzeniu -->
+    <div class="mb-4">
+        <h2>{{ $event['name'] }}</h2>
+        <p><strong>Data:</strong> {{ $event['event_date'] }}</p>
+        <p><strong>Lokalizacja:</strong> {{ $event['location'] }}</p>
+        <img src="{{ asset($event['image_path']) }}" alt="Image for {{ $event['name'] }}" class="img-fluid">
+    </div>
+
+    <!-- Formularz do zatwierdzenia kupna/rezerwacji -->
+    <form action="{{ route('home') }}" method="POST">
+        @csrf
+
+        <!-- Podsumowanie biletów-->
+        
+
+        <!-- Przycisk do zatwierdzenia -->
+       <div class="mt-3 flex justify-between gap-2">
+            <button type="submit" name="status" value="purchased" class="btn btn-success w-1/2">
+                Zatwierdź
             </button>
         </div>
     </form>
