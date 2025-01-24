@@ -316,3 +316,111 @@ button, .btn-primary {
     color: red;
     margin-top: 5px;
 }
+
+/* Stylizacja formularza dodawania wydarzenia */
+.event-form {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .event-form h1 {
+        text-align: center;
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .event-form label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .event-form input,
+    .event-form textarea,
+    .event-form select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 1em;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .event-form input:focus,
+        .event-form textarea:focus,
+        .event-form select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
+
+    .event-form .btn-primary {
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        text-align: center;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+    }
+
+        .event-form .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    /* Stylizacja dynamicznych sektorów */
+    .event-form .sector-row {
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s;
+    }
+
+        .event-form .sector-row:hover {
+            transform: scale(1.02);
+        }
+
+    .event-form #add-sector,
+    .event-form #remove-sector {
+        background-color: #6c757d;
+        color: white;
+        margin-top: 10px;
+        padding: 10px;
+        font-size: 0.9em;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .event-form #add-sector:hover {
+            background-color: #5a6268;
+        }
+
+        .event-form #remove-sector:hover {
+            background-color: #dc3545;
+        }
+
+    /* Obsługa błędów walidacji */
+    .event-form .is-invalid {
+        border-color: red;
+        background-color: #ffe6e6;
+    }
+
+    .event-form .invalid-feedback {
+        color: red;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
