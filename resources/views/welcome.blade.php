@@ -15,41 +15,22 @@
             </select>
         </div>
 
-        <!-- Dane do testowania -->
+        <!-- Pobieranie wydarzeń z bazy danych -->
         @php
-            $events = [
-                [
-                    'name' => 'C Występ Kabaretu 123',
-                    'event_date' => '2024-12-15 20:00:00',
-                    'location' => 'Sala Koncertowa',
-                    'image_path' => 'images_for_testing/o3.png'
-                ],
-                [
-                    'name' => 'A Koncert Zespołu XYZ',
-                    'event_date' => '2024-12-20 19:00:00',
-                    'location' => 'Hala Widowiskowa',
-                    'image_path' => 'images_for_testing/o1.png'
-                ],
-                [
-                    'name' => 'B Spektakl Teatralny ABC',
-                    'event_date' => '2024-12-25 18:00:00',
-                    'location' => 'Teatr Miejski',
-                    'image_path' => 'images_for_testing/o2.png'
-                ],
-            ];
+            $events = \App\Models\Event::all(); // Pobiera wszystkie wydarzenia
         @endphp
 
         <!-- Lista wydarzeń -->
         <div class="events-container" id="events-container">
             @foreach ($events as $event)
-                <div class="event-card" data-date="{{ $event['event_date'] }}" data-name="{{ $event['name'] }}">
-                    <a href="/ticket">
-                        <img class="event-image" src="{{ asset($event['image_path']) }}" alt="{{ $event['name'] }}">
-                        <h3>{{ $event['name'] }}</h3>
+                <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}">
+                    <a href="/ticket/{{ $event->id }}"> <!-- Dodaj link do biletu -->
+                        <img class="event-image" src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}">
+                        <h3>{{ $event->name }}</h3>
                         <p>
-                            Data: {{ date('d F Y', strtotime($event['event_date'])) }}<br>
-                            Godzina: {{ date('H:i', strtotime($event['event_date'])) }}<br>
-                            Miejsce: {{ $event['location'] }}
+                            Data: {{ date('d F Y', strtotime($event->event_date)) }}<br>
+                            Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>
+                            Miejsce: {{ $event->location }}
                         </p>
                     </a>
                 </div>
