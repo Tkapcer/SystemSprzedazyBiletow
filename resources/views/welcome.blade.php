@@ -20,7 +20,7 @@
             @foreach ($events as $event)
                 <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}">
                     <a href="/event/{{ $event->id }}"> <!-- Dodaj link do biletu -->
-                        <img class="event-image" src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}">
+                        <img class="event-image" src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
                         <p>
                             Data: {{ date('d F Y', strtotime($event->event_date)) }}<br>
