@@ -10,6 +10,9 @@
     <!-- Dynamiczny tytuł strony -->
     <title>@yield('title', 'Viva La Billete')</title>
 
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('images_for_testing/icons8-ticket-50.png') }}" type="image/png">
+
     <!-- Linki do fontów -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
