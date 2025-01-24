@@ -19,6 +19,17 @@
 
     <!-- Dodanie CDN do ColorThief -->
     <script src="https://cdn.jsdelivr.net/npm/colorthief@2.3.0/dist/color-thief.umd.js"></script>
+
+    <!-- Własny styl do tła strony, musi być tu, bo w app.css nie wczytuje się ścieżka do obrazu. -->
+    <style>
+        body {
+            background-image: url('{{ asset('images_for_testing/tlo.png') }}');
+            background-repeat: repeat;
+            background-position: top left;
+            background-size: auto;
+            height: 100vh;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
@@ -73,6 +84,7 @@
     <!-- Wspólny skrypt dla wszystkich stron -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
             const colorThief = new ColorThief(); // Upewnij się, że masz dostęp do ColorThief
             const eventCards = document.querySelectorAll('.event-card');
 
