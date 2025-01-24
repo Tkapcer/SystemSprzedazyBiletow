@@ -69,6 +69,17 @@
         <!-- Zdjęcie -->
         <div class="mb-3">
             <label for="image" class="form-label">Zdjęcie (pozostaw puste, jeśli nie chcesz zmieniać)</label>
+    
+            <!-- Podgląd aktualnego zdjęcia -->
+            @if($event->image)
+                <div class="mb-3">
+                    <p>Obecne zdjęcie:</p>
+                    <img src="{{ asset('storage/' . $event->image) }}" alt="Zdjęcie wydarzenia" style="max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 5px;">
+                </div>
+            @else
+                <p>Brak zdjęcia przypisanego do wydarzenia.</p>
+            @endif
+
             <input
                 type="file"
                 class="form-control @error('image') is-invalid @enderror"
@@ -78,6 +89,7 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
 
         <!-- Sektory -->
         <div class="mb-3">
