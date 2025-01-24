@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+//use MongoDB\Driver\Session;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -42,6 +44,8 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        Session::forget('url.intended');
+
         // Walidacja
         $credentials = $request->validate([
             'email' => 'required|email',
