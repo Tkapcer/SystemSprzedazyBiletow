@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid mx-auto p-6">
         <div class="card shadow-sm rounded-lg">
-            <div class="card-header text-center text-lg font-bold py-3">{{ __('Organizer Dashboard') }}</div>
+            <div class="card-header text-center text-lg font-bold py-3">{{ __('Panel Organizatora') }}</div>
 
             <div class="card-body">
                 @if (session('status'))
@@ -39,13 +39,18 @@
                                     <th class="py-2 px-4 text-left w-2/12">Lokalizacja</th>
                                     <th class="py-2 px-4 text-left w-2/12">Opcje</th>
                                     <th class="py-2 px-4 text-left w-2/12">Status</th>
+                                    <th class="py-2 px-4 text-left w-2/12">Zakończ wydarzenie</th>
+                                    <th class="py-2 px-4 text-left w-2/12">Usuń</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($events as $event)
                                     <tr class="border-b hover:bg-gray-50">
                                         <td class="py-2 px-4">{{ $loop->iteration }}</td>
-                                        <td class="py-2 px-4">{{ $event->name }}</td>
+                                        <td class="py-2 px-4">
+                                        <a href="{{ route('event.show', $event->id) }}" class="text-blue-500 hover:text-blue-700">
+                                        {{ $event->name }}
+                                        </a></td>
                                         <td class="py-2 px-4">{{ $event->event_date->format('d.m.Y H:i') }}</td>
                                         <td class="py-2 px-4">{{ $event->location }}</td>
                                         <td class="py-2 px-4">
@@ -60,7 +65,19 @@
                                                 <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujące</span>
                                             @elseif ($event->status == 'rejected')
                                                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
+                                            @elseif ($event->status == 'expired')
+                                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Archiwalne</span>
                                             @endif
+                                        </td>
+                                        <td class="py-2 px-4">
+                                            <a href="" class="btn-details text-white">
+                                                Zakończ
+                                            </a>
+                                        </td>
+                                        <td class="py-2 px-4">
+                                            <a href="" class="bg-red-300 text-white px-6 py-2 rounded-full hover:bg-red-400">
+                                                Usuń
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
