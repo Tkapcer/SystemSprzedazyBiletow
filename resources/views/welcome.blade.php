@@ -43,7 +43,7 @@
         <div class="events-container" id="events-container">
             @foreach ($events as $event)
                 <div class="event-card" data-date="{{ $event['event_date'] }}" data-name="{{ $event['name'] }}">
-                    <a href="/#">
+                    <a href="/ticket">
                         <img class="event-image" src="{{ asset($event['image_path']) }}" alt="{{ $event['name'] }}">
                         <h3>{{ $event['name'] }}</h3>
                         <p>
