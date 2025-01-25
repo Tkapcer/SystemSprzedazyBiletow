@@ -11,7 +11,7 @@
     <title>@yield('title', 'Viva La Billete')</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('images_for_testing/icons8-ticket-50.png') }}" type="image/png">
+    <link rel="icon" href="{{ asset('storage/icons8-ticket-50.png') }}" type="image/png">
 
     <!-- Linki do fontów -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -26,7 +26,7 @@
     <!-- Własny styl do tła strony, musi być tu, bo w app.css nie wczytuje się ścieżka do obrazu. -->
     <style>
         body {
-            background-image: url('{{ asset('images_for_testing/tlo.png') }}');
+            background-image: url('{{ asset('storage/tlo.png') }}');
             background-repeat: repeat;
             background-position: top left;
             background-size: auto;
