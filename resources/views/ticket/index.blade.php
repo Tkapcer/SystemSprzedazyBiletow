@@ -46,13 +46,13 @@
 
         <!-- Trzy przyciski -->
         <div class="mt-3 flex justify-between gap-2">
-            <a href="/event/{{ $event->id }}" class="btn btn-secondary w-1/2">
+            <a href="/event/{{ $event->id }}" class="main-button-style btn-secondary w-1/2">
                 Wstecz
             </a>
-            <button type="button" id="buy-button" class="btn btn-success w-1/2">
+            <button type="button" id="buy-button" class="main-button-style btn-success w-1/2">
                 Kup
             </button>
-            <button type="button" id="reserve-button" class="btn btn-warning w-1/2">
+            <button type="button" id="reserve-button" class="main-button-style btn-warning w-1/2">
                 Zarezerwuj
             </button>
         </div>
@@ -70,10 +70,10 @@
             <p><strong>Łączna kwota: </strong><span id="total-price">0 zł</span></p>
 
             <!-- Przycisk 'Wstecz' -->
-            <button id="back-button" class="btn btn-secondary">Wstecz</button>
+            <button id="back-button" class="main-button-style btn-secondary">Wstecz</button>
             
             <!-- Dynamiczny przycisk (Kup lub Zarezerwuj) -->
-            <button id="confirm-action-button" type="submit" class="btn mt-3"></button>
+            <button id="confirm-action-button" type="submit" class="main-button-style mt-3"></button>
         </form>
     </div>
 </div>

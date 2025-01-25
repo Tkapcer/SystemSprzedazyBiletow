@@ -24,7 +24,8 @@
                     <p>{{ $event->description }}</p>
                 </div>
             </div>
-            <a href="{{ route('ticket.index', $event->id) }}" class="btn btn-primary">Kup bilet</a>
+            <a href="{{ url('/') }}" class="main-button-style btn-primary">Powrót do listy wydarzeń</a>
+            <a href="{{ route('ticket.index', $event->id) }}" class="main-button-style btn-primary">Kup / Zarezerwuj</a>
         </main>
     </div>
 </div>
