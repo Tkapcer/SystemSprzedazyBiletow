@@ -20,12 +20,11 @@ a {
     position: relative;
     background-color: white;
     color: #333;
-    padding: 10px 20px;
+    padding: 5px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    text-transform: uppercase;
     border: 3px solid transparent;
     border-image: linear-gradient(to right, #ffabf4, #bd8aff, #99f5ff) 1;
     overflow: hidden;
@@ -53,12 +52,11 @@ a {
     position: relative;
     background-color: white;
     color: #333;
-    padding: 10px 20px;
+    padding: 5px 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    text-transform: uppercase;
     border: 3px solid transparent;
     border-image: linear-gradient(to right, #ff4ded, #ff6eaa, #ff2b3d) 1;
     overflow: hidden;
@@ -80,6 +78,66 @@ a {
         box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
     }
 
+/* Styl dla kontenera: przyciski pion*/
+.white-container {
+    background-color: white;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+}
+
+/* Styl dla kontenera: przyciski poziom*/
+.white-container-2 {
+    background-color: white;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+    .white-container-2 .main-button-style {
+        flex: 1;
+        margin: 0 10px;
+    }
+
+/* Kontener dla zdjęcia i treści */
+.event-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.event-info {
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
+    color: #ffffff;
+}
+
+
+.event-image-container {
+    flex-shrink: 0; 
+}
+
+#event-image {
+    border-radius: 12px;
+    width: 250px;
+    height: auto;
+}
+
+.event-details {
+    flex-grow: 1;
+    max-width: 60%;
+}
+
 .table {
     width: 100%;
     table-layout: fixed;
@@ -91,18 +149,21 @@ a {
     background-color: #f8f9fa;
     color: #333;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 15px 0;
+    position: -webkit-sticky;
     position: sticky;
     top: 0;
+    left: 0;
+    width: 100%;
     z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .navbar-title {
-    font-size: 1.5em;
+    font-size: 1.2em;
     font-weight: bold;
     color: #333;
     text-align: center;
@@ -112,42 +173,23 @@ a {
     transform: translateX(-50%);
 }
 
-.navbar .nav-link {
-    margin: 0 15px;
-    text-decoration: none;
-}
-
-.navbar .navbar-nav .user-info {
+/* Nawigacja po prawej stronie */
+.navbar-nav {
     display: flex;
     align-items: center;
+    gap: 15px;
+    padding-right: 15px;
 }
 
-    .navbar .navbar-nav .user-info .user-name {
-        font-weight: bold;
-        margin-right: 15px;
-    }
-
-    .navbar .navbar-nav .user-info .user-saldo {
-        margin-right: 15px;
-    }
-
-    .navbar .navbar-nav .user-info .nav-link.logout {
-        padding: 5px 10px;
-        background-color: #dc3545;
-        color: white;
-        border-radius: 12px;
-        cursor: pointer;
-        text-transform: uppercase;
-        transition: background-color 0.3s ease;
-    }
-
-        .navbar .navbar-nav .user-info .nav-link.logout:hover {
-            background-color: #c82333;
-        }
+/* Linki nawigacyjne po lewej stronie */
+.nav-link {
+    display: flex;
+    padding-left: 15px;
+}
 
 /* Ogólny kontener */
 .container {
-    max-width: 600px;
+    max-width: 40%;
     margin: 50px auto;
     padding: 20px;
     background-color: #fff;
@@ -295,7 +337,6 @@ button[type="button"] {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
-    font-size: 1.5em;
 }
 
 /* Kontener na wydarzenia */
@@ -334,7 +375,6 @@ button[type="button"] {
 
     .event-card h3 {
         margin: 15px 0 10px;
-        font-size: 1.5em;
         color: #ffffff;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
     }
@@ -379,7 +419,6 @@ button[type="button"] {
 
     .event-form h1 {
         text-align: center;
-        font-size: 1.8em;
         margin-bottom: 20px;
         color: #333;
         font-weight: bold;
@@ -395,7 +434,6 @@ button[type="button"] {
         padding: 12px;
         border: 1px solid #ddd;
         border-radius: 12px;
-        font-size: 1em;
         box-sizing: border-box;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
@@ -412,7 +450,6 @@ button[type="button"] {
         color: white;
         border: none;
         border-radius: 12px;
-        font-size: 1em;
         cursor: pointer;
         text-align: center;
         text-transform: uppercase;
@@ -442,7 +479,6 @@ button[type="button"] {
         color: white;
         margin-top: 10px;
         padding: 10px;
-        font-size: 0.9em;
         border-radius: 4px;
         cursor: pointer;
         transition: background-color 0.3s ease;
@@ -463,7 +499,6 @@ button[type="button"] {
 
     .event-form .invalid-feedback {
         color: red;
-        font-size: 0.9em;
         margin-top: 5px;
     }
 

@@ -26,7 +26,7 @@
     <!-- Własny styl do tła strony, musi być tu, bo w app.css nie wczytuje się ścieżka do obrazu. -->
     <style>
         body {
-            background-image: url('{{ asset('storage/tlo.png') }}');
+            background-image: url('{{ asset('storage/tlo3.png') }}');
             background-repeat: repeat;
             background-position: top left;
             background-size: auto;
@@ -38,39 +38,35 @@
     <div id="app">
         <!-- Pasek nawigacyjny -->
         <nav class="navbar">
-            <a class="nav-link main-button-style" href="/">Strona Główna</a>
+            <div class="nav-link">
+                <a class="main-button-style" href="/">Strona Główna</a>
+            </div>
             <div class="navbar-title">Viva La Billete</div>
             <div class="navbar-nav">
                 <!-- Sprawdzamy, czy użytkownik jest zalogowany jako klient, organizator lub administrator -->
                 @if(Auth::guard('web')->check())
                     <!-- Dla klienta -->
-                    <span class="user-info">
                         <span class="user-name">{{ Auth::user()->name }}</span>
                         <span class="user-saldo">{{ Auth::user()->balance }} zł</span>
-                        <a class="nav-link main-button-style" href="{{ route('home') }}">Konto</a>
+                        <a class="main-button-style" href="{{ route('home') }}">Konto</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="nav-link main-button-style">Wyloguj</button>
+                            <button type="submit" class="main-button-style">Wyloguj</button>
                         </form>
-                    </span>
                 @elseif(Auth::guard('organizer')->check())
                     <!-- Dla organizatora -->
-                    <span class="user-info">
-                        <a class="nav-link main-button-style" href="{{ route('organizer.panel') }}">Konto</a>
+                        <a class="main-button-style" href="{{ route('organizer.panel') }}">Konto</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="nav-link main-button-style">Wyloguj</button> <!-- Zmieniony przycisk -->
+                            <button type="submit" class="main-button-style">Wyloguj</button> <!-- Zmieniony przycisk -->
                         </form>
-                    </span>
                 @elseif(Auth::guard('admin')->check())
                     <!-- Dla administratora -->
-                    <span class="user-info">
-                        <a class="nav-link main-button-style" href="{{ route('adminPanel') }}">Panel</a> 
+                        <a class="main-button-style" href="{{ route('adminPanel') }}">Panel</a> 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="nav-link main-button-style" style="background: none; border: none; color: inherit; padding: 5px 10px;">Wyloguj</button> <!-- Zmieniony przycisk -->
+                            <button type="submit" class="main-button-style">Wyloguj</button> <!-- Zmieniony przycisk -->
                         </form>
-                    </span>
                 @else
                     <!-- Jeśli użytkownik nie jest zalogowany jako klient, organizator ani administrator -->
                     <a class="nav-link main-button-style" href="{{ route('register') }}">Rejestracja</a> 

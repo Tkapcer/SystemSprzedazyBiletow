@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="container">
-    <!-- Nagłówek formularza wyboru biletów -->
-    <h1 class="text-center mb-4">Wybór biletów</h1>
+    <!-- Nazwa wydarzenia -->
+        <div class="white-container">
+             <h2>{{ $event->name }}</h2>
+        </div>
 
     <!-- Informacje o wydarzeniu -->
-    <div class="mb-4">
-        <h2>{{ $event->name }}</h2>
+    <div class="event-info">
         <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($event->event_date)->format('d F Y H:i') }}</p>
         <p><strong>Lokalizacja:</strong> {{ $event->location }}</p>
-        <img src="{{ asset('storage/' . $event->image_path) }}" alt="Image for {{ $event->name }}" class="img-fluid">
     </div>
 
     <!-- Formularz do wyboru biletów -->
@@ -19,7 +19,7 @@
 
         <!-- Tabela wyboru biletów -->
         <table class="table">
-            <thead>
+            <thead class="event-info">
                 <tr>
                     <th scope="col">Rodzaj</th>
                     <th scope="col">Cena</th>
@@ -30,8 +30,8 @@
                 <!-- Dynamicznie generowane sektory -->
                 @foreach ($sectors as $sector)
                     <tr>
-                        <td>{{ $sector->name }}</td>
-                        <td>{{ $sector->price }} zł</td>
+                        <td class="event-info">{{ $sector->name }}</td>
+                        <td class="event-info">{{ $sector->price }} zł</td>
                         <td>
                             <input type="number" class="form-control" name="sectors[{{ $sector->id }}][number_of_seats]" value="0" min="0" max="10" required>
                             <input type="hidden" name="sectors[{{ $sector->id }}][sector_id]" value="{{ $sector->id }}">
@@ -44,14 +44,14 @@
         </table>
 
         <!-- Trzy przyciski -->
-        <div class="mt-3 flex justify-between gap-2">
-            <a href="/event/{{ $event->id }}" class="main-button-style btn-secondary w-1/2">
+        <div class="white-container-2">
+            <a href="/event/{{ $event->id }}" class="main-button-style">
                 Wstecz
             </a>
-            <button type="button" id="buy-button" class="main-button-style btn-success w-1/2">
+            <button type="button" id="buy-button" class="main-button-style">
                 Kup
             </button>
-            <button type="button" id="reserve-button" class="main-button-style btn-warning w-1/2">
+            <button type="button" id="reserve-button" class="main-button-style">
                 Zarezerwuj
             </button>
         </div>
@@ -202,6 +202,27 @@
         document.getElementById('confirmation-modal').style.display = 'none';
     });
 });
+
+// Skrypt związany z ColorThief
+document.addEventListener('DOMContentLoaded', function() {
+        const colorThief = new ColorThief(); // Inicjalizujemy obiekt ColorThief
+        const eventImage = new Image(); // Tworzymy nowe zdjęcie
+        const eventContainer = document.querySelector('.container'); // Wybieramy kontener, którego tło chcemy zmienić
+
+        // Ustawiamy źródło obrazka
+        eventImage.src = "{{ asset('storage/' . $event->image_path) }}";
+
+        // Czekamy, aż obrazek się załaduje
+        eventImage.onload = function() {
+            try {
+                const dominantColor = colorThief.getColor(eventImage); // Pobieramy dominujący kolor z obrazka
+                const rgbColor = `rgb(${dominantColor.join(', ')})`; // Zamieniamy kolor na format RGB
+                eventContainer.style.backgroundColor = rgbColor; // Ustawiamy tło kontenera
+            } catch (error) {
+                console.error("Błąd przy pobieraniu koloru: ", error); // Obsługa błędów
+            }
+        };
+    });
 
 </script>
 
