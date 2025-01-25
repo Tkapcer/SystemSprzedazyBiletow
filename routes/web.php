@@ -31,8 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('addMoney');
 
 //    Strona z zakupem biletu
-    //Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
-    Route::get('/ticket', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
+    Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
 
 //    Zapis biletu
     Route::post('/ticket/store', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
