@@ -37,7 +37,7 @@ class RegisterRequest extends FormRequest
         }*/
 
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required_if:organizerForm,false|string|max:255',
             'surname' => 'required_if:organizerForm,false|string|max:255',
             'companyName' => 'required_if:organizerForm,true|string|max:255',
             'email' => [
@@ -62,7 +62,7 @@ class RegisterRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Pole imię jest wymagane.',
+            'name.required_if' => 'Pole imię jest wymagane.',
             'surname.required_if' => 'Pole nazwisko jest wymagane.',
             'companyName.required_if' => 'Pole nazwa firmy jest wymagane.',
             'email.required' => 'Pole adres e-mail jest wymagane.',

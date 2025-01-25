@@ -5,15 +5,12 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <!-- Nagłówek formularza rejestracji -->
                     <div class="card-header">{{ __('Rejestracja') }}</div>
 
                     <div class="card-body">
-                        <!-- Formularz rejestracji -->
                         <form method="POST" action="{{ route('register') }}">
-                            @csrf <!-- Token CSRF dla zabezpieczenia formularza -->
+                            @csrf
 
-                            <!-- Checkbox do wyboru, czy użytkownik chce założyć konto organizatora -->
                             <div class="row mb-3">
                                 <label for="organizerForm" class="col-md-4 col-form-label text-md-end">{{ __('Chcę założyć konto organizatora') }}</label>
 
@@ -27,14 +24,11 @@
                                 </div>
                             </div>
 
-                            <!-- Pole do wpisania imienia użytkownika -->
+                            <!-- Pola dla Klienta -->
                             <div class="row mb-3 user-field">
                                 <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Imię') }}</label>
-
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                    <!-- Błąd walidacji dla imienia -->
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autocomplete="name">
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -43,14 +37,10 @@
                                 </div>
                             </div>
 
-                            <!-- Pole do wpisania nazwiska użytkownika -->
                             <div class="row mb-3 user-field">
                                 <label for="surname" class="col-md-4 col-form-label text-md-end">{{ __('Nazwisko') }}</label>
-
                                 <div class="col-md-6">
-                                    <input id="surname" type="text" class="form-control @error('surname') is-invalid @enderror" name="surname" value="{{ old('surname') }}" required autocomplete="surname">
-
-                                    <!-- Błąd walidacji dla nazwiska -->
+                                    <input id="surname" type="text" class="form-control @error('surname') is-invalid @enderror" name="surname" value="{{ old('surname') }}" autocomplete="surname">
                                     @error('surname')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -59,14 +49,11 @@
                                 </div>
                             </div>
 
-                            <!-- Formularz dla organizatora (pola ukryte, gdy użytkownik nie jest organizatorem) -->
+                            <!-- Pola dla Organizatora -->
                             <div class="row mb-3 organizer-field" style="display: none;">
                                 <label for="companyName" class="col-md-4 col-form-label text-md-end">{{ __('Nazwa Firmy') }}</label>
-
                                 <div class="col-md-6">
-                                    <input id="companyName" type="text" class="form-control @error('companyName') is-invalid @enderror" name="companyName" value="{{ old('companyName') }}" required autocomplete="companyName">
-
-                                    <!-- Błąd walidacji dla nazwy firmy -->
+                                    <input id="companyName" type="text" class="form-control @error('companyName') is-invalid @enderror" name="companyName" value="{{ old('companyName') }}" autocomplete="companyName">
                                     @error('companyName')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -75,14 +62,11 @@
                                 </div>
                             </div>
 
-                            <!-- Pole do wpisania adresu e-mail -->
+                            <!-- Pola wspólne -->
                             <div class="row mb-3">
                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('E-mail') }}</label>
-
                                 <div class="col-md-6">
                                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                    <!-- Błąd walidacji dla e-maila -->
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -91,14 +75,10 @@
                                 </div>
                             </div>
 
-                            <!-- Pole do wpisania hasła -->
                             <div class="row mb-3">
                                 <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Hasło') }}</label>
-
                                 <div class="col-md-6">
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                    <!-- Błąd walidacji dla hasła -->
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -107,16 +87,13 @@
                                 </div>
                             </div>
 
-                            <!-- Pole do potwierdzenia hasła -->
                             <div class="row mb-3">
                                 <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Powtórz hasło') }}</label>
-
                                 <div class="col-md-6">
                                     <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
                                 </div>
                             </div>
 
-                            <!-- Przycisk rejestracji -->
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
@@ -132,31 +109,46 @@
     </div>
 @endsection
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const checkbox = document.getElementById('organizerForm');
-        const organizerFields = document.querySelectorAll('.organizer-field');
-        const userFields = document.querySelectorAll('.user-field');
+        const organizerCheckbox = document.getElementById('organizerForm'); // Checkbox dla organizatora
+        const organizerFields = document.querySelectorAll('.organizer-field'); // Pola organizatora
+        const userFields = document.querySelectorAll('.user-field'); // Pola klienta
 
-        // Funkcja do ukrywania/pokazywania pól formularza
-        checkbox.addEventListener('change', function () {
-            if (checkbox.checked) {
-                organizerFields.forEach(field => field.style.display = 'block');
-                userFields.forEach(field => field.style.display = 'none');
+        // Funkcja do pokazywania/ukrywania pól
+        function toggleFields() {
+            if (organizerCheckbox.checked) {
+                organizerFields.forEach(field => field.style.display = 'block'); // Pokaż pola organizatora
+                userFields.forEach(field => field.style.display = 'none'); // Ukryj pola klienta
             } else {
-                organizerFields.forEach(field => field.style.display = 'none');
-                userFields.forEach(field => field.style.display = 'block');
+                userFields.forEach(field => field.style.display = 'block'); // Pokaż pola klienta
+                organizerFields.forEach(field => field.style.display = 'none'); // Ukryj pola organizatora
+            }
+        }
+
+        // Obsługa zmiany checkboxa
+        organizerCheckbox.addEventListener('change', toggleFields);
+
+        // Inicjalizacja przy załadowaniu strony
+        toggleFields();
+
+        // Usuwanie niepotrzebnych pól z wysyłanego formularza
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function (e) {
+            if (organizerCheckbox.checked) {
+                // Usuń pola klienta
+                userFields.forEach(field => {
+                    const input = field.querySelector('input');
+                    if (input) input.disabled = true; // Oznacz pola klienta jako nieaktywne
+                });
+            } else {
+                // Usuń pola organizatora
+                organizerFields.forEach(field => {
+                    const input = field.querySelector('input');
+                    if (input) input.disabled = true; // Oznacz pola organizatora jako nieaktywne
+                });
             }
         });
-
-        // Inicjalizacja stanu checkboxa przy załadowaniu strony
-        if (checkbox.checked) {
-            organizerFields.forEach(field => field.style.display = 'block');
-            userFields.forEach(field => field.style.display = 'none');
-        } else {
-            organizerFields.forEach(field => field.style.display = 'none');
-            userFields.forEach(field => field.style.display = 'block');
-        }
     });
 </script>
+
