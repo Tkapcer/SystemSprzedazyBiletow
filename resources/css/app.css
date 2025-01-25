@@ -48,6 +48,12 @@ a {
         box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
     }
 
+.table {
+    width: 100%;
+    table-layout: fixed;
+    text-align: left;
+}
+
 /* Pasek nawigacyjny */
 .navbar {
     background-color: #f8f9fa;

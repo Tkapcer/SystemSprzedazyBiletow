@@ -64,33 +64,40 @@
         <form action="{{ route('ticket.store') }}" method="POST" id="modal-form">
             @csrf
 
-            <p id="modal-message">Wciśnięto przycisk</p>
-            <div id="sectors-summary"></div>
+            <!-- Nagłówek modalu -->
+            <h3 class="mb-3">Twoje bilety</h3>
+
+            <!-- Podsumowanie wybranych biletów -->
+            <div id="sectors-summary" class="mb-3"></div>
+            
+            <!-- Łączna kwota -->
             <p><strong>Łączna kwota: </strong><span id="total-price">0 zł</span></p>
 
-            <!-- Przycisk 'Wstecz' -->
-            <button id="back-button" class="main-button-style btn-secondary">Wstecz</button>
-            
-            <!-- Dynamiczny przycisk (Kup lub Zarezerwuj) -->
+            <!-- Przycisk Kup/Zarezerwuj -->
             <button id="confirm-action-button" type="submit" class="main-button-style mt-3"></button>
+
+            <!-- Przycisk Wstecz -->
+            <button id="back-button" class="main-button-style btn-secondary mt-3">Wstecz</button>
         </form>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const sectors = @json($sectors);  // Przekazujemy dane sektorów z PHP do JavaScriptu
+    const sectors = @json($sectors);
 
     // Funkcja pokazująca modal z podsumowaniem
     function showModal(action) {
-        const modalMessage = document.getElementById('modal-message');
         const confirmButton = document.getElementById('confirm-action-button');
         const sectorsSummary = document.getElementById('sectors-summary');
         const totalPriceElement = document.getElementById('total-price');
+        const buyButton = document.getElementById('buy-button');
         let totalAmount = 0;
         let summaryHtml = '';
 
         const formData = new FormData(document.getElementById('ticket-form'));
+
+        let isAnyTicketSelected = false; // Zmienna sprawdzająca, czy wybrano jakiekolwiek bilety
 
         // Przetwarzanie danych sektorów i biletów
         sectors.forEach(sector => {
@@ -100,6 +107,7 @@
                 const total = numberOfSeats * price;
                 totalAmount += total;
                 summaryHtml += `<p>${sector.name}: ${numberOfSeats} x ${price} zł = ${total} zł</p>`;
+                isAnyTicketSelected = true; // Jeśli wybrano bilety, ustawiamy tę zmienną na true
             }
         });
 
@@ -110,18 +118,44 @@
         sectorsSummary.innerHTML = summaryHtml;
         totalPriceElement.innerText = totalAmount + ' zł';
 
+        // Sprawdzamy, czy użytkownik wybrał bilety
+        if (!isAnyTicketSelected) {
+            // Jeśli nie wybrano biletów, przycisk Kup/Zarezerwuj będzie ukryty lub dezaktywowany
+            confirmButton.style.display = 'none'; // Ukrywamy przycisk
+        } else {
+            confirmButton.style.display = 'block'; // Pokazujemy przycisk, jeśli wybrano bilety
+        }
+
         // Przycisk Kup/Zarezerwuj
         if (action === 'buy') {
-            modalMessage.innerText = "Wciśnięto przycisk 'Kup'";
             confirmButton.innerText = 'Kup';
             confirmButton.classList.add('btn-success');
             confirmButton.classList.remove('btn-warning');
             confirmButton.value = 'purchased';
             confirmButton.onclick = function() {
-                document.getElementById('modal-form').submit();
+                const ticketId = document.getElementById('ticket-id').value; // Załóżmy, że ID biletu jest w ukrytym polu
+
+                // Wysyłamy zapytanie AJAX do płatności
+                fetch(`/ticket/pay/${ticketId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        sectors: getFormData()
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        modalMessage.innerText = 'Płatność zakończona sukcesem';
+                    } else {
+                        modalMessage.innerText = data.message; // Wyświetlamy komunikat o błędzie
+                    }
+                });
             };
         } else if (action === 'reserve') {
-            modalMessage.innerText = "Wciśnięto przycisk 'Zarezerwuj'";
             confirmButton.innerText = 'Zarezerwuj';
             confirmButton.classList.add('btn-warning');
             confirmButton.classList.remove('btn-success');
@@ -132,7 +166,25 @@
         }
 
         // Pokazujemy modal
-        document.getElementById('confirmation-modal').style.display = 'flex';  
+        document.getElementById('confirmation-modal').style.display = 'flex';
+    }
+
+    function getFormData() {
+        const formData = new FormData(document.getElementById('ticket-form'));
+        let sectorsData = [];
+
+        sectors.forEach(sector => {
+            const numberOfSeats = parseInt(formData.get('sectors[' + sector.id + '][number_of_seats]')) || 0;
+            if (numberOfSeats > 0) {
+                sectorsData.push({
+                    sector_id: sector.id,
+                    price: sector.price,
+                    number_of_seats: numberOfSeats
+                });
+            }
+        });
+
+        return sectorsData;
     }
 
     // Obsługa przycisków
@@ -146,8 +198,8 @@
 
     // Przycisk 'Wstecz' - ukrywa modal
     document.getElementById('back-button').addEventListener('click', function() {
-        event.preventDefault(); 
-        document.getElementById('confirmation-modal').style.display = 'none';  
+        event.preventDefault();
+        document.getElementById('confirmation-modal').style.display = 'none';
     });
 });
 
