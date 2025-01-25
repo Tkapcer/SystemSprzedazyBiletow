@@ -33,7 +33,7 @@
                                         <td scope="row">
                                             <form action="{{ route('admin.confirm', $organizer->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-success">Potwierdź</button>
+                                                <button type="submit" class="main-button-style btn-success">Potwierdź</button>
                                             </form>
                                         </td>
                                     @endif
@@ -42,7 +42,7 @@
                                         <td scope="row">
                                             <form action="{{ route('admin.reject', $organizer->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger">Odrzuć</button>
+                                                <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
                                             </form>
                                         </th>
                                     @endif
@@ -93,7 +93,7 @@
                                         @if($event->status == 'approved' || $event->status == 'waiting')
                                             <form action="{{ route('admin.rejectEvent', $event->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger">Odrzuć</button>
+                                                <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
                                             </form>
                                         @endif
                                     </td>
