@@ -24,7 +24,7 @@
         <div class="events-container" id="events-container">
             @foreach ($events as $event)
                 <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}">
-                    <a href="/ticket/{{ $event->id }}"> <!-- Dodaj link do biletu -->
+                    <a href="{{ route('event.show', $event->id) }}"> <!-- Dodaj link do biletu -->
                         <img class="event-image" src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
                         <p>
