@@ -7,7 +7,6 @@
 
         <header class="header">
             <h1>Szczegóły Wydarzenia</h1>
-            <a href="{{ url('/') }}" class="btn-back">Powrót do listy wydarzeń</a>
         </header>
 
         <main class="main-container">

@@ -33,6 +33,53 @@
         </div>
     </div>
 
+    <!-- Skrypt związany z ColorThief -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const colorThief = new ColorThief(); // Upewnij się, że masz dostęp do ColorThief
+            const eventCards = document.querySelectorAll('.event-card');
+
+            eventCards.forEach(card => {
+                const img = card.querySelector('.event-image');
+
+                if (img) {
+                    // Sprawdzamy, czy obrazek jest już załadowany
+                    if (img.complete) {
+                        setCardBackgroundColor(img, card); // Ustawiamy tło od razu
+                    } else {
+                        // Czekamy na załadowanie obrazka, jeśli jeszcze nie jest załadowany
+                        img.addEventListener('load', function() {
+                            setCardBackgroundColor(img, card); // Ustawiamy tło po załadowaniu obrazu
+                        });
+                    }
+                }
+            });
+
+            // Funkcja ustalająca tło karty na podstawie dominującego koloru obrazu
+            function setCardBackgroundColor(img, card) {
+                try {
+                    // Sprawdzamy, czy obrazek jest wystarczająco duży dla ColorThief
+                    if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+                        const dominantColor = colorThief.getColor(img);
+                        const rgbColor = `rgb(${dominantColor.join(', ')})`;
+
+                        // Ustawiamy tło karty
+                        card.style.backgroundColor = rgbColor;
+
+                        // Ustawiamy tło linku wewnątrz karty
+                        const link = card.querySelector('a');
+                        if (link) {
+                            link.style.backgroundColor = rgbColor;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error while extracting dominant color:", error);
+                }
+            }
+        });
+    </script>
+
+    <!-- Skrypt do sortowania wydarzeń -->
     <script>
         // Funkcja do sortowania wydarzeń
         function sortEvents() {

@@ -87,7 +87,7 @@
                                         @if($event->status == 'waiting' || $event->status == 'rejected')
                                             <form action="{{ route('admin.approveEvent', $event->id) }}" method="POST">
                                                 @csrf
-                                                <button type="submit" class="btn btn-success">Potwierdź</button>
+                                                <button type="submit" class="main-button-style btn-success">Potwierdź</button>
                                             </form>
                                         @endif
                                         @if($event->status == 'approved' || $event->status == 'waiting')
