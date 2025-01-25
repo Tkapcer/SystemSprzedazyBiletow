@@ -15,44 +15,38 @@ a {
     text-decoration: none;
 }
 
-    /* Usunięcie podkreślenia przy najechaniu na link */
-    a:hover {
-    }
-
-/* Styl dla przycisków main-button-style */
+/* Główny styl dla przycisków */
 .main-button-style {
-    background-color: white; /* Białe tło */
-    color: #007bff; /* Niebieski tekst */
-    border: 2px solid #007bff; /* Niebieska ramka */
+    position: relative;
+    background-color: white;
+    color: #007bff;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 14px;
+    text-transform: uppercase;
     transition: background-color 0.3s, color 0.3s;
+    color: #333;
 }
 
-    .main-button-style:hover {
-        background-color: #007bff; /* Niebieskie tło przy najechaniu */
-        color: white; /* Biały tekst przy najechaniu */
+    .main-button-style::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        border-radius: 14px;
+        background: linear-gradient(to right, #ffabf4, #bd8aff, #99f5ff);
+        z-index: -1;
     }
 
-/* Styl dla elementu <a> z klasą main-button-style */
-.nav-link.main-button-style {
-    display: inline-block;
-    padding: 10px 20px;
-    color: #007bff; /* Niebieski tekst */
-    text-decoration: none;
-    background-color: white; /* Białe tło */
-    border: 2px solid #007bff; /* Niebieska ramka */
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-    .nav-link.main-button-style:hover {
-        background-color: #007bff; /* Niebieskie tło przy najechaniu */
-        color: white; /* Biały tekst przy najechaniu */
+    .main-button-style:hover {
+        background: linear-gradient(to right, #ffabf4, #bd8aff, #99f5ff);
+        box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        color: white;
     }
 
 /* Pasek nawigacyjny */
@@ -70,7 +64,6 @@ a {
     position: relative;
 }
 
-/* Wyśrodkowanie nazwy na pasku nawigacyjnym */
 .navbar-title {
     font-size: 1.5em;
     font-weight: bold;
@@ -82,38 +75,25 @@ a {
     transform: translateX(-50%);
 }
 
-/* Linki nawigacyjne */
 .navbar .nav-link {
-    color: #333;
     margin: 0 15px;
     text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
 }
 
-    /* Efekt hover dla linków */
-    .navbar .nav-link:hover {
-        color: #007bff;
-    }
-
-/* Informacje o użytkowniku w nawigacji */
 .navbar .navbar-nav .user-info {
     display: flex;
     align-items: center;
 }
 
-    /* Nazwa użytkownika */
     .navbar .navbar-nav .user-info .user-name {
         font-weight: bold;
         margin-right: 15px;
     }
 
-    /* Saldo użytkownika */
     .navbar .navbar-nav .user-info .user-saldo {
         margin-right: 15px;
     }
 
-    /* Przycisk wylogowania */
     .navbar .navbar-nav .user-info .nav-link.logout {
         padding: 5px 10px;
         background-color: #dc3545;
@@ -124,7 +104,6 @@ a {
         transition: background-color 0.3s ease;
     }
 
-        /* Efekt hover dla przycisku wylogowania */
         .navbar .navbar-nav .user-info .nav-link.logout:hover {
             background-color: #c82333;
         }
@@ -150,32 +129,25 @@ a {
 }
 
 /* Formularz */
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
 }
 
-    form label {
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: #555;
-    }
+form input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
 
-    form input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        box-sizing: border-box;
+    form input:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
-
-        /* Formularz input focus */
-        form input:focus {
-            border-color: #007bff;
-            outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-        }
 
 /* Sprawdzanie poprawności formularza */
 .form-check {
@@ -185,7 +157,6 @@ form {
     margin-top: 10px;
 }
 
-/* Pole wyboru formularza */
 .form-check-input {
     width: 18px;
     height: 18px;
@@ -194,7 +165,6 @@ form {
     cursor: pointer;
 }
 
-    /* Zaznaczone pole wyboru */
     .form-check-input:checked {
         background-color: #007bff;
         border-color: #007bff;
@@ -204,27 +174,16 @@ form {
 .card-header {
     font-weight: bold;
     text-align: center;
-    color: #333; 
-    padding: 10px 0; 
+    color: #333;
+    padding: 10px 0;
 }
 
 /* Przycisk */
 button, .btn-primary {
     width: 100%;
     padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
     cursor: pointer;
-    text-align: center;
-    text-transform: uppercase;
 }
-
-    /* Efekt hover przycisków */
-    button:hover, .btn-primary:hover {
-        background-color: #0056b3;
-    }
 
 .ticket-buttons {
     display: flex;
@@ -245,14 +204,12 @@ button, .btn-primary {
             background-color: #0056b3;
         }
 
-
 /* Styl dla przycisków obok siebie */
 button[type="button"] {
-    display: inline-block; 
-    margin-right: 10px; 
-    width: auto; 
+    display: inline-block;
+    margin-right: 10px;
+    width: auto;
 }
-
 
 /* Przycisk szczegółów */
 .btn-details {
@@ -266,7 +223,6 @@ button[type="button"] {
     transition: background-color 0.3s ease;
 }
 
-    /* Efekt hover dla przycisku szczegółów */
     .btn-details:hover {
         background-color: #0056b3;
     }
@@ -289,7 +245,6 @@ button[type="button"] {
     align-items: center;
 }
 
-    /* Okienko wyboru sortowania */
     .sort-options select {
         border-radius: 12px;
         padding: 10px;
@@ -330,12 +285,10 @@ button[type="button"] {
     background-position: center;
 }
 
-    /* Efekt powiększenia karty przy najechaniu */
     .event-card:hover {
         transform: scale(1.05);
     }
 
-    /* Obrazek w karcie wydarzenia */
     .event-card img {
         width: 100%;
         height: 200px;
@@ -343,7 +296,6 @@ button[type="button"] {
         object-fit: cover;
     }
 
-    /* Nagłówek w karcie wydarzenia */
     .event-card h3 {
         margin: 15px 0 10px;
         font-size: 1.5em;
@@ -351,14 +303,12 @@ button[type="button"] {
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
     }
 
-    /* Opis wydarzenia w karcie */
     .event-card p {
         color: #ffffff;
         margin: 10px 0;
         text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.9);
     }
 
-    /* Link w karcie wydarzenia */
     .event-card a {
         display: inline-block;
         margin-top: 10px;
@@ -370,7 +320,6 @@ button[type="button"] {
         text-decoration: none;
     }
 
-        /* Efekt hover dla linku */
         .event-card a:hover {
             background-color: none;
         }
@@ -405,9 +354,7 @@ button[type="button"] {
         color: #555;
     }
 
-    .event-form input,
-    .event-form textarea,
-    .event-form select {
+    .event-form input, .event-form textarea, .event-form select {
         width: 100%;
         padding: 12px;
         border: 1px solid #ddd;
@@ -417,9 +364,7 @@ button[type="button"] {
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-        .event-form input:focus,
-        .event-form textarea:focus,
-        .event-form select:focus {
+        .event-form input:focus, .event-form textarea:focus, .event-form select:focus {
             border-color: #007bff;
             box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
             outline: none;
@@ -442,7 +387,6 @@ button[type="button"] {
             background-color: #0056b3;
         }
 
-    /* Stylizacja dynamicznych sektorów */
     .event-form .sector-row {
         background: #f8f9fa;
         border: 1px solid #ddd;
@@ -457,8 +401,7 @@ button[type="button"] {
             transform: scale(1.02);
         }
 
-    .event-form #add-sector,
-    .event-form #remove-sector {
+    .event-form #add-sector, .event-form #remove-sector {
         background-color: #6c757d;
         color: white;
         margin-top: 10px;
@@ -477,7 +420,6 @@ button[type="button"] {
             background-color: #dc3545;
         }
 
-    /* Obsługa błędów walidacji */
     .event-form .is-invalid {
         border-color: red;
         background-color: #ffe6e6;
@@ -489,6 +431,7 @@ button[type="button"] {
         margin-top: 5px;
     }
 
+/* Modal */
 .modal {
     position: fixed;
     top: 0;
@@ -508,11 +451,3 @@ button[type="button"] {
     text-align: center;
     width: 300px;
 }
-
-.modal-buttons {
-    margin-top: 20px;
-}
-
-    .modal-buttons .btn {
-        margin: 0 10px;
-    }
