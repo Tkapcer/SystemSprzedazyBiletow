@@ -19,7 +19,7 @@
                 @endif
 
                 <div class="text-center mb-6">
-                    <a href="{{ route('createEvent') }}" class="btn-primary">
+                    <a href="{{ route('createEvent') }}" class="btn-details">
                         Dodaj nowe wydarzenie
                     </a>
                 </div>
