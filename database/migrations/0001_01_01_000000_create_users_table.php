@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable()->change();
+            $table->string('name')->nullable();
             $table->string('surname')->nullable();
             $table->string('email')->unique();
             $table->decimal('balance', 10, 2)->default(0.00);
@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
-
             $table->enum('type', ['user', 'admin'])->default('user');
         });
 
