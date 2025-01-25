@@ -32,6 +32,18 @@ class SectorController extends Controller
             'name' => 'required|string|max:255',
             'seats' => 'required|integer|min:1',
             'price' => 'required|numeric|min:0',
+        ], [
+            'name.required' => 'Nazwa sektora jest wymagana.',
+            'name.string' => 'Nazwa sektora musi być ciągiem znaków.',
+            'name.max' => 'Nazwa sektora nie może przekraczać 255 znaków.',
+        
+            'seats.required' => 'Liczba miejsc w sektorze jest wymagana.',
+            'seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
+            'seats.min' => 'Liczba miejsc musi wynosić co najmniej 1.',
+        
+            'price.required' => 'Cena za miejsce w sektorze jest wymagana.',
+            'price.numeric' => 'Cena musi być liczbą.',
+            'price.min' => 'Cena nie może być mniejsza niż 0.',
         ]);
 
         Sector::create($validated);
