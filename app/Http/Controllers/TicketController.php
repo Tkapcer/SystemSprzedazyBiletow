@@ -41,6 +41,15 @@ class TicketController extends Controller
             'sector_id' => 'required|exists:sectors,id',
             'number_of_seats' => 'required|integer|min:1',
             'status' => 'required|string|in:reserved,purchased'
+        ],[
+            'sector_id.required' => 'Proszę wybrać sektor.',
+            'sector_id.exists' => 'Wybrany sektor nie istnieje.',
+            'number_of_seats.required' => 'Proszę podać liczbę miejsc.',
+            'number_of_seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
+            'number_of_seats.min' => 'Liczba miejsc musi być większa niż 0.',
+            'status.required' => 'Proszę wybrać status rezerwacji.',
+            'status.string' => 'Status rezerwacji musi być ciągiem znaków.',
+            'status.in' => 'Status rezerwacji może przyjmować jedynie wartości: "reserved" lub "purchased".'
         ]);
 
         $user = Auth::guard('web')->user();
