@@ -19,7 +19,7 @@
                 @endif
 
                 <div class="text-center mb-6">
-                    <a href="{{ route('createEvent') }}" class="btn-details">
+                    <a href="{{ route('createEvent') }}" class="main-button-style">
                         Dodaj nowe wydarzenie
                     </a>
                 </div>
@@ -33,13 +33,13 @@
                         <table class="table-auto w-full text-sm text-gray-800">
                             <thead class="bg-blue-100">
                                 <tr>
-                                    <th class="py-2 px-4 text-left w-1/12">#</th>
+                                    <th class="py-2 px-4 text-left w-1/12">Id</th>
                                     <th class="py-2 px-4 text-left w-2/12">Tytuł</th>
                                     <th class="py-2 px-4 text-left w-3/12">Data i godzina</th>
                                     <th class="py-2 px-4 text-left w-2/12">Lokalizacja</th>
                                     <th class="py-2 px-4 text-left w-2/12">Opcje</th>
                                     <th class="py-2 px-4 text-left w-2/12">Status</th>
-                                    <th class="py-2 px-4 text-left w-2/12">Zakończ wydarzenie</th>
+                                    <th class="py-2 px-4 text-left w-2/12">Zakończ</th>
                                     <th class="py-2 px-4 text-left w-2/12">Usuń</th>
                                 </tr>
                             </thead>
@@ -54,7 +54,7 @@
                                         <td class="py-2 px-4">{{ $event->event_date->format('d.m.Y H:i') }}</td>
                                         <td class="py-2 px-4">{{ $event->location }}</td>
                                         <td class="py-2 px-4">
-                                            <a href="{{ route('editEvent', $event->id) }}" class="btn-details text-white">
+                                            <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">
                                                 Edytuj
                                             </a>
                                         </td>
@@ -70,12 +70,12 @@
                                             @endif
                                         </td>
                                         <td class="py-2 px-4">
-                                            <a href="" class="btn-details text-white">
+                                            <a href="" class="main-button-style">
                                                 Zakończ
                                             </a>
                                         </td>
                                         <td class="py-2 px-4">
-                                            <a href="" class="bg-red-300 text-white px-6 py-2 rounded-full hover:bg-red-400">
+                                            <a href="" class="main-button-style-v2">
                                                 Usuń
                                             </a>
                                         </td>

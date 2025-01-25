@@ -59,7 +59,7 @@
                         <a class="nav-link main-button-style" href="{{ route('organizer.panel') }}">Konto</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="nav-link main-button-style" style="background: none; border: none; color: inherit; padding: 5px 10px;">Wyloguj</button> <!-- Zmieniony przycisk -->
+                            <button type="submit" class="nav-link main-button-style">Wyloguj</button> <!-- Zmieniony przycisk -->
                         </form>
                     </span>
                 @elseif(Auth::guard('admin')->check())
@@ -68,7 +68,7 @@
                         <a class="nav-link main-button-style" href="{{ route('adminPanel') }}">Panel</a> 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="nav-link main-button-style" style="background: none; border: none; color: inherit; padding: 5px 10px;">Wyloguj</button> <!-- Zmieniony przycisk -->
+                            <button type="submit" class="nav-link main-button-style">Wyloguj</button> <!-- Zmieniony przycisk -->
                         </form>
                     </span>
                 @else

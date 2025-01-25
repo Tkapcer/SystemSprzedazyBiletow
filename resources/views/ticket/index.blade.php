@@ -65,7 +65,7 @@
             @csrf
 
             <!-- Nagłówek modalu -->
-            <h3 class="mb-3">Twoje bilety</h3>
+            <h3 class="mb-3">Wybrane bilety</h3>
 
             <!-- Podsumowanie wybranych biletów -->
             <div id="sectors-summary" class="mb-3"></div>
