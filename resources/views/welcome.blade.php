@@ -15,17 +15,12 @@
             </select>
         </div>
 
-        <!-- Pobieranie wydarzeń z bazy danych -->
-        @php
-            $events = \App\Models\Event::all(); // Pobiera wszystkie wydarzenia
-        @endphp
-
         <!-- Lista wydarzeń -->
         <div class="events-container" id="events-container">
             @foreach ($events as $event)
                 <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}">
-                    <a href="{{ route('event.show', $event->id) }}"> <!-- Dodaj link do biletu -->
-                        <img class="event-image" src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}">
+                    <a href="/event/{{ $event->id }}"> <!-- Dodaj link do biletu -->
+                        <img class="event-image" src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
                         <p>
                             Data: {{ date('d F Y', strtotime($event->event_date)) }}<br>
@@ -44,7 +39,7 @@
             var sortValue = document.getElementById("sort-select").value;
             var eventsContainer = document.getElementById("events-container");
             var events = Array.from(eventsContainer.getElementsByClassName("event-card"));
-            
+
             // Sortowanie wydarzeń w zależności od wybranego typu
             events.sort(function(a, b) {
                 if (sortValue.includes("date")) {
