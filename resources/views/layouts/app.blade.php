@@ -38,7 +38,7 @@
     <div id="app">
         <!-- Pasek nawigacyjny -->
         <nav class="navbar">
-            <a class="nav-link main-button-style" href="/">Strona Główna</a> <!-- Zmieniony link -->
+            <a class="nav-link main-button-style" href="/">Strona Główna</a>
             <div class="navbar-title">Viva La Billete</div>
             <div class="navbar-nav">
                 <!-- Sprawdzamy, czy użytkownik jest zalogowany jako klient, organizator lub administrator -->

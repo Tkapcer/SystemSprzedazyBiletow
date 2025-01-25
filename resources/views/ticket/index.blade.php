@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 <div class="container">
     <!-- Nagłówek formularza wyboru biletów -->
     <h1 class="text-center mb-4">Wybór biletów</h1>
