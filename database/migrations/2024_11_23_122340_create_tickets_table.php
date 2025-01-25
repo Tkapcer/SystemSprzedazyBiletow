@@ -31,7 +31,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('tickets');
 
-        Schema::table('tickets', function (Blueprint $table) {
+       /* Schema::table('tickets', function (Blueprint $table) {
             $table->dropColumn('status');
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
@@ -39,6 +39,6 @@ return new class extends Migration
             $table->dropColumn('sector_id');
             $table->dropColumn('code');
             $table->dropColumn('number_of_seats');
-        });
+        });*/
     }
 };

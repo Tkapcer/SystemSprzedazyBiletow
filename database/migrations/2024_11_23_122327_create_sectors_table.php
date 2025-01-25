@@ -14,6 +14,11 @@ return new class extends Migration
         Schema::create('sectors', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('event_id');
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+            $table->string('name');
+            $table->integer('seats');
+            $table->decimal('price', 8, 2);
         });
     }
 
