@@ -39,7 +39,7 @@
                                     <th class="py-2 px-4 text-left w-2/12">Lokalizacja</th>
                                     <th class="py-2 px-4 text-left w-2/12">Opcje</th>
                                     <th class="py-2 px-4 text-left w-2/12">Status</th>
-                                    <th class="py-2 px-4 text-left w-2/12">Zakończ</th>
+                                 <!--   <th class="py-2 px-4 text-left w-2/12">Zakończ</th> -->
                                     <th class="py-2 px-4 text-left w-2/12">Usuń</th>
                                 </tr>
                             </thead>
@@ -66,14 +66,14 @@
                                             @elseif ($event->status == 'rejected')
                                                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
                                             @elseif ($event->status == 'expired')
-                                                <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                                <span class="bg-grey-100 text-grey-800 px-3 py-1 rounded-full text-sm">Archiwalne</span>
                                             @endif
                                         </td>
-                                        <td class="py-2 px-4">
+                                       <!-- <td class="py-2 px-4">
                                             <a href="" class="main-button-style">
                                                 Zakończ
                                             </a>
-                                        </td>
+                                        </td> -->
                                         <td class="py-2 px-4">
                                             <a href="" class="main-button-style-v2">
                                                 Usuń

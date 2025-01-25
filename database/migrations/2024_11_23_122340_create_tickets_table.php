@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->enum('status', ['reserved', 'purchased'])->default('reserved');
+            $table->enum('status', ['reserved', 'purchased', 'cancelled'])->default('reserved');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('sector_id');
@@ -30,15 +30,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('tickets');
-
-       /* Schema::table('tickets', function (Blueprint $table) {
-            $table->dropColumn('status');
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
-            $table->dropForeign(['sector_id']);
-            $table->dropColumn('sector_id');
-            $table->dropColumn('code');
-            $table->dropColumn('number_of_seats');
-        });*/
     }
 };
