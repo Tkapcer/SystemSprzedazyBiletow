@@ -114,6 +114,7 @@ class EventController extends Controller
     public function show(Event $event)
     {
         if ($event->status == 'approved') {
+            $event->load('organizer');
             return view('event.show', ['event' => $event]);
         } else {
             return redirect()->route('events.index');
