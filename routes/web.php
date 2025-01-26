@@ -66,6 +66,7 @@ Route::middleware(CheckAdmin::class)->group(function () {
 
 //    Odmowa wydarzenia
     Route::post('admin/rejectEvent/{id}', [App\Http\Controllers\AdminController::class, 'rejectEvent'])->name('admin.rejectEvent');
+    Route::get('admin/rejectEvent/{id}', [App\Http\Controllers\AdminController::class, 'rejectEvent'])->name('admin.rejectEvent');
 });
 
 //  Przeniesienie niepotwierdzonego organizatora
