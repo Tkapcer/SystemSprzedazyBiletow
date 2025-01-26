@@ -32,24 +32,20 @@
                                         @if($organizer->status == 'approved') Potwierdzony @endif
                                         @if($organizer->status == 'rejected') Odrzucony @endif
                                     </td>
-
-                                    @if($organizer->status == 'waiting' || $organizer->status == 'rejected')
-                                        <td scope="row">
+                                    <td>
+                                        @if($organizer->status == 'waiting' || $organizer->status == 'rejected')
                                             <form action="{{ route('admin.confirm', $organizer->id) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="main-button-style btn-success">Potwierdź</button>
                                             </form>
-                                        </td>
-                                    @endif
-
-                                    @if ($organizer->status == 'approved' || $organizer->status == 'waiting')
-                                        <td scope="row">
+                                        @endif
+                                        @if($organizer->status == 'approved' || $organizer->status == 'waiting')
                                             <form action="{{ route('admin.reject', $organizer->id) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
                                             </form>
-                                        </th>
-                                    @endif
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
