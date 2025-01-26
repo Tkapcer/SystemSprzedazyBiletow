@@ -36,7 +36,7 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request);
+        dd($request);
         $request->validate([
             'sector_id' => 'required|exists:sectors,id',
             'number_of_seats' => 'required|integer|min:1',

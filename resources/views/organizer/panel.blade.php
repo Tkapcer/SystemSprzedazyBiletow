@@ -38,7 +38,6 @@
                                     <th class="py-2 px-4 text-left w-2/12">Lokalizacja</th>
                                     <th class="py-2 px-4 text-left w-2/12">Opcje</th>
                                     <th class="py-2 px-4 text-left w-2/12">Status</th>
-                                 <!--   <th class="py-2 px-4 text-left w-2/12">Zakończ</th> -->
                                     <th class="py-2 px-4 text-left w-2/12">Usuń</th>
                                 </tr>
                             </thead>

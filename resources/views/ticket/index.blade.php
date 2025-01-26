@@ -62,9 +62,6 @@
         <form action="{{ route('ticket.store') }}" method="POST" id="modal-form">
             @csrf
 
-            <!-- Ukryte pole na event_id -->
-{{--        <input type="hidden" name="event_id" value="{{ $event->id }}">--}}
-
             <!-- Ukryte pole na number_of_seats -->
 {{--        <input type="hidden" class="form-control" id="number_of_seats" name="number_of_seats" required>--}}
 
@@ -92,6 +89,36 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
     const sectors = @json($sectors);
+
+    // Funkcja do resetowania liczby biletów w innych sektorach
+    function resetOtherSectors(currentSectorId) {
+        // Pobieramy wszystkie pola input z liczbą biletów
+        const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
+
+        // Iterujemy po wszystkich polach input
+        sectorInputs.forEach(input => {
+            const sectorId = input.name.match(/sectors\[(\d+)\]\[number_of_seats\]/)[1]; // Wyciągamy ID sektora z nazwy inputa
+
+            // Jeśli to nie jest ten sam sektor, resetujemy jego liczbę biletów
+            if (sectorId !== currentSectorId.toString()) {
+                input.value = 0;
+            }
+        });
+    }
+
+    // Nasłuchujemy zmian na inputach liczby biletów
+    const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
+
+    sectorInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            const currentSectorId = input.name.match(/sectors\[(\d+)\]\[number_of_seats\]/)[1]; // Wyciągamy ID sektora
+
+            // Jeśli użytkownik ustawi liczbę biletów na więcej niż 0, resetujemy inne sektory
+            if (parseInt(input.value, 10) > 0) {
+                resetOtherSectors(currentSectorId);
+            }
+        });
+    });
 
     // Funkcja do sprawdzania formularza
     function validateForm() {
