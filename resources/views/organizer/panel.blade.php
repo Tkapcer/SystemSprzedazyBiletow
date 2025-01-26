@@ -3,7 +3,6 @@
 @section('content')
     <div class="container-fluid mx-auto p-6">
         <div class="card shadow-sm rounded-lg">
-            <div class="card-header text-center text-lg font-bold py-3">{{ __('Panel Organizatora') }}</div>
 
             <div class="card-body">
                 @if (session('status'))
@@ -24,7 +23,7 @@
                     </a>
                 </div>
 
-                <h2 class="section-title mb-6 text-2xl font-bold text-gray-800">Twoje wydarzenia</h2>
+                <h2 class="section-title">Twoje wydarzenia</h2>
 
                 @if ($events->isEmpty())
                     <p class="text-center text-gray-500">Nie masz jeszcze żadnych wydarzeń.</p>

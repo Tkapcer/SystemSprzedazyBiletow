@@ -6,7 +6,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <!-- Nagłówek formularza logowania -->
-                    <div class="card-header">{{ __('Zaloguj') }}</div>
+                    <div class="section-title">{{ __('Zaloguj') }}</div>
 
                     <div class="card-body">
                         <!-- Formularz logowania -->

@@ -15,6 +15,18 @@ a {
     text-decoration: none;
 }
 
+.button-container {
+    display: flex; 
+    gap: 10px; 
+    width: 100%; 
+}
+
+    .button-container a {
+        flex: 1;
+        text-align: center; 
+        padding: 10px; 
+    }
+
 /* Główny styl dla przycisków */
 .main-button-style {
     position: relative;
@@ -163,9 +175,8 @@ a {
 }
 
 .navbar-title {
-    font-size: 1.2em;
+    font-size: 1.5em;
     font-weight: bold;
-    color: #333;
     text-align: center;
     flex-grow: 1;
     position: absolute;
@@ -248,14 +259,6 @@ form input {
         border-color: #007bff;
     }
 
-/* Nagłówek karty */
-.card-header {
-    font-weight: bold;
-    text-align: center;
-    color: #333;
-    padding: 10px 0;
-}
-
 /* Przycisk */
 button, .btn-primary {
     width: 100%;
@@ -335,8 +338,9 @@ button[type="button"] {
 .section-title {
     width: 100%;
     text-align: center;
-    color: #333;
-    margin-bottom: 20px;
+    color: #aa6afc;
+    font-weight: bold;
+    font-size: 1.3em;
 }
 
 /* Kontener na wydarzenia */

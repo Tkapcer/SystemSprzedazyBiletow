@@ -6,7 +6,7 @@
         <!-- First card -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Organizatorzy') }}</div>
+                <div class="section-title">{{ __('Organizatorzy') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -58,7 +58,7 @@
         <!-- Second card -->
         <div class="col-md-6">
             <div class="card">
-                <div class="card-header">{{ __('Panel administratora') }}</div>
+                <div class="section-title">{{ __('Panel administratora') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))

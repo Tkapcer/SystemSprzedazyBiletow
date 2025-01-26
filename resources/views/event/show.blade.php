@@ -7,7 +7,7 @@
 
         <!-- Nazwa wydarzenia -->
         <div class="white-container">
-             <h2>{{ $event->name }}</h2>
+             <h2 class="section-title">{{ $event->name }}</h2>
         </div>
         <!-- Kontener zdjęcia i treści w jednym wierszu -->
         <div class="event-content">
@@ -33,8 +33,23 @@
                 </main>
             </div>
         </div>
+        <!-- Przyciski zależne od roli użytkownika -->
         <div class="white-container">
-            <a href="{{ route('ticket.index', $event->id) }}" class="main-button-style btn-primary">Kup / Zarezerwuj</a>
+            <!-- Jeśli użytkownik jest zalogowany jako klient -->
+            @if(Auth::guard('web')->check())
+                <a href="{{ route('ticket.index', $event->id) }}" class="main-button-style btn-primary">Kup / Zarezerwuj</a>
+            <!-- Jeśli użytkownik jest zalogowany jako organizator -->
+            @elseif(Auth::guard('organizer')->check() && $event->organizer_id == Auth::guard('organizer')->user()->id)
+            <div class="button-container">
+                <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">Edytuj</a>
+                <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2 btn-danger">Usuń</a>
+            </div>
+            <!-- Jeśli użytkownik jest zalogowany jako admin -->
+            @elseif(Auth::guard('admin')->check()) 
+                <a href="{{ route('admin.rejectEvent', $event->id) }}" class="main-button-style-v2 btn-primary btn-danger">Odrzuć</a>
+            @else
+                <a class="main-button-style btn-primary" href="{{ route('login') }}">Zaloguj się, aby móc kupić lub zarezerwować bilety.</a> 
+            @endif
             <a href="{{ url('/') }}" class="main-button-style btn-primary">Powrót do listy wydarzeń</a>
         </div>
     </div>
