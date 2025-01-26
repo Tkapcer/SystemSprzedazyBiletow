@@ -56,24 +56,20 @@
 </form>
 </div>
 
-<!-- Modal z powiadomieniem -->
 <div id="confirmation-modal" class="modal">
     <div class="modal-content">
         <form action="{{ route('ticket.store') }}" method="POST" id="modal-form">
             @csrf
 
-            <!-- Ukryte pole na number_of_seats -->
-{{--        <input type="hidden" class="form-control" id="number_of_seats" name="number_of_seats" required>--}}
-
             <!-- Ukryte pole na sector_id -->
-{{--        <input type="hidden" name="sector_id" id="sector_id" class="form-control" required>--}}
+            <input type="hidden" name="sectors" id="sectors-data">
 
             <!-- Nagłówek modalu -->
             <h3 class="section-title mb-3">Wybrane bilety</h3>
 
             <!-- Podsumowanie wybranych biletów -->
             <div id="sectors-summary" class="mb-3"></div>
-            
+
             <!-- Łączna kwota -->
             <p><strong>Łączna kwota: </strong><span id="total-price">0 zł</span></p>
 
@@ -86,159 +82,144 @@
     </div>
 </div>
 
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const sectors = @json($sectors);
+        const sectors = @json($sectors);
 
-    // Funkcja do resetowania liczby biletów w innych sektorach
-    function resetOtherSectors(currentSectorId) {
-        // Pobieramy wszystkie pola input z liczbą biletów
+        /*// Funkcja do resetowania liczby biletów w innych sektorach
+        function resetOtherSectors(currentSectorId) {
+            // Pobieramy wszystkie pola input z liczbą biletów
+            const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
+
+            // Iterujemy po wszystkich polach input
+            sectorInputs.forEach(input => {
+                const sectorId = input.name.match(/sectors\[(\d+)\]\[number_of_seats\]/)[1]; // Wyciągamy ID sektora z nazwy inputa
+
+                // Jeśli to nie jest ten sam sektor, resetujemy jego liczbę biletów
+                if (sectorId !== currentSectorId.toString()) {
+                    input.value = 0;
+                }
+            });
+        }*/
+
+        // Nasłuchujemy zmian na inputach liczby biletów
         const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
 
-        // Iterujemy po wszystkich polach input
         sectorInputs.forEach(input => {
-            const sectorId = input.name.match(/sectors\[(\d+)\]\[number_of_seats\]/)[1]; // Wyciągamy ID sektora z nazwy inputa
+            input.addEventListener('input', function() {
+                const currentSectorId = input.name.match(/sectors\[(\d+)\]\[number_of_seats\]/)[1]; // Wyciągamy ID sektora
 
-            // Jeśli to nie jest ten sam sektor, resetujemy jego liczbę biletów
-            if (sectorId !== currentSectorId.toString()) {
-                input.value = 0;
-            }
-        });
-    }
-
-    // Nasłuchujemy zmian na inputach liczby biletów
-    const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
-
-    sectorInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            const currentSectorId = input.name.match(/sectors\[(\d+)\]\[number_of_seats\]/)[1]; // Wyciągamy ID sektora
-
-            // Jeśli użytkownik ustawi liczbę biletów na więcej niż 0, resetujemy inne sektory
-            if (parseInt(input.value, 10) > 0) {
-                resetOtherSectors(currentSectorId);
-            }
-        });
-    });
-
-    // Funkcja do sprawdzania formularza
-    function validateForm() {
-        const form = document.getElementById('ticket-form');
-        let isValid = false;
-        let errorMessage = '';
-
-        // Pobieramy dane formularza
-        const formData = new FormData(form);
-        const sectorInputs = form.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
-
-        // Sprawdzamy, czy wybrano przynajmniej 1 bilet w jednym z sektorów
-        sectorInputs.forEach(input => {
-            const numberOfSeats = parseInt(input.value, 10);
-            if (numberOfSeats > 0) {
-                isValid = true; // Jeśli wybrano jakikolwiek bilet, formularz jest poprawny
-            }
+                // Jeśli użytkownik ustawi liczbę biletów na więcej niż 0, resetujemy inne sektory
+                if (parseInt(input.value, 10) > 0) {
+                    resetOtherSectors(currentSectorId);
+                }
+            });
         });
 
-        // Wyświetlamy komunikat o błędzie lub kontynuujemy
-        if (errorMessage) {
-            alert(errorMessage);
-            return false; // Zapobiega wysłaniu formularza
+        // Funkcja do sprawdzania formularza
+        function validateForm() {
+            const form = document.getElementById('ticket-form');
+            let isValid = false;
+            let errorMessage = '';
+
+            // Pobieramy dane formularza
+            const formData = new FormData(form);
+            const sectorInputs = form.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
+
+            // Sprawdzamy, czy wybrano przynajmniej 1 bilet w jednym z sektorów
+            sectorInputs.forEach(input => {
+                const numberOfSeats = parseInt(input.value, 10);
+                if (numberOfSeats > 0) {
+                    isValid = true; // Jeśli wybrano jakikolwiek bilet, formularz jest poprawny
+                }
+            });
+
+            // Wyświetlamy komunikat o błędzie lub kontynuujemy
+            if (errorMessage) {
+                alert(errorMessage);
+                return false; // Zapobiega wysłaniu formularza
+            }
+            return true; // Pozwala wysłać formularz
         }
-        return true; // Pozwala wysłać formularz
-    }
 
-    // Funkcja pokazująca modal z podsumowaniem
-    function showModal(action) {
-        const confirmButton = document.getElementById('confirm-action-button');
-        const sectorsSummary = document.getElementById('sectors-summary');
-        const totalPriceElement = document.getElementById('total-price');
-        let totalAmount = 0;
-        let summaryHtml = '';
+        // Funkcja pokazująca modal z podsumowaniem
+        function showModal(action) {
+            const confirmButton = document.getElementById('confirm-action-button');
+            const sectorsSummary = document.getElementById('sectors-summary');
+            const totalPriceElement = document.getElementById('total-price');
+            let totalAmount = 0;
+            let summaryHtml = '';
 
-        const formData = new FormData(document.getElementById('ticket-form'));
+            const formData = new FormData(document.getElementById('ticket-form'));
 
-        let isAnyTicketSelected = false; // Zmienna sprawdzająca, czy wybrano jakiekolwiek bilety
-        let isInvalidTicketCount = false; // Zmienna sprawdzająca, czy liczba biletów w jakiejkolwiek strefie przekracza 10
+            let isAnyTicketSelected = false;
+            let isInvalidTicketCount = false;
 
-        // Przetwarzanie danych sektorów i biletów
-        sectors.forEach(sector => {
-            const numberOfSeats = parseInt(formData.get('sectors[' + sector.id + '][number_of_seats]')) || 0;
-            if (numberOfSeats > 0) {
-                const price = sector.price;
-                const total = numberOfSeats * price;
-                totalAmount += total;
-                summaryHtml += `<p>${sector.name}: ${numberOfSeats} x ${price} zł = ${total} zł</p>`;
-                isAnyTicketSelected = true; // Jeśli wybrano bilety, ustawiamy tę zmienną na true
+            let selectedSectors = [];  // Zmienna do przechowywania danych o wybranych biletach
+
+            // Przetwarzanie danych sektorów i biletów
+            sectors.forEach(sector => {
+                const numberOfSeats = parseInt(formData.get('sectors[' + sector.id + '][number_of_seats]')) || 0;
+                if (numberOfSeats > 0) {
+                    const price = sector.price;
+                    const total = numberOfSeats * price;
+                    totalAmount += total;
+                    summaryHtml += `<p>${sector.name}: ${numberOfSeats} x ${price} zł = ${total} zł</p>`;
+                    selectedSectors.push({
+                        sector_id: sector.id,
+                        price: price,
+                        number_of_seats: numberOfSeats
+                    });
+                    isAnyTicketSelected = true;
+                }
+
+                // Sprawdzanie, czy liczba biletów w danym sektorze nie przekracza 10
+                if (numberOfSeats > 10) {
+                    isInvalidTicketCount = true;
+                }
+            });
+
+            // Jeśli nie wybrano żadnych biletów
+            if (!isAnyTicketSelected) {
+                summaryHtml = '<p>Nie wybrano żadnych biletów.</p>';
             }
 
-            // Sprawdzanie, czy liczba biletów w danym sektorze nie przekracza 10
-            if (numberOfSeats > 10) {
-                isInvalidTicketCount = true; // Jeśli liczba biletów przekroczyła 10, ustawiamy flagę na true
+            // Jeśli wybrano za dużo biletów w jednym z sektorów
+            if (isInvalidTicketCount) {
+                summaryHtml = '<p>Błędna liczba biletów. Maksymalna liczba to 10 biletów w jednej strefie.</p>';
             }
-        });
 
-        // Jeśli nie wybrano żadnych biletów
-        if (!isAnyTicketSelected) {
-            summaryHtml = '<p>Nie wybrano żadnych biletów.</p>';
+            sectorsSummary.innerHTML = summaryHtml;
+            totalPriceElement.innerText = totalAmount + ' zł';
+
+            // Przekazanie danych o wybranych sektorach do ukrytego pola formularza
+            document.getElementById('sectors-data').value = JSON.stringify(selectedSectors);
+
+            // Pokazujemy przycisk Kup/Zarezerwuj tylko jeśli wybrano bilety
+            if (isAnyTicketSelected && !isInvalidTicketCount) {
+                confirmButton.style.display = 'block';
+            } else {
+                confirmButton.style.display = 'none';
+            }
+
+            // Przycisk Kup/Zarezerwuj
+            if (action === 'buy') {
+                confirmButton.innerText = 'Kup';
+                confirmButton.classList.add('btn-success');
+                confirmButton.classList.remove('btn-warning');
+                confirmButton.value = 'purchased';
+            } else if (action === 'reserve') {
+                confirmButton.innerText = 'Zarezerwuj';
+                confirmButton.classList.add('btn-warning');
+                confirmButton.classList.remove('btn-success');
+                confirmButton.value = 'reserved';
+            }
+
+            // Pokazujemy modal
+            document.getElementById('confirmation-modal').style.display = 'flex';
         }
 
-        // Jeśli wybrano za dużo biletów w jednym z sektorów
-        if (isInvalidTicketCount) {
-            summaryHtml = '<p>Błędna liczba biletów. Maksymalna liczba to 10 biletów w jednej strefie.</p>';
-        }
-
-        sectorsSummary.innerHTML = summaryHtml;
-        totalPriceElement.innerText = totalAmount + ' zł';
-
-        // Sprawdzamy, czy użytkownik wybrał bilety lub jeśli wystąpił błąd z liczbą biletów
-        if (!isAnyTicketSelected || isInvalidTicketCount) {
-            // Jeśli nie wybrano biletów lub liczba biletów jest nieprawidłowa, przycisk Kup/Zarezerwuj będzie ukryty
-            confirmButton.style.display = 'none'; // Ukrywamy przycisk
-        } else {
-            confirmButton.style.display = 'block'; // Pokazujemy przycisk, jeśli wybrano bilety
-        }
-
-        // Przycisk Kup/Zarezerwuj
-        if (action === 'buy') {
-            confirmButton.innerText = 'Kup';
-            confirmButton.classList.add('btn-success');
-            confirmButton.classList.remove('btn-warning');
-            confirmButton.value = 'purchased';
-            confirmButton.onclick = function() {
-                const ticketId = document.getElementById('ticket-id').value; // Załóżmy, że ID biletu jest w ukrytym polu
-
-                // Wysyłamy zapytanie AJAX do płatności
-                fetch(`/ticket/pay/${ticketId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        sectors: getFormData()
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        modalMessage.innerText = 'Płatność zakończona sukcesem';
-                    } else {
-                        modalMessage.innerText = data.message; // Wyświetlamy komunikat o błędzie
-                    }
-                });
-            };
-        } else if (action === 'reserve') {
-            confirmButton.innerText = 'Zarezerwuj';
-            confirmButton.classList.add('btn-warning');
-            confirmButton.classList.remove('btn-success');
-            confirmButton.value = 'reserved';
-            confirmButton.onclick = function() {
-                document.getElementById('modal-form').submit();
-            };
-        }
-
-        // Pokazujemy modal
-        document.getElementById('confirmation-modal').style.display = 'flex';
-    }
 
         function getFormData() {
             const formData = new FormData(document.getElementById('ticket-form'));

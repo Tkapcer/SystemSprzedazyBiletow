@@ -36,50 +36,68 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
-        $request->validate([
-            'sector_id' => 'required|exists:sectors,id',
-            'number_of_seats' => 'required|integer|min:1',
-            'status' => 'required|string|in:reserved,purchased'
-        ],[
-            'sector_id.required' => 'Proszę wybrać sektor.',
-            'sector_id.exists' => 'Wybrany sektor nie istnieje.',
-            'number_of_seats.required' => 'Proszę podać liczbę miejsc.',
-            'number_of_seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
-            'number_of_seats.min' => 'Liczba miejsc musi być większa niż 0.',
+        // Debugowanie danych przed dekodowaniem
+        //dd($request->all());
+
+        // Dekodowanie JSON w polu 'sectors'
+        $sectors = json_decode($request->sectors, true);
+
+        // Walidacja danych
+        $$request->validate([
+            'status' => 'required|string|in:reserved,purchased',
+            'sectors' => 'required|array',
+            'sectors.*.sector_id' => 'required|exists:sectors,id',
+            'sectors.*.number_of_seats' => 'required|integer|min:1',
+            'sectors.*.price' => 'required|numeric|min:0',
+        ], [
             'status.required' => 'Proszę wybrać status rezerwacji.',
-            'status.string' => 'Status rezerwacji musi być ciągiem znaków.',
-            'status.in' => 'Status rezerwacji może przyjmować jedynie wartości: "reserved" lub "purchased".'
+            'status.in' => 'Status rezerwacji musi być jednym z: reserved, purchased.',
+            'sectors.required' => 'Proszę wybrać sektory.',
+            'sectors.*.sector_id.required' => 'Proszę wybrać sektor.',
+            'sectors.*.sector_id.exists' => 'Wybrany sektor nie istnieje.',
+            'sectors.*.number_of_seats.required' => 'Proszę podać liczbę miejsc.',
+            'sectors.*.number_of_seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
+            'sectors.*.number_of_seats.min' => 'Liczba miejsc musi być większa niż 0.',
         ]);
 
         $user = Auth::guard('web')->user();
-        if (!$user) {   //Niby nie potrzebne, ale strzeżonego Pan Bóg strzeże xd
+        if (!$user) {
             return redirect()->route('login');
         }
 
-        $sector = Sector::findOrFail($request->sector_id);
-        if ($sector->availableSeats() < $request->number_of_seats) {
-            return back()->withErrors('Brak wystarczającej liczby wolnych miejsc w wybranym sektorze.');
+        // Sprawdzenie dostępności miejsc w sektorach
+        foreach ($request->sectors as $sectorData) {
+            $sector = Sector::findOrFail($sectorData['sector_id']);
+            if ($sector->availableSeats() < $sectorData['number_of_seats']) {
+                return back()->withErrors('Brak wystarczającej liczby wolnych miejsc w wybranym sektorze.');
+            }
         }
 
-        if ($user->balance >= $request->number_of_seats * $sector->price) {
-            $user->balance -= $request->number_of_seats * $sector->price;
-            $user->save();
-        } else {
-            return back()->withErrors('Brak wystarczających środków na koncie.');
+        // Przetwarzanie każdego sektora i rezerwacja lub zakup
+        foreach ($request->sectors as $sectorData) {
+            $sector = Sector::findOrFail($sectorData['sector_id']);
+        
+            // Sprawdzanie stanu konta użytkownika
+            if ($user->balance >= $sectorData['number_of_seats'] * $sectorData['price']) {
+                $user->balance -= $sectorData['number_of_seats'] * $sectorData['price'];
+                $user->save();
+            } else {
+                return back()->withErrors('Brak wystarczających środków na koncie.');
+            }
+
+            Ticket::create([
+                'status' => $request->status,
+                'user_id' => $user->id,
+                'sector_id' => $sector->id,
+                'number_of_seats' => $sectorData['number_of_seats'],
+                'code' => $request->status == 'purchased' ? strtoupper(Str::random(10)) : "",
+            ]);
         }
 
-        Ticket::create([
-            'status' => $request->status,
-            'user_id' => $user->id,
-            'sector_id' => $sector->id,
-            'number_of_seats' => $request->number_of_seats,
-            'code' => $request->status == 'purchased' ? strtoupper(Str::random(10)) : "",
-        ]);
-
-        $message = $request->status == 'purchased' ? 'Zakupiono bilet' : 'Zarezerwowano miejsce';
-        return redirect()->route('home', $sector->event)->with('success', $message);
+        $message = $request->status == 'purchased' ? 'Zakupiono bilety' : 'Zarezerwowano bilety';
+        return redirect()->route('home')->with('success', $message);
     }
+
 
     public function cancel(Request $request) {
         $user = Auth::guard('web')->user();
