@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Sector;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -49,35 +52,35 @@ class EventController extends Controller
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
             'name.max' => 'Nazwa wydarzenia nie może przekraczać 255 znaków.',
-    
+
             'location.required' => 'Lokalizacja wydarzenia jest wymagana.',
             'location.string' => 'Lokalizacja musi być ciągiem znaków.',
             'location.max' => 'Lokalizacja nie może przekraczać 255 znaków.',
-    
+
             'description.required' => 'Opis wydarzenia jest wymagany.',
             'description.string' => 'Opis musi być ciągiem znaków.',
             'description.max' => 'Opis nie może przekraczać 1000 znaków.',
-    
+
             'event_date.required' => 'Data wydarzenia jest wymagana.',
             'event_date.date' => 'Proszę podać poprawny format daty.',
-    
+
             'image.required' => 'Obrazek jest wymagany.',
             'image.image' => 'Proszę przesłać plik graficzny.',
             'image.mimes' => 'Dozwolone formaty obrazka to: jpeg, png, jpg, gif, svg, webp.',
             'image.max' => 'Rozmiar pliku obrazka nie może przekroczyć 2MB.',
-    
+
             'sectors.required' => 'Proszę dodać przynajmniej jeden sektor.',
             'sectors.array' => 'Sekcje muszą być w formie tablicy.',
             'sectors.min' => 'Wydarzenie musi mieć co najmniej jeden sektor.',
-    
+
             'sectors.*.name.required' => 'Nazwa sektora jest wymagana.',
             'sectors.*.name.string' => 'Nazwa sektora musi być ciągiem znaków.',
             'sectors.*.name.max' => 'Nazwa sektora nie może przekraczać 255 znaków.',
-    
+
             'sectors.*.seats.required' => 'Liczba miejsc w sektorze jest wymagana.',
             'sectors.*.seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
             'sectors.*.seats.min' => 'Liczba miejsc musi być większa niż 0.',
-    
+
             'sectors.*.price.required' => 'Cena za miejsce w sektorze jest wymagana.',
             'sectors.*.price.numeric' => 'Cena musi być liczbą.',
             'sectors.*.price.min' => 'Cena nie może być mniejsza niż 0.',
@@ -147,35 +150,35 @@ class EventController extends Controller
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
             'name.max' => 'Nazwa wydarzenia nie może przekraczać 255 znaków.',
-    
+
             'location.required' => 'Lokalizacja wydarzenia jest wymagana.',
             'location.string' => 'Lokalizacja musi być ciągiem znaków.',
             'location.max' => 'Lokalizacja nie może przekraczać 255 znaków.',
-    
+
             'description.required' => 'Opis wydarzenia jest wymagany.',
             'description.string' => 'Opis musi być ciągiem znaków.',
             'description.max' => 'Opis nie może przekraczać 1000 znaków.',
-    
+
             'event_date.required' => 'Data wydarzenia jest wymagana.',
             'event_date.date' => 'Proszę podać poprawny format daty.',
-    
+
             'image.required' => 'Obrazek jest wymagany.',
             'image.image' => 'Proszę przesłać plik graficzny.',
             'image.mimes' => 'Dozwolone formaty obrazka to: jpeg, png, jpg, gif, svg, webp.',
             'image.max' => 'Rozmiar pliku obrazka nie może przekroczyć 2MB.',
-    
+
             'sectors.required' => 'Proszę dodać przynajmniej jeden sektor.',
             'sectors.array' => 'Sekcje muszą być w formie tablicy.',
             'sectors.min' => 'Wydarzenie musi mieć co najmniej jeden sektor.',
-    
+
             'sectors.*.name.required' => 'Nazwa sektora jest wymagana.',
             'sectors.*.name.string' => 'Nazwa sektora musi być ciągiem znaków.',
             'sectors.*.name.max' => 'Nazwa sektora nie może przekraczać 255 znaków.',
-    
+
             'sectors.*.seats.required' => 'Liczba miejsc w sektorze jest wymagana.',
             'sectors.*.seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
             'sectors.*.seats.min' => 'Liczba miejsc musi być większa niż 0.',
-    
+
             'sectors.*.price.required' => 'Cena za miejsce w sektorze jest wymagana.',
             'sectors.*.price.numeric' => 'Cena musi być liczbą.',
             'sectors.*.price.min' => 'Cena nie może być mniejsza niż 0.',
@@ -255,6 +258,38 @@ class EventController extends Controller
         });
 
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało zaktualizowane.');
+    }
+
+    public function cancel(Event $event)
+    {
+        if ($event) {
+            DB::transaction(function () use ($event) {
+                /*$sectors = Sector::where('event_id', $event->id)->get();
+                foreach ($sectors as $sector) {
+                    $tickets = Ticket::where('sector_id', $sector->id)->get();
+                    foreach ($tickets as $ticket) {
+                        $user = User::where('id', $ticket->user_id)->get();
+                        $user->balance += $sector->price * $ticket->number_of_seats;
+                        $user->save();
+                        $ticket->status = 'cancelled';
+                        $ticket->save();
+                    }
+                    $sector->delete();
+                }*/
+
+                $tickets = Ticket::with(['user', 'sector'])->where('event_id', $event->id)->get();
+                foreach ($tickets as $ticket) {
+                    $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
+                    $ticket->user->save();
+                    $ticket->status = 'cancelled';
+                }
+
+                $event->delete();
+            });
+        } else {
+            return redirect()->route('organizer.panel')->with('error', 'Wydarzenie nie istnieje.');
+        }
+        return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało usunięte.');
     }
 
     /**

@@ -85,6 +85,8 @@ Route::middleware(CheckOrganizerConfirmed::class)->group(function () {
 
     Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('editEvent');
     Route::put('/events/{event}', [EventController::class, 'update'])->name('updateEvent');
+
+    Route::get('/events/{event}/cancel', [EventController::class, 'cancel'])->name('cancelEvent');
 });
 
 

@@ -75,7 +75,7 @@
                                             </a>
                                         </td> -->
                                         <td class="py-2 px-4">
-                                            <a href="" class="main-button-style-v2">
+                                            <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2">
                                                 Usuń
                                             </a>
                                         </td>
