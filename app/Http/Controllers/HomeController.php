@@ -25,7 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::with(['sector.event'])->where('user_id' == Auth::id())->get();
+        $tickets = Ticket::with(['sector.event'])->where('user_id', Auth::id())->get();
         return view('home', ['tickets' => $tickets]);
     }
 
