@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container-fluid mx-auto p-6">
+    <div class="container">
         <div class="card shadow-sm rounded-lg">
 
             <div class="card-body">
@@ -23,7 +23,7 @@
                     </a>
                 </div>
 
-                <h2 class="section-title">Twoje wydarzenia</h2>
+                <h2 class="section-title">Twoje wydarzenia</h2><br>
 
                 @if ($events->isEmpty())
                     <p class="text-center text-gray-500">Nie masz jeszcze żadnych wydarzeń.</p>
@@ -67,12 +67,6 @@
                                             @elseif ($event->status == 'expired')
                                                 <span class="bg-grey-100 text-grey-800 px-3 py-1 rounded-full text-sm">Archiwalne</span>
                                             @endif
-                                        </td>
-                                       <!-- <td class="py-2 px-4">
-                                            <a href="" class="main-button-style">
-                                                Zakończ
-                                            </a>
-                                        </td> -->
                                         <td class="py-2 px-4">
                                             <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2">
                                                 Usuń

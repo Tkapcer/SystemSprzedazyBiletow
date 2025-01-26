@@ -23,11 +23,11 @@
                         <p>
                             <strong>Data:</strong> {{ date('d F Y', strtotime($event->event_date)) }}<br>
                             <strong>Godzina:</strong> {{ date('H:i', strtotime($event->event_date)) }}<br>
-                            <strong>Miejsce:</strong> {{ $event->location }}
+                            <strong>Lokalizacja:</strong> {{ $event->location }}
                         </p>
                         <div class="description">
-                            <strong>Opis:</strong>
-                            <p>{{ $event->description }}</p>
+                            <br><p>{{ $event->description }}</p><br>
+                            <strong>Organizator:</strong> {{ $event->organizer->companyName }}
                         </div>
                     </div>
                 </main>

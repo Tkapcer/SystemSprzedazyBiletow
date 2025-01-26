@@ -9,8 +9,7 @@
 
     <!-- Informacje o wydarzeniu -->
     <div class="event-info">
-        <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($event->event_date)->format('d F Y H:i') }}</p>
-        <p><strong>Lokalizacja:</strong> {{ $event->location }}</p>
+        <p><strong>Data, godzina i miejsce: </strong> {{ \Carbon\Carbon::parse($event->event_date)->format('d F Y,  H:i') }},  {{ $event->location }}</p><br>
     </div>
 
     <!-- Formularz do wyboru biletów -->
@@ -46,11 +45,13 @@
                 </tr>
             @endforeach
         </tbody>
-    </table>
-    <div class="white-container-2">
-        <a href="/event/{{ $event->id }}" class="main-button-style">Wstecz</a>
-        <button type="button" id="buy-button" class="main-button-style">Kup</button>
-        <button type="button" id="reserve-button" class="main-button-style">Zarezerwuj</button>
+    </table><br>
+    <div class="white-container">
+        <div class="button-container">
+            <button type="button" id="buy-button" class="main-button-style">Kup</button>
+            <button type="button" id="reserve-button" class="main-button-style">Zarezerwuj</button>
+        </div>
+        <a href="/event/{{ $event->id }}" class="main-button-style btn-primary">Wstecz</a>
     </div>
 </form>
 </div>
@@ -62,7 +63,13 @@
             @csrf
 
             <!-- Ukryte pole na event_id -->
-{{--            <input type="hidden" name="event_id" value="{{ $event->id }}">--}}
+{{--        <input type="hidden" name="event_id" value="{{ $event->id }}">--}}
+
+            <!-- Ukryte pole na number_of_seats -->
+{{--        <input type="hidden" class="form-control" id="number_of_seats" name="number_of_seats" required>--}}
+
+            <!-- Ukryte pole na sector_id -->
+{{--        <input type="hidden" name="sector_id" id="sector_id" class="form-control" required>--}}
 
             <!-- Nagłówek modalu -->
             <h3 class="section-title mb-3">Wybrane bilety</h3>
@@ -113,142 +120,142 @@
     }
 
     // Funkcja pokazująca modal z podsumowaniem
-function showModal(action) {
-    const confirmButton = document.getElementById('confirm-action-button');
-    const sectorsSummary = document.getElementById('sectors-summary');
-    const totalPriceElement = document.getElementById('total-price');
-    let totalAmount = 0;
-    let summaryHtml = '';
+    function showModal(action) {
+        const confirmButton = document.getElementById('confirm-action-button');
+        const sectorsSummary = document.getElementById('sectors-summary');
+        const totalPriceElement = document.getElementById('total-price');
+        let totalAmount = 0;
+        let summaryHtml = '';
 
-    const formData = new FormData(document.getElementById('ticket-form'));
-
-    let isAnyTicketSelected = false; // Zmienna sprawdzająca, czy wybrano jakiekolwiek bilety
-    let isInvalidTicketCount = false; // Zmienna sprawdzająca, czy liczba biletów w jakiejkolwiek strefie przekracza 10
-
-    // Przetwarzanie danych sektorów i biletów
-    sectors.forEach(sector => {
-        const numberOfSeats = parseInt(formData.get('sectors[' + sector.id + '][number_of_seats]')) || 0;
-        if (numberOfSeats > 0) {
-            const price = sector.price;
-            const total = numberOfSeats * price;
-            totalAmount += total;
-            summaryHtml += `<p>${sector.name}: ${numberOfSeats} x ${price} zł = ${total} zł</p>`;
-            isAnyTicketSelected = true; // Jeśli wybrano bilety, ustawiamy tę zmienną na true
-        }
-
-        // Sprawdzanie, czy liczba biletów w danym sektorze nie przekracza 10
-        if (numberOfSeats > 10) {
-            isInvalidTicketCount = true; // Jeśli liczba biletów przekroczyła 10, ustawiamy flagę na true
-        }
-    });
-
-    // Jeśli nie wybrano żadnych biletów
-    if (!isAnyTicketSelected) {
-        summaryHtml = '<p>Nie wybrano żadnych biletów.</p>';
-    }
-
-    // Jeśli wybrano za dużo biletów w jednym z sektorów
-    if (isInvalidTicketCount) {
-        summaryHtml = '<p>Błędna liczba biletów. Maksymalna liczba to 10 biletów w jednej strefie.</p>';
-    }
-
-    sectorsSummary.innerHTML = summaryHtml;
-    totalPriceElement.innerText = totalAmount + ' zł';
-
-    // Sprawdzamy, czy użytkownik wybrał bilety lub jeśli wystąpił błąd z liczbą biletów
-    if (!isAnyTicketSelected || isInvalidTicketCount) {
-        // Jeśli nie wybrano biletów lub liczba biletów jest nieprawidłowa, przycisk Kup/Zarezerwuj będzie ukryty
-        confirmButton.style.display = 'none'; // Ukrywamy przycisk
-    } else {
-        confirmButton.style.display = 'block'; // Pokazujemy przycisk, jeśli wybrano bilety
-    }
-
-    // Przycisk Kup/Zarezerwuj
-    if (action === 'buy') {
-        confirmButton.innerText = 'Kup';
-        confirmButton.classList.add('btn-success');
-        confirmButton.classList.remove('btn-warning');
-        confirmButton.value = 'purchased';
-        confirmButton.onclick = function() {
-            const ticketId = document.getElementById('ticket-id').value; // Załóżmy, że ID biletu jest w ukrytym polu
-
-            // Wysyłamy zapytanie AJAX do płatności
-            fetch(`/ticket/pay/${ticketId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    sectors: getFormData()
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    modalMessage.innerText = 'Płatność zakończona sukcesem';
-                } else {
-                    modalMessage.innerText = data.message; // Wyświetlamy komunikat o błędzie
-                }
-            });
-        };
-    } else if (action === 'reserve') {
-        confirmButton.innerText = 'Zarezerwuj';
-        confirmButton.classList.add('btn-warning');
-        confirmButton.classList.remove('btn-success');
-        confirmButton.value = 'reserved';
-        confirmButton.onclick = function() {
-            document.getElementById('modal-form').submit();
-        };
-    }
-
-    // Pokazujemy modal
-    document.getElementById('confirmation-modal').style.display = 'flex';
-}
-
-    function getFormData() {
         const formData = new FormData(document.getElementById('ticket-form'));
-        let sectorsData = [];
 
+        let isAnyTicketSelected = false; // Zmienna sprawdzająca, czy wybrano jakiekolwiek bilety
+        let isInvalidTicketCount = false; // Zmienna sprawdzająca, czy liczba biletów w jakiejkolwiek strefie przekracza 10
+
+        // Przetwarzanie danych sektorów i biletów
         sectors.forEach(sector => {
             const numberOfSeats = parseInt(formData.get('sectors[' + sector.id + '][number_of_seats]')) || 0;
             if (numberOfSeats > 0) {
-                sectorsData.push({
-                    sector_id: sector.id,
-                    price: sector.price,
-                    number_of_seats: numberOfSeats
-                });
+                const price = sector.price;
+                const total = numberOfSeats * price;
+                totalAmount += total;
+                summaryHtml += `<p>${sector.name}: ${numberOfSeats} x ${price} zł = ${total} zł</p>`;
+                isAnyTicketSelected = true; // Jeśli wybrano bilety, ustawiamy tę zmienną na true
+            }
+
+            // Sprawdzanie, czy liczba biletów w danym sektorze nie przekracza 10
+            if (numberOfSeats > 10) {
+                isInvalidTicketCount = true; // Jeśli liczba biletów przekroczyła 10, ustawiamy flagę na true
             }
         });
 
-        return sectorsData;
+        // Jeśli nie wybrano żadnych biletów
+        if (!isAnyTicketSelected) {
+            summaryHtml = '<p>Nie wybrano żadnych biletów.</p>';
+        }
+
+        // Jeśli wybrano za dużo biletów w jednym z sektorów
+        if (isInvalidTicketCount) {
+            summaryHtml = '<p>Błędna liczba biletów. Maksymalna liczba to 10 biletów w jednej strefie.</p>';
+        }
+
+        sectorsSummary.innerHTML = summaryHtml;
+        totalPriceElement.innerText = totalAmount + ' zł';
+
+        // Sprawdzamy, czy użytkownik wybrał bilety lub jeśli wystąpił błąd z liczbą biletów
+        if (!isAnyTicketSelected || isInvalidTicketCount) {
+            // Jeśli nie wybrano biletów lub liczba biletów jest nieprawidłowa, przycisk Kup/Zarezerwuj będzie ukryty
+            confirmButton.style.display = 'none'; // Ukrywamy przycisk
+        } else {
+            confirmButton.style.display = 'block'; // Pokazujemy przycisk, jeśli wybrano bilety
+        }
+
+        // Przycisk Kup/Zarezerwuj
+        if (action === 'buy') {
+            confirmButton.innerText = 'Kup';
+            confirmButton.classList.add('btn-success');
+            confirmButton.classList.remove('btn-warning');
+            confirmButton.value = 'purchased';
+            confirmButton.onclick = function() {
+                const ticketId = document.getElementById('ticket-id').value; // Załóżmy, że ID biletu jest w ukrytym polu
+
+                // Wysyłamy zapytanie AJAX do płatności
+                fetch(`/ticket/pay/${ticketId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        sectors: getFormData()
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        modalMessage.innerText = 'Płatność zakończona sukcesem';
+                    } else {
+                        modalMessage.innerText = data.message; // Wyświetlamy komunikat o błędzie
+                    }
+                });
+            };
+        } else if (action === 'reserve') {
+            confirmButton.innerText = 'Zarezerwuj';
+            confirmButton.classList.add('btn-warning');
+            confirmButton.classList.remove('btn-success');
+            confirmButton.value = 'reserved';
+            confirmButton.onclick = function() {
+                document.getElementById('modal-form').submit();
+            };
+        }
+
+        // Pokazujemy modal
+        document.getElementById('confirmation-modal').style.display = 'flex';
     }
 
-   // Obsługa przycisków
-    document.getElementById('buy-button').addEventListener('click', function() {
-        if (validateForm()) {
-            showModal("buy");
+        function getFormData() {
+            const formData = new FormData(document.getElementById('ticket-form'));
+            let sectorsData = [];
+
+            sectors.forEach(sector => {
+                const numberOfSeats = parseInt(formData.get('sectors[' + sector.id + '][number_of_seats]')) || 0;
+                if (numberOfSeats > 0) {
+                    sectorsData.push({
+                        sector_id: sector.id,
+                        price: sector.price,
+                        number_of_seats: numberOfSeats
+                    });
+                }
+            });
+
+            return sectorsData;
         }
+
+        // Obsługa przycisków
+        document.getElementById('buy-button').addEventListener('click', function() {
+            if (validateForm()) {
+                showModal("buy");
+            }
+        });
+
+        document.getElementById('reserve-button').addEventListener('click', function() {
+            if (validateForm()) {
+                showModal("reserve");
+            }
+        });
+
+        // Przycisk 'Wstecz' - ukrywa modal
+        document.getElementById('back-button').addEventListener('click', function() {
+            event.preventDefault();
+            document.getElementById('confirmation-modal').style.display = 'none';
+        });
     });
 
-    document.getElementById('reserve-button').addEventListener('click', function() {
-        if (validateForm()) {
-            showModal("reserve");
-        }
-    });
-
-    // Przycisk 'Wstecz' - ukrywa modal
-    document.getElementById('back-button').addEventListener('click', function() {
-        event.preventDefault();
-        document.getElementById('confirmation-modal').style.display = 'none';
-    });
-});
-
-// Skrypt związany z ColorThief
-document.addEventListener('DOMContentLoaded', function() {
-        const colorThief = new ColorThief(); // Inicjalizujemy obiekt ColorThief
-        const eventImage = new Image(); // Tworzymy nowe zdjęcie
-        const eventContainer = document.querySelector('.container'); // Wybieramy kontener, którego tło chcemy zmienić
+    // Skrypt związany z ColorThief
+    document.addEventListener('DOMContentLoaded', function() {
+        const colorThief = new ColorThief(); 
+        const eventImage = new Image(); 
+        const eventContainer = document.querySelector('.container'); 
 
         // Ustawiamy źródło obrazka
         eventImage.src = "{{ asset('storage/' . $event->image_path) }}";
@@ -256,15 +263,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Czekamy, aż obrazek się załaduje
         eventImage.onload = function() {
             try {
-                const dominantColor = colorThief.getColor(eventImage); // Pobieramy dominujący kolor z obrazka
-                const rgbColor = `rgb(${dominantColor.join(', ')})`; // Zamieniamy kolor na format RGB
-                eventContainer.style.backgroundColor = rgbColor; // Ustawiamy tło kontenera
+                const dominantColor = colorThief.getColor(eventImage);
+                const rgbColor = `rgb(${dominantColor.join(', ')})`; 
+                eventContainer.style.backgroundColor = rgbColor;
             } catch (error) {
-                console.error("Błąd przy pobieraniu koloru: ", error); // Obsługa błędów
+                console.error("Błąd przy pobieraniu koloru: ", error); 
             }
         };
     });
-
 </script>
 
 @endsection
