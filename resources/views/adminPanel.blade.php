@@ -27,7 +27,11 @@
                                 <tr>
                                     <td scope="row">{{ $organizer->companyName }}</td>
                                     <td scope="row">{{ $organizer->email }}</td>
-                                    <th scope="row">{{ $organizer->status }}</th>
+                                    <td>
+                                        @if($organizer->status == 'waiting') Oczekujący @endif
+                                        @if($organizer->status == 'approved') Potwierdzony @endif
+                                        @if($organizer->status == 'rejected') Odrzucony @endif
+                                    </td>
 
                                     @if($organizer->status == 'waiting' || $organizer->status == 'rejected')
                                         <td scope="row">
@@ -58,7 +62,7 @@
         <!-- Second card -->
         <div class="col-md-6">
             <div class="card">
-                <div class="section-title">{{ __('Panel administratora') }}</div>
+                <div class="section-title">{{ __('Wydarzenia') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -82,7 +86,11 @@
                                             {{ $event->name }}
                                         </a>
                                     </td>
-                                    <th>{{ $event->status }}</th>
+                                    <td>
+                                        @if($event->status == 'waiting') Oczekujący @endif
+                                        @if($event->status == 'approved') Potwierdzony @endif
+                                        @if($event->status == 'rejected') Odrzucony @endif
+                                    </td>
                                     <td>
                                         @if($event->status == 'waiting' || $event->status == 'rejected')
                                             <form action="{{ route('admin.approveEvent', $event->id) }}" method="POST">
