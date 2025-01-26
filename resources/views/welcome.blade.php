@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="main-container">
-        <h2 class="section-title">Nadchodzące Wydarzenia</h2>
+        <h2 class="white-container section-title" style="width:20%">Nadchodzące Wydarzenia</h2>
 
         <!-- Formularz do wyboru sortowania -->
         <div class="sort-options">

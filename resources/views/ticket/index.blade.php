@@ -4,7 +4,7 @@
 <div class="container">
     <!-- Nazwa wydarzenia -->
         <div class="white-container">
-             <h2>{{ $event->name }}</h2>
+             <h2 class="section-title">{{ $event->name }}</h2>
         </div>
 
     <!-- Informacje o wydarzeniu -->
@@ -65,7 +65,7 @@
 {{--            <input type="hidden" name="event_id" value="{{ $event->id }}">--}}
 
             <!-- Nagłówek modalu -->
-            <h3 class="mb-3">Wybrane bilety</h3>
+            <h3 class="section-title mb-3">Wybrane bilety</h3>
 
             <!-- Podsumowanie wybranych biletów -->
             <div id="sectors-summary" class="mb-3"></div>

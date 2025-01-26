@@ -41,13 +41,13 @@
             <div class="nav-link">
                 <a class="main-button-style" href="/">Strona Główna</a>
             </div>
-            <div class="navbar-title">Viva La Billete</div>
+            <div class="navbar-title" style="background-image: linear-gradient(to right, #ffabf4, #bd8aff, #99f5ff); color: transparent;  background-clip: text; -webkit-background-clip: text;">Viva La Billete</div>
             <div class="navbar-nav">
                 <!-- Sprawdzamy, czy użytkownik jest zalogowany jako klient, organizator lub administrator -->
                 @if(Auth::guard('web')->check())
                     <!-- Dla klienta -->
-                        <span class="user-name">{{ Auth::user()->name }}</span>
-                        <span class="user-saldo">{{ Auth::user()->balance }} zł</span>
+                        <span>{{ Auth::user()->name }} {{ Auth::user()->surname }}</span>
+                        <span>{{ Auth::user()->balance }} zł</span>
                         <a class="main-button-style" href="{{ route('home') }}">Konto</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
@@ -55,6 +55,7 @@
                         </form>
                 @elseif(Auth::guard('organizer')->check())
                     <!-- Dla organizatora -->
+                        <span>{{ Auth::guard('organizer')->user()->companyName }}</span> 
                         <a class="main-button-style" href="{{ route('organizer.panel') }}">Konto</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
@@ -62,6 +63,7 @@
                         </form>
                 @elseif(Auth::guard('admin')->check())
                     <!-- Dla administratora -->
+                        <span>{{ Auth::guard('admin')->user()->name }} {{ Auth::guard('admin')->user()->surname }}</span> 
                         <a class="main-button-style" href="{{ route('adminPanel') }}">Panel</a> 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
