@@ -20,7 +20,7 @@ class Event extends Model
         return $this->hasMany(Sector::class);
     }
 
-    public function organizers() {
+    public function organizer() {
         return $this->belongsTo(Organizer::class);
     }
 }
