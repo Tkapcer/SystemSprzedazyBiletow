@@ -36,7 +36,7 @@
     <!-- Skrypt związany z ColorThief -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const colorThief = new ColorThief(); // Upewnij się, że masz dostęp do ColorThief
+            const colorThief = new ColorThief();
             const eventCards = document.querySelectorAll('.event-card');
 
             eventCards.forEach(card => {
@@ -45,21 +45,34 @@
                 if (img) {
                     // Sprawdzamy, czy obrazek jest już załadowany
                     if (img.complete) {
-                        setCardBackgroundColor(img, card); // Ustawiamy tło od razu
+                        setCardBackgroundColor(img, card); 
                     } else {
                         // Czekamy na załadowanie obrazka, jeśli jeszcze nie jest załadowany
                         img.addEventListener('load', function() {
-                            setCardBackgroundColor(img, card); // Ustawiamy tło po załadowaniu obrazu
+                            setCardBackgroundColor(img, card); 
                         });
                     }
+
+                    // Obsługuje błąd, jeśli obrazek się nie załaduje
+                    img.addEventListener('error', function() {
+                        setCardBackgroundColor(null, card); 
+                    });
                 }
             });
 
             // Funkcja ustalająca tło karty na podstawie dominującego koloru obrazu
             function setCardBackgroundColor(img, card) {
                 try {
-                    // Sprawdzamy, czy obrazek jest wystarczająco duży dla ColorThief
-                    if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+                    // Jeśli nie ma obrazu lub nie udało się wyciągnąć koloru
+                    if (!img || img.naturalWidth === 0 || img.naturalHeight === 0) {
+                        // Jeśli brak obrazu, generujemy losowy kolor
+                        const randomColor = getRandomColor();
+                        card.style.backgroundColor = randomColor;
+                        const link = card.querySelector('a');
+                        if (link) {
+                            link.style.backgroundColor = randomColor;
+                        }
+                    } else {
                         const dominantColor = colorThief.getColor(img);
                         const rgbColor = `rgb(${dominantColor.join(', ')})`;
 
@@ -74,7 +87,22 @@
                     }
                 } catch (error) {
                     console.error("Error while extracting dominant color:", error);
+                    // Jeśli wystąpi błąd, generujemy losowy kolor
+                    const randomColor = getRandomColor();
+                    card.style.backgroundColor = randomColor;
+                    const link = card.querySelector('a');
+                    if (link) {
+                        link.style.backgroundColor = randomColor;
+                    }
                 }
+            }
+
+            // Funkcja generująca prawie losowy kolor w formacie RGB
+            function getRandomColor() {
+                const r = Math.floor(Math.random() * 200);
+                const g = Math.floor(Math.random() * 200);
+                const b = Math.floor(Math.random() * 200);
+                return `rgb(${r}, ${g}, ${b})`;
             }
         });
     </script>

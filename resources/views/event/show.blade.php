@@ -62,14 +62,23 @@
         const eventImage = document.getElementById('event-image'); // Pobieramy obrazek wydarzenia
         const eventContainer = document.getElementById('event-container'); // Pobieramy kontener, który chcemy zmienić tło
 
-        // Czekamy, aż obrazek zostanie załadowany
-        if (eventImage.complete) {
-            setBackgroundColor(eventImage); // Jeśli obrazek już jest załadowany, ustawiamy kolor
-        } else {
-            eventImage.addEventListener('load', function() {
-                setBackgroundColor(eventImage); // Jeśli obrazek nie jest jeszcze załadowany, ustawiamy kolor po jego załadowaniu
+        if (eventImage) {
+            // Sprawdzamy, czy obrazek jest już załadowany
+            if (eventImage.complete) {
+                setBackgroundColor(eventImage); 
+            } else {
+                // Czekamy na załadowanie obrazka, jeśli jeszcze nie jest załadowany
+                eventImage.addEventListener('load', function() {
+                    setBackgroundColor(eventImage); 
+                });
+            }
+
+            // Obsługuje błąd, jeśli obrazek się nie załaduje
+            eventImage.addEventListener('error', function() {
+                setBackgroundColor(null); 
             });
         }
+
 
         // Funkcja ustalająca tło kontenera na podstawie dominującego koloru
         function setBackgroundColor(img) {
@@ -87,14 +96,18 @@
                 }
             } catch (error) {
                 console.error("Error while extracting dominant color:", error);
+                // W przypadku błędu generujemy losowy kolor
+                const randomColor = getRandomColor();
+                eventContainer.style.backgroundColor = randomColor;
             }
         }
 
-        // Funkcja do obliczania kontrastującego koloru tekstu na podstawie dominującego koloru (opcjonalnie)
-        function getContrastingTextColor(rgb) {
-            const [r, g, b] = rgb;
-            const brightness = 0.2126 * r + 0.7152 * g + 0.0722 * b; // Luma formula
-            return brightness > 128 ? 'black' : 'white'; // Jeśli tło jest jasne, tekst będzie czarny, w przeciwnym razie biały
+        // Funkcja generująca prawie losowy kolor w formacie RGB
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 200);
+            const g = Math.floor(Math.random() * 200);
+            const b = Math.floor(Math.random() * 200);
+            return `rgb(${r}, ${g}, ${b})`;
         }
     });
 </script>

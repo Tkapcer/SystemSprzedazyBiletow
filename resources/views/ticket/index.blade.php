@@ -282,21 +282,57 @@
     document.addEventListener('DOMContentLoaded', function() {
         const colorThief = new ColorThief(); 
         const eventImage = new Image(); 
+        eventImage.src = "{{ asset('storage/' . $event->image_path) }}";
         const eventContainer = document.querySelector('.container'); 
 
-        // Ustawiamy źródło obrazka
-        eventImage.src = "{{ asset('storage/' . $event->image_path) }}";
 
-        // Czekamy, aż obrazek się załaduje
-        eventImage.onload = function() {
-            try {
-                const dominantColor = colorThief.getColor(eventImage);
-                const rgbColor = `rgb(${dominantColor.join(', ')})`; 
-                eventContainer.style.backgroundColor = rgbColor;
-            } catch (error) {
-                console.error("Błąd przy pobieraniu koloru: ", error); 
+        if (eventImage) {
+            // Sprawdzamy, czy obrazek jest już załadowany
+            if (eventImage.complete) {
+                setBackgroundColor(eventImage); 
+            } else {
+                // Czekamy na załadowanie obrazka, jeśli jeszcze nie jest załadowany
+                eventImage.addEventListener('load', function() {
+                    setBackgroundColor(eventImage); 
+                });
             }
-        };
+
+            // Obsługuje błąd, jeśli obrazek się nie załaduje
+            eventImage.addEventListener('error', function() {
+                setBackgroundColor(null); 
+            });
+        }
+
+        // Funkcja ustalająca tło kontenera na podstawie dominującego koloru
+        function setBackgroundColor(img) {
+            try {
+                // Sprawdzamy, czy obrazek jest wystarczająco duży dla ColorThief
+                if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+                    const dominantColor = colorThief.getColor(img); 
+                    const rgbColor = `rgb(${dominantColor.join(', ')})`;
+
+                    // Ustawiamy tło dla kontenera
+                    eventContainer.style.backgroundColor = rgbColor;
+                } else {
+                    // Jeśli obrazek jest niewłaściwy lub nie ma go, generujemy losowy kolor
+                    const randomColor = getRandomColor();
+            eventContainer.style.backgroundColor = randomColor;
+                }
+            } catch (error) {
+                console.error("Error while extracting dominant color:", error);
+                // W przypadku błędu generujemy losowy kolor
+                const randomColor = getRandomColor();
+            eventContainer.style.backgroundColor = randomColor;
+            }
+        }
+
+        // Funkcja generująca prawie losowy kolor w formacie RGB
+        function getRandomColor() {
+            const r = Math.floor(Math.random() * 200);
+            const g = Math.floor(Math.random() * 200);
+            const b = Math.floor(Math.random() * 200);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
     });
 </script>
 
