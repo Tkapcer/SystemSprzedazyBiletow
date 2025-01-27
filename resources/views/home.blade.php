@@ -54,7 +54,7 @@
                                         <td>{{ $ticket->sector->event->name }}</td> {{--Dorobić tu przekierowanie na odpowiedni event--}}
                                         <td>{{ $ticket->sector->name }}</td>
                                         <td>{{ $ticket->number_of_seats }}</td>
-                                        <td>{{ $ticket->status }}</td>
+                                        <td>{{ $ticket->sector->event->status }}</td>
                                         <td>{{ $ticket->code }}</td>
 
                                         @if($ticket->status == 'reserved')

@@ -265,27 +265,34 @@ class EventController extends Controller
     {
         if ($event) {
             DB::transaction(function () use ($event) {
-                /*$sectors = Sector::where('event_id', $event->id)->get();
+                $sectors = Sector::where('event_id', $event->id)->get();
                 foreach ($sectors as $sector) {
-                    $tickets = Ticket::where('sector_id', $sector->id)->get();
+                    $tickets = Ticket::with('user')->where('sector_id', $sector->id)->get();
                     foreach ($tickets as $ticket) {
-                        $user = User::where('id', $ticket->user_id)->get();
-                        $user->balance += $sector->price * $ticket->number_of_seats;
-                        $user->save();
+//                        $user = User::where('id', $ticket->user_id)->get();
+                        if ($ticket->status == 'purchased') {
+                            $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
+                            $ticket->user->save();
+                        }
                         $ticket->status = 'cancelled';
                         $ticket->save();
                     }
-                    $sector->delete();
-                }*/
-
-                $tickets = Ticket::with(['user', 'sector'])->where('event_id', $event->id)->get();
-                foreach ($tickets as $ticket) {
-                    $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
-                    $ticket->user->save();
-                    $ticket->status = 'cancelled';
+                    $sector->seats=-1;
+                    $sector->save();
                 }
 
-                $event->delete();
+                /*$tickets = Ticket::with(['user', 'sector'])->where('event_id', $event->id)->get();
+                foreach ($tickets as $ticket) {
+                    if ($ticket->status == 'purchased') {
+                        $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
+                        $ticket->user->save();
+                    }
+                    $ticket->status = 'cancelled';
+                    // Tu i tak brakuje usuwania sektorów jak coś
+                }*/
+
+                $event->status='cancelled';
+                $event->save();
             });
         } else {
             return redirect()->route('organizer.panel')->with('error', 'Wydarzenie nie istnieje.');
