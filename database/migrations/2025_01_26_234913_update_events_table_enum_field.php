@@ -40,6 +40,15 @@ return new class extends Migration
         // Usuwamy backup
         Schema::drop('events_backup');
 
+        // Usuwamy i ponownie dodajemy klucz obcy w tabeli `sectors`
+        Schema::table('sectors', function (Blueprint $table) {
+            // Usuwamy istniejący klucz obcy
+            $table->dropForeign(['event_id']);
+
+            // Dodajemy klucz obcy wskazujący na nową tabelę `events`
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+        });
+
         // Włączanie sprawdzania kluczy obcych ponownie
         DB::statement('PRAGMA foreign_keys = ON;');
     }
@@ -74,6 +83,15 @@ return new class extends Migration
                        FROM events_backup');
 
         Schema::drop('events_backup');
+
+        // Usuwamy i ponownie dodajemy klucz obcy w tabeli `sectors`
+        Schema::table('sectors', function (Blueprint $table) {
+            // Usuwamy istniejący klucz obcy
+            $table->dropForeign(['event_id']);
+
+            // Dodajemy klucz obcy wskazujący na nową tabelę `events`
+            $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
+        });
 
         // Włączanie sprawdzania kluczy obcych
         DB::statement('PRAGMA foreign_keys = ON;');
