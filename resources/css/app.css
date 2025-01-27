@@ -171,6 +171,10 @@ a {
     text-align: left;
 }
 
+    .table th {
+        vertical-align: bottom;
+    }
+
 /* Pasek nawigacyjny */
 .navbar {
     background-color: #f8f9fa;
@@ -507,7 +511,7 @@ button, .btn-primary {
 }
 
 .btn-admin-event {
-    background-image: linear-gradient(to right, rgb(255, 171, 244), rgb(189, 138, 255), rgb(153, 245, 255));
+    background-image: linear-gradient(to right, #fc79eb,#9f54ff,#68eefc );
     color: transparent;
     background-clip: text;
     padding: 10px 15px;
