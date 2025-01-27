@@ -31,9 +31,13 @@
                                         <a href="mailto:{{ $organizer->email }}"> {{ $organizer->email }} </a>
                                     </td>
                                     <td>
-                                        @if($organizer->status == 'waiting') Oczekujący @endif
-                                        @if($organizer->status == 'approved') Potwierdzony @endif
-                                        @if($organizer->status == 'rejected') Odrzucony @endif
+                                        @if ($organizer->status == 'approved')
+                                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Potwierdzony</span>
+                                        @elseif ($organizer->status == 'rejected')
+                                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucony</span>
+                                        @elseif ($organizer->status == 'waiting')
+                                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujący</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 10px; width: 110%; padding-right:10px;">
@@ -74,9 +78,9 @@
                     <table class="table table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th style="width: 25%;">Tytuł wydarzenia</th>
-                                <th style="width: 25%;">Status</th>
-                                <th style="width: 30%;">Akcje</th>
+                                <th style="width: 35%;">Tytuł wydarzenia</th>
+                                <th style="width: 14%;">Status</th>
+                                <th style="width: 18%;">Akcje</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,9 +92,13 @@
                                         </a>
                                     </td>
                                     <td>
-                                        @if($event->status == 'waiting') Oczekujący @endif
-                                        @if($event->status == 'approved') Potwierdzony @endif
-                                        @if($event->status == 'rejected') Odrzucony @endif
+                                        @if ($event->status == 'approved')
+                                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Potwierdzone</span>
+                                        @elseif ($event->status == 'rejected')
+                                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
+                                        @elseif ($event->status == 'waiting')
+                                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujące</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <div style="display: flex; gap: 10px; width: 100%;">
