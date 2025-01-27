@@ -133,7 +133,7 @@ class TicketController extends Controller
         }
 
         if ($user->balance < $ticket->number_of_seats * $ticket->sector->price) {
-            return back()->withErrors('Brak wystarczających środków na koncie.');
+            return redirect()->back()->withErrors('Brak wystarczających środków na koncie.');
         }
 
         DB::transaction(function () use ($ticket, $user) {

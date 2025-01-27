@@ -19,7 +19,13 @@
 
                             <div class="mb-3">
                                 <label for="amount" class="form-label">Kwota doładowania</label>
-                                <input type="number" step="0.01" name="amount" id="amount" class="form-control" placeholder="Wprowadź kwotę" required>
+                                <input type="number" step="0.01" name="amount" id="amount" class="form-control @error('amount') is-invalid @enderror"
+                                       value="{{ old('amount') }}" placeholder="Wprowadź kwotę" required>
+                                @error('amount')
+                                     <span class="invalid-feedback" role="alert">
+                                           <strong>{{ $message }}</strong>
+                                     </span>
+                                @enderror
                             </div>
                             @csrf
                             <button type="submit" class="main-button-style btn-success">Dodaj środki</button>
@@ -32,6 +38,14 @@
                         @if (session('success'))
                             <div class="alert alert-success">
                                 {{ session('success') }}
+                            </div>
+                        @endif
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger invalid-feedback">
+                                   @foreach ($errors->all() as $error)
+                                       {{ $error }}
+                                   @endforeach
                             </div>
                         @endif
 
@@ -62,30 +76,20 @@
                                         </td>
                                         <td>{{ $ticket->sector->event->status }}</td>
                                         <td>{{ $ticket->code }}</td>
-
-                                        @if($ticket->status == 'reserved')
-                                            <th scope="row">
-                                                <form action="{{ route('ticket.pay', $ticket->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="main-button-style btn-success">Opłać</button>
-                                                </form>
-                                            </th>
-                                            <th scope="row">
-                                                <form action="{{ route('ticket.cancel', $ticket->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="main-button-style-v2 btn-danger">Anuluj</button>
-                                                </form>
-                                            </th>
-                                        @endif
-
-                                        @if($ticket->status == 'purchased')
-                                            <th scope="row">
-                                                <form action="{{ route('ticket.return', $ticket->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="main-button-style-v2 btn-danger">Zwróć</button>
-                                                </form>
-                                            </th>
-                                        @endif
+                                        
+                                        <th scope="row">
+                                            <form action="{{ route('ticket.pay', $ticket->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="main-button-style btn-success">Opłać</button>
+                                            </form>
+                                        </th>
+                                        <th scope="row">
+                                            <form action="{{ route('ticket.cancel', $ticket->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="main-button-style-v2 btn-danger">Anuluj</button>
+                                            </form>
+                                        </th>
+                                        
                                     </tr>
                                 @endif
                                 @endforeach
@@ -101,32 +105,17 @@
                                         <td>{{ $ticket->sector->event->status }}</td>
                                         <td>{{ $ticket->code }}</td>
 
-                                        @if($ticket->status == 'reserved')
-                                            <th scope="row">
-                                                <form action="{{ route('ticket.pay', $ticket->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="main-button-style btn-success">Opłać</button>
-                                                </form>
-                                            </th>
-                                            <th scope="row">
-                                                <form action="{{ route('ticket.cancel', $ticket->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="main-button-style-v2 btn-danger">Anuluj</button>
-                                                </form>
-                                            </th>
-                                        @endif
+                                        <th scope="row">
+                                            <form action="{{ route('ticket.return', $ticket->id) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="main-button-style-v2 btn-danger">Zwróć</button>
+                                            </form>
+                                        </th>
 
-                                        @if($ticket->status == 'purchased')
-                                            <th scope="row">
-                                                <form action="{{ route('ticket.return', $ticket->id) }}" method="POST">
-                                                    @csrf
-                                                    <button type="submit" class="main-button-style-v2 btn-danger">Zwróć</button>
-                                                </form>
-                                            </th>
-                                        @endif
                                     </tr>
                                 @endif
                                 @endforeach
+                                <tr>     <td>                        {{--                        @dump($errors)--}} </td> </tr>
                                 </tbody>
                             </table>
                         @endif
