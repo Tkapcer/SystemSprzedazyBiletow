@@ -50,6 +50,11 @@ class LoginController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|string|min:6',
+        ], [
+            'email.required' => 'Proszę podać adres e-mail.',
+            'email.email' => 'Podaj poprawny adres e-mail.',
+            'password.required' => 'Proszę podać hasło.',
+            'password.min' => 'Hasło musi mieć co najmniej :min znaków.',
         ]);
 
         // Próba logowania usera

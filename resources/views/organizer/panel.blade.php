@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
+        
         <div class="card shadow-sm rounded-lg">
 
             <div class="card-body">
@@ -28,7 +29,7 @@
                 @if ($events->isEmpty())
                     <p class="text-center text-gray-500">Nie masz jeszcze żadnych wydarzeń.</p>
                 @else
-                    <div class="overflow-x-auto">
+                    <div class="">
                         <table class="table-auto w-full text-sm text-gray-800">
                             <thead class="bg-blue-100">
                                 <tr>
@@ -46,15 +47,18 @@
                                     <tr class="border-b hover:bg-gray-50">
                                         <td class="py-2 px-4">{{ $loop->iteration }}</td>
                                         <td class="py-2 px-4">
-                                        <a href="{{ route('event.show', $event->id) }}" class="text-blue-500 hover:text-blue-700">
-                                        {{ $event->name }}
-                                        </a></td>
+                                            <a href="{{ route('event.show', $event->id) }}" class="text-blue-500 hover:text-blue-700">
+                                                {{ $event->name }}
+                                            </a>
+                                        </td>
                                         <td class="py-2 px-4">{{ $event->event_date->format('d.m.Y H:i') }}</td>
                                         <td class="py-2 px-4">{{ $event->location }}</td>
                                         <td class="py-2 px-4">
-                                            <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">
-                                                Edytuj
-                                            </a>
+                                            @if ($event->status != 'cancelled')
+                                                <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">
+                                                    Edytuj
+                                                </a>
+                                            @endif
                                         </td>
                                         <td class="py-2 px-4">
                                             @if ($event->status == 'approved')
@@ -68,10 +72,13 @@
                                             @elseif ($event->status == 'cancelled')
                                                 <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
                                             @endif
+                                        </td>
                                         <td class="py-2 px-4">
-                                            <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2">
-                                                Usuń
-                                            </a>
+                                            @if ($event->status != 'cancelled')
+                                                <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2">
+                                                    Usuń
+                                                </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

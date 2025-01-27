@@ -126,7 +126,11 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        return view('organizer.editEvent', compact('event'));
+        if ($event->status == 'cancelled') {
+            return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
+        } else {
+            return view('organizer.editEvent', compact('event'));
+        }
     }
 
     /**
@@ -134,7 +138,9 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-
+        if ($event->status == 'cancelled') {
+            return redirect()->route('organizer.panel')->withErrors('Nie można edytować anulowanych wydarzeń');
+        }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
@@ -263,7 +269,7 @@ class EventController extends Controller
 
     public function cancel(Event $event)
     {
-        if ($event) {
+        if ($event->status != 'cancelled') {
             DB::transaction(function () use ($event) {
                 $sectors = Sector::where('event_id', $event->id)->get();
                 foreach ($sectors as $sector) {
