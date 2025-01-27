@@ -71,7 +71,7 @@
                     <table class="table table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th>Tytuł wydarzenia <br> (Kliknij aby zobaczyć szczegóły)</th>
+                                <th>Tytuł wydarzenia <br> <div style="font-size: 50%">(Kliknij aby zobaczyć szczegóły) </div> </th>
                                 <th>Status</th>
                                 <th>Akcje</th>
                             </tr>
