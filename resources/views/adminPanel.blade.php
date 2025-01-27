@@ -17,16 +17,17 @@
                     <table class="table table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th>Nazwa firmy</th>
-                                <th>E-Mail</th>
-                                <th>Akcje</th>
+                                <th style="width: 25%;">Nazwa firmy</th>
+                                <th style="width: 25%;">E-Mail</th>
+                                <th style="width: 15%;">Status</th>
+                                <th style="width: 18%;">Akcje</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($organizers as $organizer)
                                 <tr>
-                                    <td scope="row">{{ $organizer->companyName }}</td>
-                                    <td scope="row">
+                                    <td>{{ $organizer->companyName }}</td>
+                                    <td>
                                         <a href="mailto:{{ $organizer->email }}"> {{ $organizer->email }} </a>
                                     </td>
                                     <td>
@@ -35,18 +36,20 @@
                                         @if($organizer->status == 'rejected') Odrzucony @endif
                                     </td>
                                     <td>
-                                        @if($organizer->status == 'waiting' || $organizer->status == 'rejected')
-                                            <form action="{{ route('admin.confirm', $organizer->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="main-button-style btn-success">Potwierdź</button>
-                                            </form>
-                                        @endif
-                                        @if($organizer->status == 'approved' || $organizer->status == 'waiting')
-                                            <form action="{{ route('admin.reject', $organizer->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
-                                            </form>
-                                        @endif
+                                        <div style="display: flex; gap: 10px; width: 110%; padding-right:10px;">
+                                            @if($organizer->status == 'waiting' || $organizer->status == 'rejected')
+                                                <form action="{{ route('admin.confirm', $organizer->id) }}" method="POST" style="flex: 1;">
+                                                    @csrf
+                                                    <button type="submit" class="main-button-style btn-success">Zatwierdź</button>
+                                                </form>
+                                            @endif
+                                            @if($organizer->status == 'approved' || $organizer->status == 'waiting')
+                                                <form action="{{ route('admin.reject', $organizer->id) }}" method="POST" style="flex: 1;">
+                                                    @csrf
+                                                    <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -71,9 +74,9 @@
                     <table class="table table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th>Tytuł wydarzenia <br> <div style="font-size: 50%">(Kliknij aby zobaczyć szczegóły) </div> </th>
-                                <th>Status</th>
-                                <th>Akcje</th>
+                                <th style="width: 25%;">Tytuł wydarzenia</th>
+                                <th style="width: 25%;">Status</th>
+                                <th style="width: 30%;">Akcje</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,18 +93,20 @@
                                         @if($event->status == 'rejected') Odrzucony @endif
                                     </td>
                                     <td>
-                                        @if($event->status == 'waiting' || $event->status == 'rejected')
-                                            <form action="{{ route('admin.approveEvent', $event->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="main-button-style btn-success">Potwierdź</button>
-                                            </form>
-                                        @endif
-                                        @if($event->status == 'approved' || $event->status == 'waiting')
-                                            <form action="{{ route('admin.rejectEvent', $event->id) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
-                                            </form>
-                                        @endif
+                                        <div style="display: flex; gap: 10px; width: 100%;">
+                                            @if($event->status == 'waiting' || $event->status == 'rejected')
+                                                <form action="{{ route('admin.approveEvent', $event->id) }}" method="POST" style="flex: 1;">
+                                                    @csrf
+                                                    <button type="submit" class="main-button-style btn-success">Zatwierdź</button>
+                                                </form>
+                                            @endif
+                                            @if($event->status == 'approved' || $event->status == 'waiting')
+                                                <form action="{{ route('admin.rejectEvent', $event->id) }}" method="POST" style="flex: 1;">
+                                                    @csrf
+                                                    <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
