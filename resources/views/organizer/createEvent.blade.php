@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dodawanie wydarzenia') }}</div>
+                <div class="section-title">{{ __('Dodawanie wydarzenia') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -94,11 +94,11 @@
                                         </div>
                                     @endforeach
                                 </div>
-                                <button type="button" id="add-sector" class="btn btn-secondary mt-2">Dodaj sektor</button>
-                                <button type="button" id="remove-sector" class="btn btn-danger mt-2">Usuń sektor</button>
+                                <button type="button" id="add-sector" class="main-button-style-v2">Dodaj sektor</button>
+                                <button type="button" id="remove-sector" class="main-button-style-v2">Usuń sektor</button>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Dodaj wydarzenie</button>
+                            <button type="submit" class="main-button-style">Dodaj wydarzenie</button>
                         </form>
                     </div>
 

@@ -420,7 +420,7 @@ button, .btn-primary {
 
 /* Stylizacja formularza dodawania wydarzenia */
 .event-form {
-    max-width: 800px;
+    max-width: 1000px;
     margin: 50px auto;
     padding: 30px;
     background: #ffffff;
@@ -456,22 +456,6 @@ button, .btn-primary {
             outline: none;
         }
 
-    .event-form .btn-primary {
-        padding: 12px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        text-align: center;
-        text-transform: uppercase;
-        transition: background-color 0.3s ease;
-    }
-
-        .event-form .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
     .event-form .sector-row {
         background: #f8f9fa;
         border: 1px solid #ddd;
@@ -487,8 +471,7 @@ button, .btn-primary {
         }
 
     .event-form #add-sector, .event-form #remove-sector {
-        background-color: #6c757d;
-        color: white;
+        color: black;
         margin-top: 10px;
         padding: 10px;
         border-radius: 4px;
@@ -496,23 +479,6 @@ button, .btn-primary {
         transition: background-color 0.3s ease;
     }
 
-        .event-form #add-sector:hover {
-            background-color: #5a6268;
-        }
-
-        .event-form #remove-sector:hover {
-            background-color: #dc3545;
-        }
-
-    .event-form .is-invalid {
-        border-color: red;
-        background-color: #ffe6e6;
-    }
-
-    .event-form .invalid-feedback {
-        color: red;
-        margin-top: 5px;
-    }
 
 /* Modal */
 .modal {
