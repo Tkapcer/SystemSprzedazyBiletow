@@ -21,7 +21,9 @@ class Sector extends Model
     }
 
     public function availableSeats() {
-        $reservedSeats = $this->tickets()->sum('number_of_seats');
+        $reservedSeats = $this->tickets()
+            ->where('status', '!=', 'cancelled')
+            ->sum('number_of_seats');
         return $this->seats - $reservedSeats;
     }
 }

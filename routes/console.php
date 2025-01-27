@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Event;
+use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -18,3 +19,12 @@ Artisan::command('UpdateEventsStatus', function () {
         $event->save();
     }
 })->purpose('Ustawienie statusu odbytych wydarzeń')->everyMinute();
+
+Artisan::command('ReturnOldReservations', function () {
+    $oldReservations = Ticket::where('status', 'reserved')
+        ->where('created_at', '<', Carbon::now()->subWeek());
+    foreach ($oldReservations->get() as $ticket) {
+        $ticket->status = 'cancelled';
+        $ticket->save();
+    }
+})->purpose('Usuwanie starych rezerwacji')->everyMinute();
