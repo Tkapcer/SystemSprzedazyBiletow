@@ -505,3 +505,16 @@ button, .btn-primary {
     max-width: 500px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+.btn-admin-event {
+    background-image: linear-gradient(to right, rgb(255, 171, 244), rgb(189, 138, 255), rgb(153, 245, 255));
+    color: transparent;
+    background-clip: text;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+
+    .btn-admin-event:hover {
+        color: white;
+        background-clip: border-box;
+    }

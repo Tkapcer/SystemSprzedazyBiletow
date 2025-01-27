@@ -26,7 +26,9 @@
                             @foreach($organizers as $organizer)
                                 <tr>
                                     <td scope="row">{{ $organizer->companyName }}</td>
-                                    <td scope="row">{{ $organizer->email }}</td>
+                                    <td scope="row">
+                                        <a href="mailto:{{ $organizer->email }}"> {{ $organizer->email }} </a>
+                                    </td>
                                     <td>
                                         @if($organizer->status == 'waiting') Oczekujący @endif
                                         @if($organizer->status == 'approved') Potwierdzony @endif
@@ -69,7 +71,7 @@
                     <table class="table table-bordered mt-3">
                         <thead>
                             <tr>
-                                <th>Tytuł wydarzenia</th>
+                                <th>Tytuł wydarzenia <br> <div style="font-size: 50%">(Kliknij aby zobaczyć szczegóły) </div> </th>
                                 <th>Status</th>
                                 <th>Akcje</th>
                             </tr>
@@ -78,7 +80,7 @@
                             @foreach($events as $event)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('event.show', $event->id) }}" class="btn btn-primary" role="button">
+                                        <a href="{{ route('event.show', $event->id) }}" class="btn-admin-event" role="button">
                                             {{ $event->name }}
                                         </a>
                                     </td>
