@@ -64,7 +64,9 @@
                                             @elseif ($event->status == 'rejected')
                                                 <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
                                             @elseif ($event->status == 'expired')
-                                                <span class="bg-grey-100 text-grey-800 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                                <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                            @elseif ($event->status == 'cancelled')
+                                                <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
                                             @endif
                                         <td class="py-2 px-4">
                                             <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2">
