@@ -24,7 +24,7 @@
                         </div>
                     @endif
 
-                    <div class="container">
+                    
                         <form action="{{ route('organizer.storeEvent') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
@@ -100,7 +100,7 @@
 
                             <button type="submit" class="main-button-style">Dodaj wydarzenie</button>
                         </form>
-                    </div>
+                    
 
                     <script>
                         document.addEventListener('DOMContentLoaded', () => {

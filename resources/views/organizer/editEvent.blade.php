@@ -2,7 +2,10 @@
 
 @section('content')
 <div class="container event-form">
-    <h1>Edytuj wydarzenie</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="section-title">{{ __('Edytuj wydarzenie') }}</div>
     <form action="{{ route('updateEvent', $event->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT') {{-- Metoda PUT dla aktualizacji --}}
@@ -135,11 +138,11 @@
                     </div>
                 @endforeach
             </div>
-            <button type="button" id="add-sector" class="btn btn-secondary mt-2">Dodaj sektor</button>
-            <button type="button" id="remove-sector" class="btn btn-danger mt-2">Usuń sektor</button>
+            <button type="button" id="add-sector" class="main-button-style-v2">Dodaj sektor</button>
+            <button type="button" id="remove-sector" class="main-button-style-v2">Usuń sektor</button>
         </div>
 
-        <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+        <button type="submit" class="main-button-style">Zapisz zmiany</button>
     </form>
 </div>
 
