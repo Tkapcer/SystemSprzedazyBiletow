@@ -1,0 +1,119 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' ----- MODELE -----
+class User {
+    +name: string
+    +surname: string
+    +email: string
+    +password: string
+    +companyName: string
+    +type: string
+    +organizerStatus: string
+    +balance: float
+    --
+    +casts(): array
+}
+
+class Ticket {
+    +status: string
+    +code: string
+    --
+    +sector(): Sector
+    +user(): User
+}
+
+class Sector {
+    +name: string
+    +seats: int
+    +price: float
+    --
+    +event(): Event
+    +tickets(): Ticket[]
+    +availableSeats(): int
+}
+
+class Organizer {
+    --
+    +events(): Event[]
+}
+
+class Event {
+    +name: string
+    +location: string
+    +description: string
+    +event_date: datetime
+    +image_path: string
+    --
+    +sectors(): Sector[]
+    +organizer(): Organizer
+}
+
+' ----- RELACJE MIĘDZY KLASAMI -----
+User "1" -- "0..*" Ticket
+Sector "1" -- "0..*" Ticket
+Sector "1" -- "1" Event
+Organizer "1" -- "0..*" Event
+Event "1" -- "0..*" Sector
+
+' ----- KONTROLERY -----
+
+class TicketController {
+    +index(event: Event): View
+    +store(request: Request): RedirectResponse
+    +cancel(request: Request): RedirectResponse
+    +return(request: Request): RedirectResponse
+    +pay(request: Request): RedirectResponse
+}
+
+class SectorController {
+    +store(request: Request): void
+}
+
+class OrganizerController {
+    +indexConfirmed(): View
+    +indexNotConfirmed(): View
+    +createEvent(): View
+    +storeEvent(request: Request): RedirectResponse
+    +cancel(event: Event): RedirectResponse
+}
+
+class HomeController {
+    +index(): View
+    +addMoney(request: Request): RedirectResponse
+}
+
+class EventController {
+    +index(): View
+    +store(request: Request): RedirectResponse
+    +show(event: Event): View
+    +edit(event: Event): View
+    +update(request: Request, event: Event): RedirectResponse
+    +cancel(event: Event): RedirectResponse
+}
+
+class AdminController {
+    +index(): View
+    +confirmOrganizer(id: int): RedirectResponse
+    +rejectOrganizer(id: int): RedirectResponse
+    +approveEvent(id: int): RedirectResponse
+    +rejectEvent(id: int): RedirectResponse
+}
+
+' ----- RELACJE KONTROLER-MODEL -----
+TicketController --> Ticket
+TicketController --> Sector
+TicketController --> User
+SectorController --> Sector
+OrganizerController --> Event
+OrganizerController --> Sector
+OrganizerController --> User
+HomeController --> Ticket
+HomeController --> User
+EventController --> Event
+EventController --> Sector
+AdminController --> Event
+AdminController --> Organizer
+AdminController --> User
+
+@enduml
