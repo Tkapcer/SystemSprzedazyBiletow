@@ -34,6 +34,10 @@ class Sector {
 }
 
 class Organizer {
+    +companyName: string
+    +email: string
+    +password: string
+    +status: string
     --
     +events(): Event[]
 }
@@ -49,7 +53,7 @@ class Event {
     +organizer(): Organizer
 }
 
-' ----- RELACJE MIĘDZY KLASAMI -----
+' ----- RELACJE MODELE -----
 User "1" -- "0..*" Ticket
 Sector "1" -- "0..*" Ticket
 Sector "1" -- "1" Event
@@ -100,6 +104,16 @@ class AdminController {
     +rejectEvent(id: int): RedirectResponse
 }
 
+class LoginController {
+    +login(request: Request): RedirectResponse
+    +logout(request: Request): RedirectResponse
+    +redirectTo(): string
+}
+
+class RegisterController {
+    +register(request: RegisterRequest): RedirectResponse
+}
+
 ' ----- RELACJE KONTROLER-MODEL -----
 TicketController --> Ticket
 TicketController --> Sector
@@ -115,5 +129,40 @@ EventController --> Sector
 AdminController --> Event
 AdminController --> Organizer
 AdminController --> User
+LoginController --> User
+LoginController --> Organizer
+RegisterController --> User
+RegisterController --> Organizer
+
+note top of LoginController
+ login.blade.php
+end note
+
+note top of RegisterController
+ register.blade.php
+end note
+
+note top of AdminController
+ adminPanel.blade.php
+end note
+
+note top of OrganizerController
+ organizer/createEvent.blade.php
+ organizer/editEvent.blade.php
+ organizer/panel.blade.php
+ organizer/statuInfo.blade.php
+end note
+
+note top of EventController
+ event/show.blade.php
+end note
+
+note top of TicketController
+ ticket/index.blade.php
+end note
+
+note top of HomeController
+ home.blade.php
+end note
 
 @enduml
