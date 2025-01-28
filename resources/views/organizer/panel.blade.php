@@ -29,7 +29,7 @@
                 @if ($events->isEmpty())
                     <p class="text-center text-gray-500">Nie masz jeszcze żadnych wydarzeń.</p>
                 @else
-                    <div class="">
+                    <div class="owerflow-x-auto">
                         <table class="table-auto w-full text-sm text-gray-800">
                             <thead class="bg-blue-100">
                                 <tr>
@@ -54,7 +54,7 @@
                                         <td class="py-2 px-4">{{ $event->event_date->format('d.m.Y H:i') }}</td>
                                         <td class="py-2 px-4">{{ $event->location }}</td>
                                         <td class="py-2 px-4">
-                                            @if ($event->status != 'cancelled')
+                                            @if ($event->status != 'cancelled' && $event->status != 'expired')
                                                 <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">
                                                     Edytuj
                                                 </a>
@@ -74,7 +74,7 @@
                                             @endif
                                         </td>
                                         <td class="py-2 px-4">
-                                            @if ($event->status != 'cancelled')
+                                            @if ($event->status != 'cancelled' && $event->status != 'expired')
                                                 <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2">
                                                     Usuń
                                                 </a>
