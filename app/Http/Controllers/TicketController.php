@@ -116,9 +116,12 @@ class TicketController extends Controller
         $ticket = Ticket::where('id', $request->id)
             ->where('user_id', $user->id)
             ->where('status', 'purchased')
+            ->whereHas('sector.event', function ($query) {
+                $query->where('status', 'approved');
+            })
             ->first();
 
-        if (!$ticket) {
+        if (!$ticket ) {
             return redirect()->back()->withErrors('Nie masz tego biletu.');
         }
 
