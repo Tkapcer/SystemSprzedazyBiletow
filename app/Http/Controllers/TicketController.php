@@ -136,7 +136,12 @@ class TicketController extends Controller
 
     public function pay(Request $request) {
         $user = Auth::guard('web')->user();
-        $ticket = Ticket::where('id', $request->id)->where('user_id', $user->id)->first();
+        $ticket = Ticket::where('id', $request->id)
+            ->where('user_id', $user->id)
+            ->whereHas('sector.event', function ($query) {
+                $query->where('status', 'approved');
+            })
+            ->first();
 
         if (!$ticket) {
             return redirect()->back()->withErrors('Nie masz tej rezerwacji.');
