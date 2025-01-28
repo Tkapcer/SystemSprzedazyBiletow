@@ -59,7 +59,19 @@
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
-                                            <td>{{ $ticket->sector->event->status }}</td>
+                                            <td>
+                                                @if ($ticket->sector->event->status == 'approved')
+                                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Zatwierdzone</span>
+                                                @elseif ($ticket->sector->event->status == 'waiting')
+                                                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujące</span>
+                                                @elseif ($ticket->sector->event->status == 'rejected')
+                                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
+                                                @elseif ($ticket->sector->event->status == 'expired')
+                                                    <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                                @elseif ($ticket->sector->event->status == 'cancelled')
+                                                    <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div style="display: flex; gap: 10px;">
                                                     <form action="{{ route('ticket.pay', $ticket->id) }}" method="POST" style="flex: 1;">
@@ -90,9 +102,9 @@
                                     <th style="width: 6%;">Sektor</th>
                                     <th style="width: 5%;">Liczba miejsc</th>
                                     <th style="width: 10%;">Status biletu</th>
-                                    <th style="width: 8%;">Status wydarzenia</th>
+                                    <th style="width: 10%;">Status wydarzenia</th>
                                     <th style="width: 10%;">Kod biletu</th>
-                                    <th style="width: 9%;">Dostępne akcje</th>
+                                    <th style="width: 9%;">Zwracanie biletu</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,9 +119,25 @@
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
                                             <td class="py-2 px-4">
-                                                <span class="bg-green-100 text-yellow-800 px-3 py-1 rounded-full text-sm">{{ $ticket->status }}</span>
+                                                @if ($ticket->status == 'purchased')
+                                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Zakupiony</span>
+                                                @elseif ($ticket->status == 'cancelled')
+                                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
+                                                @endif
                                             </td>
-                                            <td>{{ $ticket->sector->event->status }}</td>
+                                            <td>
+                                                @if ($ticket->sector->event->status == 'approved')
+                                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Zatwierdzone</span>
+                                                @elseif ($ticket->sector->event->status == 'waiting')
+                                                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujące</span>
+                                                @elseif ($ticket->sector->event->status == 'rejected')
+                                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
+                                                @elseif ($ticket->sector->event->status == 'expired')
+                                                    <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                                @elseif ($ticket->sector->event->status == 'cancelled')
+                                                    <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $ticket->code }}</td>
                                             <td style="width: 9%;">
                                                 <form action="{{ route('ticket.return', $ticket->id) }}" method="POST">
