@@ -284,8 +284,9 @@ class EventController extends Controller
                             $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
                             $ticket->user->save();
                         }
-                        $ticket->status = 'cancelled';
-                        $ticket->save();
+                        $ticket->sector->event->status = 'cancelled';
+//                        $ticket->status = 'cancelled';
+                        $ticket->sector->event->save();
                     }
                     $sector->seats=-1;
                     $sector->save();
