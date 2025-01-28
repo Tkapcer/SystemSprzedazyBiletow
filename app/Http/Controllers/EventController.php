@@ -128,6 +128,8 @@ class EventController extends Controller
     {
         if ($event->status == 'cancelled') {
             return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
+        } else if ($event->status == 'expired') {
+            return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
         } else {
             return view('organizer.editEvent', compact('event'));
         }
@@ -140,6 +142,8 @@ class EventController extends Controller
     {
         if ($event->status == 'cancelled') {
             return redirect()->route('organizer.panel')->withErrors('Nie można edytować anulowanych wydarzeń');
+        } else if ($event->status == 'expired') {
+            return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
         }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -269,7 +273,7 @@ class EventController extends Controller
 
     public function cancel(Event $event)
     {
-        if ($event->status != 'cancelled') {
+        if ($event->status != 'cancelled' && $event->status != 'expired') {
             DB::transaction(function () use ($event) {
                 $sectors = Sector::where('event_id', $event->id)->get();
                 foreach ($sectors as $sector) {

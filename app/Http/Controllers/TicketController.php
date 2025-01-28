@@ -37,6 +37,10 @@ class TicketController extends Controller
     public function store(Request $request)
     {
 //        dd($request->all());
+        // Sprawdzenie, czy 'sectors' zostało przekazane w żądaniu
+        if (!$request->has('sectors')) {
+            return back()->withErrors('Brak danych dotyczących sektorów.');
+        }
 
         // Dekodujemy "sectors" na tablicę
         $decodedSectors = json_decode($request->input('sectors'), true);
@@ -109,7 +113,10 @@ class TicketController extends Controller
 
     public function return(Request $request) {
         $user = Auth::guard('web')->user();
-        $ticket = Ticket::where('id', $request->id)->where('user_id', $user->id)->first();
+        $ticket = Ticket::where('id', $request->id)
+            ->where('user_id', $user->id)
+            ->where('status', 'purchased')
+            ->first();
 
         if (!$ticket) {
             return redirect()->back()->withErrors('Nie masz tego biletu.');

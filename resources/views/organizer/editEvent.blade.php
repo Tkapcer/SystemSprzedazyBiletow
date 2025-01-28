@@ -138,8 +138,10 @@
                     </div>
                 @endforeach
             </div>
-            <button type="button" id="add-sector" class="main-button-style-v2">Dodaj sektor</button>
-            <button type="button" id="remove-sector" class="main-button-style-v2">Usuń sektor</button>
+            <div style="display: flex; gap: 10px;">
+                <button type="button" id="add-sector" class="main-button-style">Dodaj sektor</button>
+                <button type="button" id="remove-sector" class="main-button-style-v2">Usuń sektor</button>
+            </div>
         </div>
 
         <button type="submit" class="main-button-style">Zapisz zmiany</button>

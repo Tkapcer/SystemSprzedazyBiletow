@@ -28,7 +28,7 @@
             @foreach ($sectors as $sector)
                 <tr>
                     <td class="event-info">{{ $sector->name }}</td>
-                    <td class="event-info">{{ $sector->seats }}</td>
+                    <td class="event-info">{{ $sector->availableSeats() }}</td>
                     <td class="event-info">{{ $sector->price }} zł</td>
                     <td>
                         <input type="number" 
@@ -46,6 +46,15 @@
             @endforeach
         </tbody>
     </table><br>
+
+    @if ($errors->any())
+       <div class="alert alert-danger invalid-feedback">
+               @foreach ($errors->all() as $error)
+                   <strong>{{ $error }}</strong>
+               @endforeach
+       </div>
+    @endif
+
     <div class="white-container">
         <div class="button-container">
             <button type="button" id="buy-button" class="main-button-style">Kup</button>
