@@ -5,8 +5,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="section-title">{{ __('Twoje konto') }}</div>
-
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
@@ -14,6 +12,7 @@
                         </div>
                     @endif
 
+                    <h4 class="section-title">Doładowanie konta</h4>
                     <form action="{{ route('addMoney') }}" method="POST">
                         @csrf
                         <div class="mb-3">
@@ -32,9 +31,17 @@
                             </button>
                         </div>
                     </form>
-
-                    <br>
-                    <h4 class="section-title">Twoje rezerwacje</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="section-title" style="padding-bottom: 5px;">Twoje rezerwacje</h4>
                     @if($tickets->isEmpty() || $tickets->where('status', 'reserved')->isEmpty())
                         <p>Brak rezerwacji biletów do wyświetlenia.</p>
                     @else
@@ -44,13 +51,12 @@
                                     <th style="width: 25%;">Wydarzenie</th>
                                     <th style="width: 10%;">Sektor</th>
                                     <th style="width: 10%;">Liczba miejsc</th>
-                                    <th style="width: 14%;">Status wydarzenia</th>
                                     <th style="width: 14%;">Dostępne akcje</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($tickets as $ticket)
-                                    @if($ticket->status == 'reserved')
+                                    @if($ticket->status == 'reserved' && $ticket->sector->event->status == 'approved')
                                         <tr>
                                             <td>
                                                 <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
@@ -59,19 +65,6 @@
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
-                                            <td>
-                                                @if ($ticket->sector->event->status == 'approved')
-                                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Zatwierdzone</span>
-                                                @elseif ($ticket->sector->event->status == 'waiting')
-                                                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujące</span>
-                                                @elseif ($ticket->sector->event->status == 'rejected')
-                                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
-                                                @elseif ($ticket->sector->event->status == 'expired')
-                                                    <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
-                                                @elseif ($ticket->sector->event->status == 'cancelled')
-                                                    <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
-                                                @endif
-                                            </td>
                                             <td>
                                                 <div style="display: flex; gap: 10px;">
                                                     <form action="{{ route('ticket.pay', $ticket->id) }}" method="POST" style="flex: 1;">
@@ -91,7 +84,7 @@
                         </table>
                     @endif
                     <br>
-                    <h4 class="section-title">Twoje bilety</h4>
+                    <h4 class="section-title" style="padding-bottom: 5px;">Twoje bilety</h4>
                     @if($tickets->where('status', 'purchased')->isEmpty())
                         <p>Brak kupionych biletów do wyświetlenia.</p>
                     @else
@@ -99,17 +92,15 @@
                             <thead>
                                 <tr>
                                     <th style="width: 25%;">Wydarzenie</th>
-                                    <th style="width: 6%;">Sektor</th>
-                                    <th style="width: 5%;">Liczba miejsc</th>
-                                    <th style="width: 10%;">Status biletu</th>
-                                    <th style="width: 10%;">Status wydarzenia</th>
-                                    <th style="width: 10%;">Kod biletu</th>
+                                    <th style="width: 12%;">Sektor</th>
+                                    <th style="width: 6%;">Liczba miejsc</th>
+                                    <th style="width: 12%;">Kod biletu</th>
                                     <th style="width: 9%;">Zwracanie biletu</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($tickets as $ticket)
-                                    @if($ticket->status == 'purchased')
+                                    @if($ticket->status == 'purchased' && $ticket->sector->event->status == 'approved')
                                         <tr>
                                             <td>
                                                 <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
@@ -118,32 +109,99 @@
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
-                                            <td class="py-2 px-4">
-                                                @if ($ticket->status == 'purchased')
-                                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Zakupiony</span>
-                                                @elseif ($ticket->status == 'cancelled')
-                                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($ticket->sector->event->status == 'approved')
-                                                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">Zatwierdzone</span>
-                                                @elseif ($ticket->sector->event->status == 'waiting')
-                                                    <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">Oczekujące</span>
-                                                @elseif ($ticket->sector->event->status == 'rejected')
-                                                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">Odrzucone</span>
-                                                @elseif ($ticket->sector->event->status == 'expired')
-                                                    <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
-                                                @elseif ($ticket->sector->event->status == 'cancelled')
-                                                    <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
-                                                @endif
-                                            </td>
                                             <td>{{ $ticket->code }}</td>
                                             <td style="width: 9%;">
                                                 <form action="{{ route('ticket.return', $ticket->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="main-button-style-v2 btn-danger">Zwróć</button>
                                                 </form>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="section-title" style="padding-bottom: 5px;">Archiwalne rezerwacje</h4>
+                    @if($tickets->isEmpty() || $tickets->where('status', 'reserved')->isEmpty())
+                        <p>Brak rezerwacji biletów do wyświetlenia.</p>
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%;">Wydarzenie</th>
+                                    <th style="width: 15%;">Sektor</th>
+                                    <th style="width: 15%;">Liczba miejsc</th>
+                                    <th style="width: 10%;">Status wydarzenia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($tickets as $ticket)
+                                    @if($ticket->status == 'reserved' && ($ticket->sector->event->status == 'expired' || $ticket->sector->event->status == 'cancelled'))
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
+                                                    {{ $ticket->sector->event->name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $ticket->sector->name }}</td>
+                                            <td>{{ $ticket->number_of_seats }}</td>
+                                            <td>
+                                                @if ($ticket->sector->event->status == 'expired')
+                                                    <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                                @elseif ($ticket->sector->event->status == 'cancelled')
+                                                    <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    @endif
+                    <br>
+                    <h4 class="section-title" style="padding-bottom: 5px;">Archiwalne bilety</h4>
+                    @if($tickets->where('status', 'purchased')->isEmpty())
+                        <p>Brak kupionych biletów do wyświetlenia.</p>
+                    @else
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th style="width: 20%;">Wydarzenie</th>
+                                    <th style="width: 10%;">Sektor</th>
+                                    <th style="width: 10%;">Liczba miejsc</th>
+                                    <th style="width: 10%;">Kod biletu</th>
+                                    <th style="width: 10%;">Status wydarzenia</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($tickets as $ticket)
+                                    @if($ticket->status == 'purchased' && ($ticket->sector->event->status == 'expired' || $ticket->sector->event->status == 'cancelled'))
+                                        <tr>
+                                            <td>
+                                                <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
+                                                    {{ $ticket->sector->event->name }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $ticket->sector->name }}</td>
+                                            <td>{{ $ticket->number_of_seats }}</td>
+                                            <td>{{ $ticket->code }}</td>
+                                            <td>
+                                                @if ($ticket->sector->event->status == 'expired')
+                                                    <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
+                                                @elseif ($ticket->sector->event->status == 'cancelled')
+                                                    <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endif
