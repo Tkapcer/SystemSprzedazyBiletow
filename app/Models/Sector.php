@@ -12,18 +12,26 @@ class Sector extends Model
 
     protected $guarded = [];
 
+    public function sector() {
+        return $this->belongsTo(Sector::class);
+    }
+
     public function event() {
-        return $this->belongsTo(Event::class);
+        return $this->belongsToMany(Event::class, 'sector_prices')->withPivot('price');
+    }
+
+    public function venue() {
+        return $this->belongsTo(Venue::class);
     }
 
     public function tickets() {
         return $this->hasMany(Ticket::class);
     }
 
-    public function availableSeats() {
+    /*public function availableSeats() {
         $reservedSeats = $this->tickets()
             ->where('status', '!=', 'cancelled')
             ->sum('number_of_seats');
         return $this->seats - $reservedSeats;
-    }
+    }*/
 }

@@ -28,16 +28,16 @@
             @foreach ($sectors as $sector)
                 <tr>
                     <td class="event-info">{{ $sector->name }}</td>
-                    <td class="event-info">{{ $sector->availableSeats() }}</td>
+                    {{--<td class="event-info">{{ $sector->availableSeats() }}</td>--}}
                     <td class="event-info">{{ $sector->price }} zł</td>
                     <td>
-                        <input type="number" 
-                               class="form-control" 
-                               name="sectors[{{ $sector->id }}][number_of_seats]" 
-                               value="0" 
-                               min="0" 
-                               max="10" 
-                               required 
+                        <input type="number"
+                               class="form-control"
+                               name="sectors[{{ $sector->id }}][number_of_seats]"
+                               value="0"
+                               min="0"
+                               max="10"
+                               required
                                aria-label="Liczba biletów w sektorze {{ $sector->name }}">
                         <input type="hidden" name="sectors[{{ $sector->id }}][sector_id]" value="{{ $sector->id }}">
                         <input type="hidden" name="sectors[{{ $sector->id }}][price]" value="{{ $sector->price }}">
@@ -270,26 +270,26 @@
 
     // Skrypt związany z ColorThief
     document.addEventListener('DOMContentLoaded', function() {
-        const colorThief = new ColorThief(); 
-        const eventImage = new Image(); 
+        const colorThief = new ColorThief();
+        const eventImage = new Image();
         eventImage.src = "{{ asset('storage/' . $event->image_path) }}";
-        const eventContainer = document.querySelector('.container'); 
+        const eventContainer = document.querySelector('.container');
 
 
         if (eventImage) {
             // Sprawdzamy, czy obrazek jest już załadowany
             if (eventImage.complete) {
-                setBackgroundColor(eventImage); 
+                setBackgroundColor(eventImage);
             } else {
                 // Czekamy na załadowanie obrazka, jeśli jeszcze nie jest załadowany
                 eventImage.addEventListener('load', function() {
-                    setBackgroundColor(eventImage); 
+                    setBackgroundColor(eventImage);
                 });
             }
 
             // Obsługuje błąd, jeśli obrazek się nie załaduje
             eventImage.addEventListener('error', function() {
-                setBackgroundColor(null); 
+                setBackgroundColor(null);
             });
         }
 
@@ -298,7 +298,7 @@
             try {
                 // Sprawdzamy, czy obrazek jest wystarczająco duży dla ColorThief
                 if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
-                    const dominantColor = colorThief.getColor(img); 
+                    const dominantColor = colorThief.getColor(img);
                     const rgbColor = `rgb(${dominantColor.join(', ')})`;
 
                     // Ustawiamy tło dla kontenera

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Sector;
 use App\Models\User;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -36,7 +37,8 @@ class OrganizerController extends Controller
      */
     public function createEvent()
     {
-        return view('organizer.createEvent');
+        $venues = Venue::with('sectors')->get();
+        return view('organizer.createEvent', compact('venues'));
     }
 
     /**
@@ -52,38 +54,44 @@ class OrganizerController extends Controller
 
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
 
-            'sectors.*.name' => 'required|string|max:255',
+            'venue_id' => 'required|exists:venues,id',
+
+            'sectors' => 'nullable|array',
+            'sectors.*.price' => 'nullable|numeric|min:0', // Walidacja ceny sektorów
+
+
+            /*'sectors.*.name' => 'required|string|max:255',
             'sectors.*.seats' => 'required|integer|min:1',
-            'sectors.*.price' => 'required|numeric|min:0',
-        ], [
+            'sectors.*.price' => 'required|numeric|min:0',*/
+        ], [ /*TODO: Dostosować komunikaty*/
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
             'name.max' => 'Nazwa wydarzenia nie może przekraczać 255 znaków.',
-    
+
             'location.required' => 'Lokalizacja wydarzenia jest wymagana.',
             'location.string' => 'Lokalizacja musi być ciągiem znaków.',
             'location.max' => 'Lokalizacja nie może przekraczać 255 znaków.',
-    
+
             'description.required' => 'Opis wydarzenia jest wymagany.',
             'description.string' => 'Opis musi być ciągiem znaków.',
             'description.max' => 'Opis nie może przekraczać 1000 znaków.',
-    
+
             'event_date.required' => 'Data wydarzenia jest wymagana.',
             'event_date.date' => 'Proszę podać poprawny format daty.',
-    
+
             'image.required' => 'Obrazek jest wymagany.',
             'image.image' => 'Proszę przesłać plik graficzny.',
             'image.mimes' => 'Dozwolone formaty obrazka to: jpeg, png, jpg, gif, svg, webp.',
             'image.max' => 'Rozmiar pliku obrazka nie może przekroczyć 2MB.',
-    
+
             'sectors.*.name.required' => 'Nazwa sektora jest wymagana.',
             'sectors.*.name.string' => 'Nazwa sektora musi być ciągiem znaków.',
             'sectors.*.name.max' => 'Nazwa sektora nie może przekraczać 255 znaków.',
-    
+
             'sectors.*.seats.required' => 'Liczba miejsc w sektorze jest wymagana.',
             'sectors.*.seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
             'sectors.*.seats.min' => 'Liczba miejsc musi być większa niż 0.',
-    
+
             'sectors.*.price.required' => 'Cena za miejsce w sektorze jest wymagana.',
             'sectors.*.price.numeric' => 'Cena musi być liczbą.',
             'sectors.*.price.min' => 'Cena nie może być mniejsza niż 0.',
@@ -103,11 +111,16 @@ class OrganizerController extends Controller
             'description' => $validated['description'],
             'event_date' => $validated['event_date'],
             'image_path' => $imagePath,
-            'status' => 'waiting'
+            'status' => 'waiting',
+            'venue_id' => $validated['venue_id'],
         ]);
 
-        foreach ($validated['sectors'] as $sectorData) {
-            $event->sectors()->create($sectorData);
+        if (!empty($validated['sectors'])) {
+            foreach ($validated['sectors'] as $sectorId => $sectorData) {
+                if (!empty($sectorData['price'])) {
+                    $event->sectors()->attach($sectorId, ['price' => $sectorData['price']]);
+                }
+            }
         }
 
         return redirect()->route('organizer.panel');

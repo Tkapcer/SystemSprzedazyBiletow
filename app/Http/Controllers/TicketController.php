@@ -72,9 +72,9 @@ class TicketController extends Controller
 
         foreach ($decodedSectors as $sectorData) {
             $sector = Sector::findOrFail($sectorData['sector_id']);
-            if ($sector->availableSeats() < $sectorData['number_of_seats']) {
+           /* if ($sector->availableSeats() < $sectorData['number_of_seats']) {
                 return back()->withErrors('Brak wystarczającej liczby wolnych miejsc w wybranym sektorze.');
-            }
+            }*/
 //            dd($sectorData);
 
             if ($request->status == 'purchased') {
