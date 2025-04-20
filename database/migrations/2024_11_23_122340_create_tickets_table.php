@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->enum('status', ['reserved', 'purchased', 'cancelled'])->default('reserved');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('sector_id');
-            $table->foreign('sector_id')->references('id')->on('sectors');
             $table->string('code');
-            $table->integer('number_of_seats')->default(1);
+            $table->unsignedInteger('row');
+            $table->unsignedInteger('column');
+
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('event_id')->constrained();
+            $table->foreignId('sector_id')->constrained();
+
+            $table->unique(['event_id', 'sector_id', 'row', 'column']);
+            $table->timestamps();
         });
     }
 
