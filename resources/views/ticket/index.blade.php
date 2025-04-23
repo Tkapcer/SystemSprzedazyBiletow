@@ -25,10 +25,12 @@
             </tr>
         </thead>
         <tbody id="sectors-list">
-            @foreach ($sectors as $sector)
+{{--        @dump($sectorsWithSeats)--}}
+
+            {{--@foreach ($sectorsWithSeats as $sector)
                 <tr>
                     <td class="event-info">{{ $sector->name }}</td>
-                    {{--<td class="event-info">{{ $sector->availableSeats() }}</td>--}}
+                    --}}{{--<td class="event-info">{{ $sector->availableSeats() }}</td>--}}{{--
                     <td class="event-info">{{ $sector->price }} zł</td>
                     <td>
                         <input type="number"
@@ -43,9 +45,38 @@
                         <input type="hidden" name="sectors[{{ $sector->id }}][price]" value="{{ $sector->price }}">
                     </td>
                 </tr>
-            @endforeach
+            @endforeach--}}
         </tbody>
     </table><br>
+
+        <div class="container">
+            <h1>{{ $event->name }}</h1>
+
+            @foreach ($sectorsWithSeats as $sectorDetails)
+                <div class="sector">
+                    <h2>Sektor: {{ $sectorDetails['sector']->name }}</h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Rząd</th>
+                            <th>Kolumna</th>
+                            <th>Dostępność</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($sectorDetails['seats'] as $seat)
+                            <tr>
+                                <td>{{ $seat->row }}</td>
+                                <td>{{ $seat->column }}</td>
+                                <td>{{ $seat->available ? 'Dostępne' : 'Zajęte' }}</td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endforeach
+        </div>
+
 
     @if ($errors->any())
        <div class="alert alert-danger invalid-feedback">
@@ -65,7 +96,7 @@
 </form>
 </div>
 
-<div id="confirmation-modal" class="modal">
+{{--<div id="confirmation-modal" class="modal">
     <div class="modal-content">
         <form action="{{ route('ticket.store') }}" method="POST" id="modal-form">
             @csrf
@@ -89,14 +120,14 @@
             <button id="back-button" class="main-button-style btn-secondary mt-3">Wstecz</button>
         </form>
     </div>
-</div>
+</div>--}}
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sectors = @json($sectors);
+    /*document.addEventListener('DOMContentLoaded', function() {
+        const sectors = {{--@json($sectors)--}};
 
-        /*// Funkcja do resetowania liczby biletów w innych sektorach
+        /!*!// Funkcja do resetowania liczby biletów w innych sektorach
         function resetOtherSectors(currentSectorId) {
             // Pobieramy wszystkie pola input z liczbą biletów
             const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
@@ -110,7 +141,7 @@
                     input.value = 0;
                 }
             });
-        }*/
+        }*!/
 
         // Nasłuchujemy zmian na inputach liczby biletów
         const sectorInputs = document.querySelectorAll('input[name^="sectors["][name$="][number_of_seats]');
@@ -227,10 +258,10 @@
 
             // Pokazujemy modal
             document.getElementById('confirmation-modal').style.display = 'flex';
-        }
+        }*/
 
 
-        function getFormData() {
+        /*function getFormData() {
             const formData = new FormData(document.getElementById('ticket-form'));
             let sectorsData = [];
 
@@ -266,7 +297,7 @@
             event.preventDefault();
             document.getElementById('confirmation-modal').style.display = 'none';
         });
-    });
+    });*/
 
     // Skrypt związany z ColorThief
     document.addEventListener('DOMContentLoaded', function() {

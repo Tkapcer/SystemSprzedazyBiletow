@@ -28,6 +28,56 @@ class Sector extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function generateSeats() {
+        $seats = collect();
+
+        for ($row = 1; $row <= $this->rows; $row++) {
+            for ($column = 1; $column <= $this->columns; $column++) {
+                $seats->push(new Seat($row, $column));
+            }
+        }
+
+        return $seats;
+    }
+
+    public function getAllSeats($event_id) {
+        $allSeats = $this->generateSeats();
+
+        $takenSeats = Ticket::where('sector_id', $this->id)
+            ->where('event_id', $event_id)
+            ->whereIn('status', ['purchased', 'reserved'])
+            ->get(['row', 'column']);
+
+        foreach ($allSeats as $seat) {
+            foreach ($takenSeats as $takenSeat) {
+                if ($seat->row === $takenSeat->row && $seat->column === $takenSeat->column) {
+                    $seat->available = false;
+                    break;
+                }
+            }
+        }
+
+        return $allSeats;
+    }
+
+    public function seats()
+    {
+//        Symulowanie relacji hasMany
+        return collect($this->allSeats());
+    }
+
+    /*public function allSeats() {
+        $allSeats = collect();
+
+        for ($row = 1; $row <= $this->rows; $row++) {
+            for ($column = 1; $column <= $this->collumn; $column++) {
+                $allSeats->push($row . $column);
+            }
+        }
+
+        return $allSeats;
+    }*/
+
     /*public function availableSeats() {
         $reservedSeats = $this->tickets()
             ->where('status', '!=', 'cancelled')

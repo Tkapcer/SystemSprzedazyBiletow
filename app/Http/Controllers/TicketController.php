@@ -8,9 +8,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use function PHPSTORM_META\map;
 
 class TicketController extends Controller
 {
+    /*public function getAvailableSeats(int $event_id, int $sector_id)
+    {
+        $sector = Sector::findOrFail($sector_id);
+        $allSeats = $sector->allSeats();
+
+        $takenSeats = Ticket::where('event_id', $event_id)->where('sector_id', $sector_id)->get(['row', 'column']);
+
+        $availableSeats = $allSeats->reject(function ($seat) use ($takenSeats) {
+            return $takenSeats->contains(function ($takenSeat) use ($seat) {
+                return $takenSeat->row == $seat['row'] && $takenSeat->column == $seat['column'];
+            });
+        });
+
+    }*/
+
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +36,13 @@ class TicketController extends Controller
             return $sector->availableSeats() > 0;
         });*/
         $sectors = $event->sectors;
-        return view('ticket.index', compact('event', 'sectors'));
+
+        $sectorsWithSeats = $sectors->map(function ($sector) use ($event) {
+           $allSeats = $sector->getAllSeats($event->id);
+           return ['sector' => $sector, 'seats' => $allSeats];
+        });
+
+        return view('ticket.index', compact('event', 'sectorsWithSeats'));
     }
 
     /**
