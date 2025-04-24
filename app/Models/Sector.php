@@ -28,12 +28,14 @@ class Sector extends Model
         return $this->hasMany(Ticket::class);
     }
 
-    public function generateSeats() {
+    public function generateSeats($event_id) {
         $seats = collect();
+
+        $price = $this->event()->where('event_id', $event_id)->first()->pivot->price;
 
         for ($row = 1; $row <= $this->rows; $row++) {
             for ($column = 1; $column <= $this->columns; $column++) {
-                $seats->push(new Seat($row, $column));
+                $seats->push(new Seat($row, $column, $price));
             }
         }
 
@@ -41,12 +43,12 @@ class Sector extends Model
     }
 
     public function getAllSeats($event_id) {
-        $allSeats = $this->generateSeats();
+        $allSeats = $this->generateSeats($event_id);
 
         $takenSeats = Ticket::where('sector_id', $this->id)
             ->where('event_id', $event_id)
             ->whereIn('status', ['purchased', 'reserved'])
-            ->get(['row', 'column']);
+            ->get(/*['row', 'column']*/);
 
         foreach ($allSeats as $seat) {
             foreach ($takenSeats as $takenSeat) {
@@ -58,12 +60,6 @@ class Sector extends Model
         }
 
         return $allSeats;
-    }
-
-    public function seats()
-    {
-//        Symulowanie relacji hasMany
-        return collect($this->allSeats());
     }
 
     /*public function allSeats() {

@@ -60,6 +60,7 @@
                         <tr>
                             <th>Rząd</th>
                             <th>Kolumna</th>
+                            <th>Cena</th>
                             <th>Dostępność</th>
                         </tr>
                         </thead>
@@ -68,6 +69,7 @@
                             <tr>
                                 <td>{{ $seat->row }}</td>
                                 <td>{{ $seat->column }}</td>
+                                <td>{{ $seat->price }}</td>
                                 <td>{{ $seat->available ? 'Dostępne' : 'Zajęte' }}</td>
                             </tr>
                         @endforeach
