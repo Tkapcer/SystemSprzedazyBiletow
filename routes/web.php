@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('addMoney');
 
     //Dodawanie nowych srodkow-sprawdzanie sukcesu
-        Route::get('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('balanceSuccess');
+        Route::get('/balanceSuccess', [App\Http\Controllers\HomeController::class, 'balanceSuccess'])->name('balanceSuccess');
 
 //    Strona z zakupem biletu
     Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
