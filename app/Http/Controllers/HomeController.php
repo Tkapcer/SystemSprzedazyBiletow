@@ -6,6 +6,9 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Stripe\Stripe;
+use Stripe\Checkout\Session;
+
 class HomeController extends Controller
 {
     /**
@@ -42,11 +45,49 @@ class HomeController extends Controller
             'amount.regex' => 'Kwota może mieć maksymalnie 2 miejsca po przecinku.',
         ]);
 
-        $amout = $request->input('amount');
-
+        $amount = $request->input('amount');
+    /*
         $user->balance += $amout;
         $user->save();
 
         return redirect()->back()->with('success', 'Kwota została pomyślnie dodana do Twojego salda.');
+        */
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        $session = Session::create([
+            'payment_method_types' => ['card'],
+            'mode' => 'payment',
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'pln',
+                    'product_data' => [
+                        'name' => 'Doładowanie konta',
+                    ],
+                    'unit_amount' => $amount * 100,
+                ],
+                'quantity' => 1,
+            ]],
+            'customer_email' => $user->email,
+            'success_url' => route('balanceSuccess', ['amount' => $amount]),
+            'cancel_url' => url()->previous(),
+        ]);
+
+        return redirect($session->url);
     }
+
+    public function balanceSuccess(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+        $amount = $request->query('amount');
+
+        if (!$amount || !is_numeric($amount) || $amount <= 0) {
+            return redirect()->route('home')->withErrors('Nieprawidłowa kwota.');
+        }
+
+        $user->balance += $amount;
+        $user->save();
+
+        return redirect()->route('home')->with('success', 'Saldo doładowane o: ' . number_format($amount, 2) . ' zł');
+    }
+
 }
