@@ -30,6 +30,9 @@ Route::middleware('auth')->group(function () {
 //    Dodanie nowych środków
     Route::post('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('addMoney');
 
+    //Dodawanie nowych srodkow-sprawdzanie sukcesu
+        Route::get('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('balanceSuccess');
+
 //    Strona z zakupem biletu
     Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
 
@@ -45,10 +48,6 @@ Route::middleware('auth')->group(function () {
 //    Zwracanie biletu
     Route::post('/ticket/return/{id}', [App\Http\Controllers\TicketController::class, 'return'])->name('ticket.return');
 
-        //bramka platnicza
-     Route::post('/ticket/payStripe', [App\Http\Controllers\TicketController::class, 'payWithStripe'])->name('ticket.pay.stripe');
-
-    Route::get('/ticket/pay/success/{id}', [App\Http\Controllers\TicketController::class, 'stripeSuccess'])->name('ticket.stripe.success');
 });
 
 
