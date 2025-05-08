@@ -33,9 +33,10 @@ class Sector extends Model
 
         $price = $this->event()->where('event_id', $event_id)->first()->pivot->price;
 
+        $id = 0;    //Nwm czy to dobre rozwiązanie
         for ($row = 1; $row <= $this->rows; $row++) {
             for ($column = 1; $column <= $this->columns; $column++) {
-                $seats->push(new Seat($row, $column, $price));
+                $seats->push(new Seat($id++, $row, $column, $price));
             }
         }
 
