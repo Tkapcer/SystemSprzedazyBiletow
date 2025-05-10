@@ -13,45 +13,12 @@
     </div>
 
     <!-- Formularz do wyboru biletów -->
-    <form action="{{ route('home') }}" method="POST" id="ticket-form">
+    <form action="{{ route('ticket.summary') }}" method="POST" id="ticket-form">
     @csrf
-    <table class="table">
-        <thead class="event-info">
-            <tr>
-                <th scope="col">Rodzaj</th>
-                <th scope="col">Dostępne</th>
-                <th scope="col">Cena</th>
-                <th scope="col">Liczba biletów</th>
-            </tr>
-        </thead>
-        <tbody id="sectors-list">
-{{--        @dump($sectorsWithSeats)--}}
-
-            {{--@foreach ($sectorsWithSeats as $sector)
-                <tr>
-                    <td class="event-info">{{ $sector->name }}</td>
-                    --}}{{--<td class="event-info">{{ $sector->availableSeats() }}</td>--}}{{--
-                    <td class="event-info">{{ $sector->price }} zł</td>
-                    <td>
-                        <input type="number"
-                               class="form-control"
-                               name="sectors[{{ $sector->id }}][number_of_seats]"
-                               value="0"
-                               min="0"
-                               max="10"
-                               required
-                               aria-label="Liczba biletów w sektorze {{ $sector->name }}">
-                        <input type="hidden" name="sectors[{{ $sector->id }}][sector_id]" value="{{ $sector->id }}">
-                        <input type="hidden" name="sectors[{{ $sector->id }}][price]" value="{{ $sector->price }}">
-                    </td>
-                </tr>
-            @endforeach--}}
-        </tbody>
-    </table><br>
-
+        <input type="hidden" name="eventId" value="{{ $event->id }}">
         <div class="container">
             <h1>{{ $event->name }}</h1>
-            <form action="{{ route('ticket.store') }}" method="POST" id="ticket-form">
+
 {{--            @dump($sectorsWithSeats)--}}
                 @foreach ($sectorsWithSeats as $sectorDetails)
     {{--                @dump($sectorDetails)--}}
@@ -80,7 +47,7 @@
                                         @if ($seat->available)
                                             <input type="checkbox"
                                                    name="selected_seats[{{ $sectorDetails['sector']->id }}][]"
-                                                   value="{{ $seat->id }}"
+                                                   value="{{ $seat->row . '-' . $seat->column }}"
                                                    aria-label="Wybierz miejsce w rzędzie {{ $seat->row }}, kolumna {{ $seat->column }}">
 {{--                                            <p>{{ $seat->id }}</p>--}}
                                         @else
@@ -93,8 +60,6 @@
                         </table>
                     </div>
                 @endforeach
-                <button type="submit" class="btn btn-primary">Wyślij</button>
-            </form>
         </div>
 
 
@@ -108,8 +73,8 @@
 
     <div class="white-container">
         <div class="button-container">
-            <button type="button" id="buy-button" class="main-button-style">Kup</button>
-            <button type="button" id="reserve-button" class="main-button-style">Zarezerwuj</button>
+            <button type="submit" id="buy-button" class="main-button-style">Kup</button>
+            <button type="submit" id="reserve-button" class="main-button-style">Zarezerwuj</button>
         </div>
         <a href="/event/{{ $event->id }}" class="main-button-style btn-primary">Wstecz</a>
     </div>

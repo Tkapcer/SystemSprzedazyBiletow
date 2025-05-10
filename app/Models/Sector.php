@@ -28,15 +28,20 @@ class Sector extends Model
         return $this->hasMany(Ticket::class);
     }
 
+    public function getPriceForSeat($event_id) {
+        return $this->event()->where('event_id', $event_id)->first()->pivot->price;
+    }
+
     public function generateSeats($event_id) {
         $seats = collect();
 
-        $price = $this->event()->where('event_id', $event_id)->first()->pivot->price;
+//        $price = $this->event()->where('event_id', $event_id)->first()->pivot->price;
+        $price = $this->getPriceForSeat($event_id);
 
         $id = 0;    //Nwm czy to dobre rozwiązanie
         for ($row = 1; $row <= $this->rows; $row++) {
             for ($column = 1; $column <= $this->columns; $column++) {
-                $seats->push(new Seat($id++, $row, $column, $price));
+                $seats->push(new Seat($id++, $event_id, $this->id, $row, $column, $price));
             }
         }
 

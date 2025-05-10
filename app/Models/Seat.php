@@ -9,15 +9,19 @@ class Seat /*extends Model*/
 {
 //    protected $table = null;
     public int $id;
+    public int $event_id;
+    public int $sector_id;
     public int $row;
     public int $column;
     public bool $available;
     public Decimal $price;
 
-    public function __construct(int $id, int $row, int $column, $price)
+    public function __construct(int $id, int $eventId, int $sectorId, int $row, int $column, $price)
     {
 //        parent::__construct();
         $this->id = $id;
+        $this->event_id = $eventId;
+        $this->sector_id = $sectorId;
         $this->row = $row;
         $this->column = $column;
         $this->available = true;

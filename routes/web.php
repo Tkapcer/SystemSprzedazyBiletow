@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
 //    Strona z zakupem biletu
     Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
 
+//    Strona z podsumowaniem zakupu biletu
+    Route::post('/ticket/summary', [App\Http\Controllers\TicketController::class, 'summary'])->name('ticket.summary');
+
 //    Zapis biletu
     Route::post('/ticket/store', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
 

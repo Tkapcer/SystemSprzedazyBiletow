@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Seat;
 use App\Models\Sector;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
@@ -53,10 +55,58 @@ class TicketController extends Controller
         //
     }
 
+    public function summary(Request $request)
+    {
+//        dd($request->all());
+        $request->validate([
+            'selected_seats' => 'required|array',
+            'selected_seats.*.*' => ['required', 'regex:/^\d+-\d+$/']
+        ], [
+            'selected_seats.required' => 'Proszę wybrać przynajmniej jedno miejsce.',
+            'selected_seats.*.*.required' => 'Proszę wybrać miejsca.',
+            'selected_seats.*.*.regex' => 'Błędne dane wybranego miejsca.'
+        ]);
+
+        $eventId = $request->input('eventId');
+        $event = Event::findOrFail($eventId);
+        $selectedSeatsByCoordinates = $request->input('selected_seats');
+        $selectedSeats = [];
+        $totalPrice = 0;
+
+        foreach ($selectedSeatsByCoordinates as $sectorId => $seatsCoordinates) {
+            $sector = Sector::findOrFail($sectorId);
+            $price = $sector->getPriceForSeat($eventId);
+
+            foreach ($seatsCoordinates as $seatCoordinates) {
+                list($row, $colum) = explode('-', $seatCoordinates);
+                $totalPrice += $price;
+
+                $seat  = new Seat(
+                    id: -1,
+                    eventId: $eventId,
+                    sectorId: $sectorId,
+                    row: $row,
+                    column: $colum,
+                    price: $price,
+                );
+
+                $selectedSeats[] = $seat;
+            }
+        }
+
+        session(['selectedSeats' => $selectedSeats]);
+//        dd(session('selectedSeats'));
+
+        return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'));
+    }
+    public function store(Request $request) {
+
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store_STARY_NIE_UZYWANY(Request $request)
     {
 //        dd($request->all());
         // Sprawdzenie, czy 'sectors' zostało przekazane w żądaniu
