@@ -32,6 +32,10 @@ class OrganizerController extends Controller
         ]);
     }
 
+    public function indexReport() {
+        return view('organizer.organizerReportSystem');
+    }
+
     /**
      * Show the form for creating a new resource.
      */

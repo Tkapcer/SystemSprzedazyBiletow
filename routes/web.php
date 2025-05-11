@@ -81,6 +81,8 @@ Route::get('/organizerStatusInfo', [App\Http\Controllers\OrganizerController::cl
 Route::middleware(CheckOrganizerConfirmed::class)->group(function () {
     Route::get('/organizerPanel', [App\Http\Controllers\OrganizerController::class, 'indexConfirmed'])->name('organizer.panel');
 
+    Route::get('/organizer/report', [App\Http\Controllers\OrganizerController::class, 'indexReport'])->name('report');
+
     Route::post('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
 
     Route::get('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');

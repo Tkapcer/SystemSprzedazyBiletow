@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        
+
         <div class="card shadow-sm rounded-lg">
 
             <div class="card-body">
@@ -21,6 +21,12 @@
                 <div class="text-center mb-6">
                     <a href="{{ route('createEvent') }}" class="main-button-style">
                         Dodaj nowe wydarzenie
+                    </a>
+                </div>
+
+                <div class="text-center mb-6">
+                    <a href="{{ route('report') }}" class="main-button-style">
+                        Raport
                     </a>
                 </div>
 
