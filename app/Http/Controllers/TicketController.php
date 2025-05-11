@@ -43,7 +43,25 @@ class TicketController extends Controller
            return ['sector' => $sector, 'seats' => $allSeats];
         });
 
-        return view('ticket.index', compact('event', 'sectorsWithSeats'));
+//        Jeśli nastąpi powrót z podsumowania to tu będą zapisane wybrane wcześniej miejsca
+        $selectedSeats = session('selectedSeats');
+        $selectedSeatsMap = collect();
+
+        if (!empty($selectedSeats)) {
+            if ($selectedSeats[0]->event_id == $event->id) {
+                $selectedSeatsMap = collect($selectedSeats)->map(function ($seat) {
+                    return [
+                        'sector_id' => $seat->sector_id,
+                        'row' => $seat->row,
+                        'column' => $seat->column,
+                    ];
+                });
+            } else {
+                session()->forget('selectedSeats');  // Wyczyść błędne dane
+            }
+        }
+
+        return view('ticket.index', compact('event', 'sectorsWithSeats', 'selectedSeatsMap'));
     }
 
     /**

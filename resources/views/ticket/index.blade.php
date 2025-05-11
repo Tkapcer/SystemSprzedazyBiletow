@@ -48,6 +48,12 @@
                                             <input type="checkbox"
                                                    name="selected_seats[{{ $sectorDetails['sector']->id }}][]"
                                                    value="{{ $seat->row . '-' . $seat->column }}"
+{{--                                                   Sprawdzanie czy miejsce dostałoo wcześniej wybrane (mógł nastąpić powrót z podsumowania) --}}
+                                                   {{ $selectedSeatsMap->contains(function ($selectedSeat) use ($sectorDetails, $seat) {
+                                                           return $selectedSeat['sector_id'] == $sectorDetails['sector']->id
+                                                               && $selectedSeat['row'] == $seat->row
+                                                               && $selectedSeat['column'] == $seat->column;
+                                                       }) ? 'checked' : '' }}
                                                    aria-label="Wybierz miejsce w rzędzie {{ $seat->row }}, kolumna {{ $seat->column }}">
 {{--                                            <p>{{ $seat->id }}</p>--}}
                                         @else
@@ -73,10 +79,9 @@
 
     <div class="white-container">
         <div class="button-container">
-            <button type="submit" id="buy-button" class="main-button-style">Kup</button>
-            <button type="submit" id="reserve-button" class="main-button-style">Zarezerwuj</button>
+            <a href="/event/{{ $event->id }}" class="main-button-style btn-primary">Wstecz</a>
+            <button type="submit" class="main-button-style">Dalej</button>
         </div>
-        <a href="/event/{{ $event->id }}" class="main-button-style btn-primary">Wstecz</a>
     </div>
 </form>
 </div>
