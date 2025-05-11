@@ -32,29 +32,29 @@ class Sector extends Model
         return $this->event()->where('event_id', $event_id)->first()->pivot->price;
     }
 
-    public function generateSeats($event_id) {
+    public function getAllSeats($event_id): \Illuminate\Support\Collection
+    {
         $seats = collect();
 
 //        $price = $this->event()->where('event_id', $event_id)->first()->pivot->price;
         $price = $this->getPriceForSeat($event_id);
 
-        $id = 0;    //Nwm czy to dobre rozwiązanie
         for ($row = 1; $row <= $this->rows; $row++) {
             for ($column = 1; $column <= $this->columns; $column++) {
-                $seats->push(new Seat($id++, $event_id, $this->id, $row, $column, $price));
+                $seats->push(new Seat($event_id, $this->id, $row, $column, $price));
             }
         }
 
         return $seats;
     }
 
-    public function getAllSeats($event_id) {
+    /*public function getAllSeats($event_id) {
         $allSeats = $this->generateSeats($event_id);
 
         $takenSeats = Ticket::where('sector_id', $this->id)
             ->where('event_id', $event_id)
             ->whereIn('status', ['purchased', 'reserved'])
-            ->get(/*['row', 'column']*/);
+            ->get();
 
         foreach ($allSeats as $seat) {
             foreach ($takenSeats as $takenSeat) {
@@ -66,7 +66,7 @@ class Sector extends Model
         }
 
         return $allSeats;
-    }
+    }*/
 
     /*public function allSeats() {
         $allSeats = collect();

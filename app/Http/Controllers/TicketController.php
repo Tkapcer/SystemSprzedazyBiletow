@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use function PHPSTORM_META\map;
 
 class TicketController extends Controller
 {
@@ -32,7 +31,7 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(\App\Models\Event $event)
+    public function index(Event $event)
     {
         /*$sectors = $event->sectors->filter(function ($sector) {
             return $sector->availableSeats() > 0;
@@ -82,7 +81,6 @@ class TicketController extends Controller
                 $totalPrice += $price;
 
                 $seat  = new Seat(
-                    id: -1,
                     eventId: $eventId,
                     sectorId: $sectorId,
                     row: $row,

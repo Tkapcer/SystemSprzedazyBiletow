@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Type\Decimal;
+use function PHPUnit\Framework\isTrue;
 
 class Seat /*extends Model*/
 {
@@ -16,15 +17,23 @@ class Seat /*extends Model*/
     public bool $available;
     public Decimal $price;
 
-    public function __construct(int $id, int $eventId, int $sectorId, int $row, int $column, $price)
+    public function __construct(int $eventId, int $sectorId, int $row, int $column, $price)
     {
-//        parent::__construct();
-        $this->id = $id;
         $this->event_id = $eventId;
         $this->sector_id = $sectorId;
         $this->row = $row;
         $this->column = $column;
-        $this->available = true;
+        $this->available = $this->isAvailable();
         $this->price = new Decimal($price);
+    }
+
+    public function isAvailable(): bool
+    {
+        return !Ticket::where('event_id', $this->event_id)
+            ->where('sector_id', $this->sector_id)
+            ->where('row', $this->row)
+            ->where('column', $this->column)
+            ->whereIn('status', ['purchased', 'reserved'])
+            ->exists();
     }
 }
