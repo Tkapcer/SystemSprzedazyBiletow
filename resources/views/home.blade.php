@@ -56,12 +56,12 @@
                             </thead>
                             <tbody>
                                 @foreach($tickets as $ticket)
-                                    @if($ticket->status == 'reserved' && $ticket->sector->event->status == 'approved')
+                                    @if($ticket->status == 'reserved'/* && $ticket->sector->event->status == 'approved'*/)
                                         <tr>
                                             <td>
-                                                <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
+                                                {{--<a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
                                                     {{ $ticket->sector->event->name }}
-                                                </a>
+                                                </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
@@ -100,12 +100,12 @@
                             </thead>
                             <tbody>
                                 @foreach($tickets as $ticket)
-                                    @if($ticket->status == 'purchased' && $ticket->sector->event->status == 'approved')
+                                    @if($ticket->status == 'purchased' /*&& $ticket->sector->event->status == 'approved'*/)
                                         <tr>
                                             <td>
-                                                <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
+                                                {{--<a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
                                                     {{ $ticket->sector->event->name }}
-                                                </a>
+                                                </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
@@ -147,21 +147,21 @@
                             </thead>
                             <tbody>
                                 @foreach($tickets as $ticket)
-                                    @if($ticket->status == 'reserved' && ($ticket->sector->event->status == 'expired' || $ticket->sector->event->status == 'cancelled'))
+                                    @if($ticket->status == 'reserved' /*&& ($ticket->sector->event->status == 'expired' || $ticket->sector->event->status == 'cancelled')*/)
                                         <tr>
                                             <td>
-                                                <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
+                                                {{--<a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
                                                     {{ $ticket->sector->event->name }}
-                                                </a>
+                                                </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
                                             <td>
-                                                @if ($ticket->sector->event->status == 'expired')
+                                               {{-- @if ($ticket->sector->event->status == 'expired')
                                                     <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
                                                 @elseif ($ticket->sector->event->status == 'cancelled')
                                                     <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
-                                                @endif
+                                                @endif--}}
                                             </td>
                                         </tr>
                                     @endif
@@ -186,22 +186,22 @@
                             </thead>
                             <tbody>
                                 @foreach($tickets as $ticket)
-                                    @if($ticket->status == 'purchased' && ($ticket->sector->event->status == 'expired' || $ticket->sector->event->status == 'cancelled'))
+                                    @if($ticket->status == 'purchased'/* && ($ticket->sector->event->status == 'expired' || $ticket->sector->event->status == 'cancelled')*/)
                                         <tr>
                                             <td>
-                                                <a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
+                                                {{--<a href="{{ route('event.show', $ticket->sector->event->id) }}" class="btn-admin-event" role="button">
                                                     {{ $ticket->sector->event->name }}
-                                                </a>
+                                                </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
                                             <td>{{ $ticket->number_of_seats }}</td>
                                             <td>{{ $ticket->code }}</td>
                                             <td>
-                                                @if ($ticket->sector->event->status == 'expired')
+                                                {{--@if ($ticket->sector->event->status == 'expired')
                                                     <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
                                                 @elseif ($ticket->sector->event->status == 'cancelled')
                                                     <span class="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full text-sm">Anulowane</span>
-                                                @endif
+                                                @endif--}}
                                             </td>
                                         </tr>
                                     @endif

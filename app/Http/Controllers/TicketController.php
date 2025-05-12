@@ -116,7 +116,53 @@ class TicketController extends Controller
         return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'));
     }
     public function store(Request $request) {
+        $request->validate([
+            'status' => 'required|in:purchased,reserved',
+        ], [
+            'status.required' => 'Pole status jest wymagane.',
+            'status.in' => 'Pole status musi być jedną z wartości: purchased lub reserved.',
+        ]);
 
+//        dd(session('selectedSeats'));
+        $selectedSeats = session('selectedSeats');
+//        dd($selectedSeats);
+        $status = $request->input('status');
+        $totalPrice = 0;
+        foreach ($selectedSeats as $selectedSeat) {
+            $totalPrice += (float) $selectedSeat->price->toString();
+            if(!$selectedSeat->isAvailable()) {
+                return back()->withErrors('Wybrane miejsca są już niedostępne');
+            }
+        }
+
+        $user = Auth::guard('web')->user();
+        if ($user->balance < $totalPrice) {
+            return back()->withErrors('Za mało hajsu');
+        }
+
+        DB::transaction(function () use ($user, $status, $selectedSeats, $totalPrice) {
+
+            if ($status == 'purchased') {
+                $user->balance -= $totalPrice;
+                $user->save();
+            }
+
+            foreach ($selectedSeats as $selectedSeat) {
+                Ticket::create([
+                    'status' => $status,
+                    'row' => $selectedSeat->row,
+                    'column' => $selectedSeat->column,
+                    'user_id' => $user->id,
+                    'event_id' => $selectedSeat->event_id,
+                    'sector_id' => $selectedSeat->sector_id,
+                    'code' => $status == 'purchased' ? strtoupper(Str::random(10)) : "",
+                ]);
+            }
+
+        });
+
+        $message = $status == 'purchased' ? 'Zakupiono bilet' : 'Zarezerwowano miejsce';
+        return redirect()->route('home'/*, $sector->event*/)->with('success', $message);
     }
 
     /**

@@ -12,7 +12,7 @@ class ClearTransactionData
         $transactionRoutes = [
             'ticket.index',
             'ticket.summary',
-//            'ticket.purchase',
+            'ticket.store',
         ];
 
         if (!in_array($request->route()->getName(), $transactionRoutes)) {

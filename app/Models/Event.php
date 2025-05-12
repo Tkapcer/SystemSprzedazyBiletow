@@ -25,6 +25,10 @@ class Event extends Model
         return $this->belongsToMany(Sector::class, 'sector_prices')->withPivot('price');
     }
 
+    public function tickets() {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function organizer() {
         return $this->belongsTo(Organizer::class);
     }

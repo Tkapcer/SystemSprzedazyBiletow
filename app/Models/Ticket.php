@@ -12,6 +12,11 @@ class Ticket extends Model
 
     protected $guarded = [];
 
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
     public function sector()
     {
         return $this->belongsTo(Sector::class);

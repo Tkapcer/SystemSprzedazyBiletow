@@ -39,13 +39,18 @@
         <strong>Całkowita suma: {{ $totalPrice }} zł</strong>
     </div>
 
-    <div class="white-container">
-        <div class="button-container">
-            <button type="submit" id="buy-button" class="main-button-style">Kup</button>
-            <button type="submit" id="reserve-button" class="main-button-style">Zarezerwuj</button>
+    <form action="{{ route('ticket.store') }}" method="POST" id="ticket-form">
+        @csrf
+
+        <div class="white-container">
+            <div class="button-container">
+                <button type="submit" name="status" value="purchased" id="buy-button" class="main-button-style">Kup</button>
+                <button type="submit" name="status" value="reserved" id="reserve-button" class="main-button-style">Zarezerwuj</button>
+            </div>
+            <a href="/ticket/{{ $event->id }}" class="main-button-style btn-primary">Wstecz</a>
         </div>
-        <a href="/ticket/{{ $event->id }}" class="main-button-style btn-primary">Wstecz</a>
-    </div>
+
+    </form>
 
 </div>
 
