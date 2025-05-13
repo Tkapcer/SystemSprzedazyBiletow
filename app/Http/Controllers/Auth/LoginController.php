@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\LoginQueue;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -85,6 +86,11 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         if (Auth::guard('web')->check()) {
+
+            $userId = Auth::guard('web')->user()->id;
+            LoginQueue::where('user_id', $userId)->delete();
+            LoginQueue::where('position', '>', 1)->decrement('position');
+
             Auth::guard('web')->logout();
         }
 
