@@ -522,3 +522,21 @@ button, .btn-primary {
         color: white;
         background-clip: border-box;
     }
+
+.admin-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+    .admin-actions form {
+        flex: 1;
+        margin: 0;
+    }
+
+    .admin-actions button.main-button-style-v2 {
+        width: 100%;
+        text-align: center;
+        padding: 10px 0 !important; /* Match anchor link padding */
+        display: block !important;
+    }

@@ -22,6 +22,12 @@
                     <a href="/event/{{ $event->id }}"> <!-- Dodaj link do biletu -->
                         <img class="event-image" src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
+
+                        <!-- Dla admina: wyświetla informację jeśli wydarzenie nie jest approved -->
+                        @if ($event->status != 'approved')
+                            <p class="event-status">Wydarzenie niezatwierdzone!</p>
+                        @endif
+
                         <p>
                             Data: {{ date('d F Y', strtotime($event->event_date)) }}<br>
                             Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>

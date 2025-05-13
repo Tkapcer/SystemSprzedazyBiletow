@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Auth; 
 
 class EventController extends Controller
 {
@@ -17,9 +18,15 @@ class EventController extends Controller
      */
     public function index()
     {
-        $approvedEvents = Event::where('status', 'approved')->orderBy('event_date')->get();
+        // Jeśli user jest adminem, chcemy żeby widział wszystkie eventy
+        if (Auth::guard('admin')->check()) {
+            $events = Event::orderBy('event_date')->get();
+        } else {
+            $events = Event::where('status', 'approved')->orderBy('event_date')->get();
+        }
+
         return view('welcome', [
-            'events' => $approvedEvents
+            'events' => $events
         ]);
     }
 
@@ -111,8 +118,14 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+   public function show(Event $event)
     {
+        // Allow admin to see any event, others only see approved
+        if (Auth::guard('admin')->check()) {
+            $event->load('organizer');
+            return view('event.show', ['event' => $event]);
+        }
+
         if ($event->status == 'approved') {
             $event->load('organizer');
             return view('event.show', ['event' => $event]);
