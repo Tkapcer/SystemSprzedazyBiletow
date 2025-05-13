@@ -48,10 +48,11 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th style="width: 25%;">Wydarzenie</th>
-                                    <th style="width: 10%;">Sektor</th>
-                                    <th style="width: 10%;">Liczba miejsc</th>
-                                    <th style="width: 14%;">Dostępne akcje</th>
+                                    <th style="width: 22%;">Wydarzenie</th>
+                                    <th style="width: 15%;">Sektor</th>
+                                    <th style="width: 15%;">Rząd</th>
+                                    <th style="width: 15%;">Miejsce</th>
+                                    <th style="width: 20%;">Dostępne akcje</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,7 +65,8 @@
                                                 </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
-                                            <td>{{ $ticket->number_of_seats }}</td>
+                                            <td>{{ $ticket->row }}</td>
+                                            <td>{{ $ticket->column }}</td>
                                             <td>
                                                 <div style="display: flex; gap: 10px;">
                                                     <form action="{{ route('ticket.pay', $ticket->id) }}" method="POST" style="flex: 1;">
@@ -91,11 +93,12 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th style="width: 25%;">Wydarzenie</th>
-                                    <th style="width: 12%;">Sektor</th>
-                                    <th style="width: 6%;">Liczba miejsc</th>
-                                    <th style="width: 12%;">Kod biletu</th>
-                                    <th style="width: 9%;">Zwracanie biletu</th>
+                                    <th style="width: 20%;">Wydarzenie</th>
+                                    <th style="width: 10%;">Sektor</th>
+                                    <th style="width: 10%;">Rząd</th>
+                                    <th style="width: 10%;">Miejsce</th>
+                                    <th style="width: 15%;">Kod biletu</th>
+                                    <th style="width: 15%;">Zwracanie biletu</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -108,7 +111,8 @@
                                                 </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
-                                            <td>{{ $ticket->number_of_seats }}</td>
+                                            <td>{{ $ticket->row }}</td>
+                                            <td>{{ $ticket->column }}</td>
                                             <td>{{ $ticket->code }}</td>
                                             <td style="width: 9%;">
                                                 <form action="{{ route('ticket.return', $ticket->id) }}" method="POST">
@@ -141,8 +145,9 @@
                                 <tr>
                                     <th style="width: 20%;">Wydarzenie</th>
                                     <th style="width: 15%;">Sektor</th>
-                                    <th style="width: 15%;">Liczba miejsc</th>
-                                    <th style="width: 10%;">Status wydarzenia</th>
+                                    <th style="width: 15%;">Rząd</th>
+                                    <th style="width: 15%;">Miejsce</th>
+                                    <th style="width: 14%;">Status wydarzenia</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -155,7 +160,8 @@
                                                 </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
-                                            <td>{{ $ticket->number_of_seats }}</td>
+                                            <td>{{ $ticket->row }}</td>
+                                            <td>{{ $ticket->column }}</td>
                                             <td>
                                                {{-- @if ($ticket->sector->event->status == 'expired')
                                                     <span class="bg-purple-100 text-purple-900 px-3 py-1 rounded-full text-sm">Archiwalne</span>
@@ -178,10 +184,11 @@
                             <thead>
                                 <tr>
                                 <th style="width: 20%;">Wydarzenie</th>
-                                    <th style="width: 10%;">Sektor</th>
-                                    <th style="width: 10%;">Liczba miejsc</th>
-                                    <th style="width: 10%;">Kod biletu</th>
-                                    <th style="width: 10%;">Status wydarzenia</th>
+                                    <th style="width: 15%;">Sektor</th>
+                                    <th style="width: 10%;">Rząd</th>
+                                    <th style="width: 10%;">Miejsce</th>
+                                    <th style="width: 15%;">Kod biletu</th>
+                                    <th style="width: 15%;">Status wydarzenia</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -194,7 +201,8 @@
                                                 </a>--}}
                                             </td>
                                             <td>{{ $ticket->sector->name }}</td>
-                                            <td>{{ $ticket->number_of_seats }}</td>
+                                            <td>{{ $ticket->row }}</td>
+                                            <td>{{ $ticket->column }}</td>
                                             <td>{{ $ticket->code }}</td>
                                             <td>
                                                 {{--@if ($ticket->sector->event->status == 'expired')
