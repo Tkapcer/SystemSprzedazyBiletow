@@ -125,19 +125,20 @@ class TicketController extends Controller
 
 //        dd(session('selectedSeats'));
         $selectedSeats = session('selectedSeats');
+        $event = Event::findOrFail($selectedSeats[0]->event_id);
 //        dd($selectedSeats);
         $status = $request->input('status');
         $totalPrice = 0;
         foreach ($selectedSeats as $selectedSeat) {
             $totalPrice += (float) $selectedSeat->price->toString();
             if(!$selectedSeat->isAvailable()) {
-                return back()->withErrors('Wybrane miejsca są już niedostępne');
+                return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'))->withErrors(['Wybrane miejsca są już niedostępne']);
             }
         }
 
         $user = Auth::guard('web')->user();
-        if ($user->balance < $totalPrice) {
-            return back()->withErrors('Za mało hajsu');
+        if ($user->balance < $totalPrice && $status == 'purchased') {
+            return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'))->withErrors(['Za mało hasju']);
         }
 
         DB::transaction(function () use ($user, $status, $selectedSeats, $totalPrice) {
@@ -162,7 +163,7 @@ class TicketController extends Controller
         });
 
         $message = $status == 'purchased' ? 'Zakupiono bilet' : 'Zarezerwowano miejsce';
-        return redirect()->route('home'/*, $sector->event*/)->with('success', $message);
+        return redirect()->route('home')->with('success', $message);
     }
 
     /**

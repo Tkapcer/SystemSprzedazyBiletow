@@ -15,9 +15,13 @@ class ClearTransactionData
             'ticket.store',
         ];
 
-        if (!in_array($request->route()->getName(), $transactionRoutes)) {
+        if (!in_array($request->route()->getName(), $transactionRoutes) && !session('errors')) {
             session()->forget('selectedSeats');
         }
+
+        /*if (!in_array($request->route()->getName(), $transactionRoutes)) {
+            session()->forget('selectedSeats');
+        }*/
 
         return $next($request);
     }

@@ -42,6 +42,14 @@
     <form action="{{ route('ticket.store') }}" method="POST" id="ticket-form">
         @csrf
 
+        @if($errors->any())
+            <div class="alert alert-danger">
+                @foreach($errors->all() as $error)
+                    {{ $error }}
+                @endforeach
+            </div>
+        @endif
+
         <div class="white-container">
             <div class="button-container">
                 <button type="submit" name="status" value="purchased" id="buy-button" class="main-button-style">Kup</button>
@@ -54,7 +62,7 @@
 
 </div>
 
-<script>
+{{--<script>
     // Skrypt związany z ColorThief
     document.addEventListener('DOMContentLoaded', function() {
         const colorThief = new ColorThief();
@@ -111,6 +119,6 @@
             return `rgb(${r}, ${g}, ${b})`;
         }
     });
-</script>
+</script>--}}
 
 @endsection
