@@ -95,6 +95,7 @@
                                                             type="number"
                                                             class="form-control"
                                                             name="sectors[{{ $sector->id }}][price]"
+                                                            step="0.01"
                                                             placeholder="Podaj cenę"
                                                         >
                                                     </td>

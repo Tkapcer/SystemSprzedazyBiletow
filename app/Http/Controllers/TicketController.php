@@ -261,7 +261,7 @@ class TicketController extends Controller
         }
 
         DB::transaction(function () use ($ticket, $user) {
-            $user->balance += $ticket->number_of_seats * $ticket->sector->price;
+            $user->balance += $ticket->sector->getPriceForSeat($ticket->event_id);
             $user->save();
             $ticket->delete();
         });
@@ -282,12 +282,12 @@ class TicketController extends Controller
             return redirect()->back()->withErrors('Nie masz tej rezerwacji.');
         }
 
-        if ($user->balance < $ticket->number_of_seats * $ticket->sector->price) {
+        if ($user->balance < $ticket->sector->getPriceForSeat($ticket->event_id)) {
             return redirect()->back()->withErrors('Brak wystarczających środków na koncie.');
         }
 
         DB::transaction(function () use ($ticket, $user) {
-           $user->balance -= $ticket->number_of_seats * $ticket->sector->price;
+           $user->balance -= $ticket->sector->getPriceForSeat($ticket->event_id);
            $user->save();
            $ticket->status = 'purchased';
            $ticket->code = strtoupper(Str::random(10));
