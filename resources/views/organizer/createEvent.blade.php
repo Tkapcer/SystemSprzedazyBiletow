@@ -35,13 +35,6 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="location" class="form-label">Lokalizacja</label>
-                                <input type="text" class="form-control @error('location') is-invalid @enderror" id="location" name="location" value="{{ old('location') }}" required>
-                                @error('location')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
                                 <label for="description" class="form-label">Opis</label>
                                 <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
                                 @error('description')

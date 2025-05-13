@@ -58,7 +58,7 @@
                                             </a>
                                         </td>
                                         <td class="py-2 px-4">{{ $event->event_date->format('d.m.Y H:i') }}</td>
-                                        <td class="py-2 px-4">{{ $event->location }}</td>
+                                        <td class="py-2 px-4">{{ $event->venue->location }}</td>
                                         <td class="py-2 px-4">
                                             @if ($event->status != 'cancelled' && $event->status != 'expired')
                                                 <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">

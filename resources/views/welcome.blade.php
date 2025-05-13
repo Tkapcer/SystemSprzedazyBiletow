@@ -23,15 +23,17 @@
                         <img class="event-image" src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
                         <p>
-                            Data: {{ date('d F Y', strtotime($event->event_date)) }}<br>
+                            Data: {{ date('d.m.Y', strtotime($event->event_date)) }}<br>
                             Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>
-                            Miejsce: {{ $event->location }}
+                            Miejsce: {{ $event->venue->name }}<br>
+                            Lokalizacja: {{ $event->venue->location }}
                         </p>
                     </a>
                 </div>
             @endforeach
         </div>
     </div>
+
 
     <!-- Skrypt związany z ColorThief -->
     <script>

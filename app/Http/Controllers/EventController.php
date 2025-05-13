@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Sector;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -39,7 +40,6 @@ class EventController extends Controller
         // Walidacja danych
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
@@ -52,10 +52,6 @@ class EventController extends Controller
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
             'name.max' => 'Nazwa wydarzenia nie może przekraczać 255 znaków.',
-
-            'location.required' => 'Lokalizacja wydarzenia jest wymagana.',
-            'location.string' => 'Lokalizacja musi być ciągiem znaków.',
-            'location.max' => 'Lokalizacja nie może przekraczać 255 znaków.',
 
             'description.required' => 'Opis wydarzenia jest wymagany.',
             'description.string' => 'Opis musi być ciągiem znaków.',
@@ -94,7 +90,6 @@ class EventController extends Controller
         // Tworzenie wydarzenia
         $event = Event::create([
             'name' => $validated['name'],
-            'location' => $validated['location'],
             'description' => $validated['description'],
             'event_date' => $validated['event_date'],
             'image_path' => $imagePath,
@@ -125,15 +120,23 @@ class EventController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Event $event)
-    {
-        if ($event->status == 'cancelled') {
-            return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
-        } else if ($event->status == 'expired') {
-            return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
-        } else {
-            return view('organizer.editEvent', compact('event'));
-        }
+{
+    if ($event->status == 'cancelled') {
+        return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
+    } else if ($event->status == 'expired') {
+        return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
+    } else {
+        // Pobierz wszystkie sale z sektorami
+        $venues = Venue::with('sectors')->get();
+
+        // Upewnij się, że sektory wydarzenia zawierają pivot z ceną
+        $event->load(['sectors' => function ($query) {
+            $query->withPivot('price');
+        }]);
+
+        return view('organizer.editEvent', compact('event', 'venues'));
     }
+}
 
     /**
      * Update the specified resource in storage.
@@ -147,7 +150,6 @@ class EventController extends Controller
         }
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
@@ -161,10 +163,6 @@ class EventController extends Controller
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
             'name.max' => 'Nazwa wydarzenia nie może przekraczać 255 znaków.',
-
-            'location.required' => 'Lokalizacja wydarzenia jest wymagana.',
-            'location.string' => 'Lokalizacja musi być ciągiem znaków.',
-            'location.max' => 'Lokalizacja nie może przekraczać 255 znaków.',
 
             'description.required' => 'Opis wydarzenia jest wymagany.',
             'description.string' => 'Opis musi być ciągiem znaków.',
@@ -205,7 +203,6 @@ class EventController extends Controller
             // Aktualizowanie danych wydarzenia
             $event->update([
                 'name' => $validated['name'],
-                'location' => $validated['location'],
                 'description' => $validated['description'],
                 'event_date' => $validated['event_date'],
                 'image_path' => $imagePath,

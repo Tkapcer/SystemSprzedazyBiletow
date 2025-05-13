@@ -52,7 +52,6 @@ class OrganizerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
 
@@ -72,9 +71,6 @@ class OrganizerController extends Controller
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
             'name.max' => 'Nazwa wydarzenia nie może przekraczać 255 znaków.',
 
-            'location.required' => 'Lokalizacja wydarzenia jest wymagana.',
-            'location.string' => 'Lokalizacja musi być ciągiem znaków.',
-            'location.max' => 'Lokalizacja nie może przekraczać 255 znaków.',
 
             'description.required' => 'Opis wydarzenia jest wymagany.',
             'description.string' => 'Opis musi być ciągiem znaków.',
@@ -111,7 +107,6 @@ class OrganizerController extends Controller
 
         $event = $organizer->events()->create([
             'name' => $validated['name'],
-            'location' => $validated['location'],
             'description' => $validated['description'],
             'event_date' => $validated['event_date'],
             'image_path' => $imagePath,
