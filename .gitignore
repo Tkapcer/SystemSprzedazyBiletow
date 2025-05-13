@@ -26,4 +26,3 @@ yarn-error.log
 /laravel
 /database/database.sqlite
 /database/database.sqlite
-/database/seeders
