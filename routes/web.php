@@ -61,6 +61,12 @@ Route::middleware(ClearTransactionData::class)->group(function () {
 //    Odmowa wydarzenia
         Route::post('admin/rejectEvent/{id}', [App\Http\Controllers\AdminController::class, 'rejectEvent'])->name('admin.rejectEvent');
         Route::get('admin/rejectEvent/{id}', [App\Http\Controllers\AdminController::class, 'rejectEvent'])->name('admin.rejectEvent');
+
+//    Trasy dla zarządzania lokalizacjami (venues)
+        Route::get('admin/createVenue', [App\Http\Controllers\VenueController::class, 'create'])->name('venues.create');
+        Route::post('admin/storeVenue', [App\Http\Controllers\VenueController::class, 'store'])->name('venues.store');
+
+
     });
 
 //  Przeniesienie niepotwierdzonego organizatora
