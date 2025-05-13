@@ -39,6 +39,15 @@ class OrganizerController extends Controller
         return view('organizer.createEvent');
     }
 
+    // new!!!!!!!!!!!!!!!!!!!!!!!!
+     /**
+     * Show the report system.
+     */
+    public function organizerReportSystem()
+    {
+        return view('organizer.organizerReportSystem');
+    }
+
     /**
      * Store a newly created resource in storage.
      */
