@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('location');
             $table->string('name');
             $table->string('description');
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

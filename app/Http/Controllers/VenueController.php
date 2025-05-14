@@ -47,7 +47,7 @@ class VenueController extends Controller
         if ($venue->hasActiveEvents()) {
             return redirect()->route('adminPanel')->withErrors('W danej sali są jakieś wydarzenia');
         } else {
-            $venue->delete();
+            $venue->update(['is_deleted' => true]);
             return redirect()->back()->with('status', 'Usunięto lokalizację');
         }
     }
