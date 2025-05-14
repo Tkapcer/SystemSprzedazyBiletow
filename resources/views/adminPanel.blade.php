@@ -26,7 +26,7 @@
 <!-- Second card -->
 <div class="container">
     <div class="bg-white rounded-lg shadow-lg p-6">
-        <h4 class="section-title">{{ __('Dodaj Gatunek') }}</h4>
+        <h4 class="section-title">{{ __('Gatunki') }}</h4>
 
         <!-- Formularz dodawania gatunku -->
         <form action="{{ route('categories.store') }}" method="POST">
