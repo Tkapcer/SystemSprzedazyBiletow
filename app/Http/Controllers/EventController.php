@@ -21,15 +21,18 @@ class EventController extends Controller
     public function index()
     {
         // Jeśli user jest adminem, chcemy żeby widział wszystkie eventy
-        if (Auth::guard('admin')->check()) {
-            $events = Event::orderBy('event_date')->get();
-        } else {
-            $events = Event::where('status', 'approved')->orderBy('event_date')->get();
-        }
+    if (Auth::guard('admin')->check()) {
+        $events = Event::with('categories', 'venue')->orderBy('event_date')->get();
+    } else {
+        $events = Event::with('categories', 'venue')->where('status', 'approved')->orderBy('event_date')->get();
+    }
 
-        return view('welcome', [
-            'events' => $events
-        ]);
+    $categories = Category::all(); // Dodane kategorie
+
+    return view('welcome', [
+        'events' => $events,
+        'categories' => $categories, // Dodane kategorie
+    ]);
     }
 
     /**
@@ -260,6 +263,8 @@ class EventController extends Controller
         }
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało usunięte.');
     }
+
+
 
     /**
      * Remove the specified resource from storage.
