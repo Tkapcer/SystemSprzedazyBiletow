@@ -46,8 +46,26 @@
                 <a href="{{ route('cancelEvent', $event->id) }}" class="main-button-style-v2 btn-danger">Usuń</a>
             </div>
             <!-- Jeśli użytkownik jest zalogowany jako admin -->
-            @elseif(Auth::guard('admin')->check()) 
-                <a href="{{ route('admin.rejectEvent', $event->id) }}" class="main-button-style-v2 btn-primary btn-danger">Odrzuć</a>
+            @elseif(Auth::guard('admin')->check())
+            <div class="admin-actions">
+                @if($event->status != 'approved')
+                    <form method="POST" action="{{ route('admin.approveEvent', $event->id) }}">
+                        @csrf
+                        <button type="submit" class="main-button-style-v2 btn-primary">
+                            Zatwierdź
+                        </button>
+                    </form>
+                @endif
+
+                @if($event->status != 'rejected')
+                    <form method="POST" action="{{ route('admin.rejectEvent', $event->id) }}">
+                        @csrf
+                        <button type="submit" class="main-button-style-v2 btn-danger">
+                            Odrzuć
+                        </button>
+                    </form>
+                @endif
+            </div>
             @else
                 <a class="main-button-style btn-primary" href="{{ route('login') }}">Zaloguj się, aby móc kupić lub zarezerwować bilety.</a> 
             @endif

@@ -124,13 +124,13 @@
                                     <td>
                                         <div style="display: flex; gap: 10px; width: 100%;">
                                             @if($event->status == 'waiting' || $event->status == 'rejected')
-                                                <form action="{{ route('admin.approveEvent', $event->id) }}" method="POST" style="flex: 1;">
+                                                <form action="{{ route('admin.approveEvent', $event->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="main-button-style btn-success">Zatwierdź</button>
                                                 </form>
                                             @endif
                                             @if($event->status == 'approved' || $event->status == 'waiting')
-                                                <form action="{{ route('admin.rejectEvent', $event->id) }}" method="POST" style="flex: 1;">
+                                                <form action="{{ route('admin.rejectEvent', $event->id) }}" method="POST">
                                                     @csrf
                                                     <button type="submit" class="main-button-style-v2 btn-danger">Odrzuć</button>
                                                 </form>
