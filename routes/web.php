@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckOrganizerConfirmed;
 use App\Http\Middleware\CheckOrganizerNotConfirmed;
+use App\Http\Middleware\CheckQueue;
 use App\Http\Middleware\ClearTransactionData;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -14,34 +15,41 @@ Route::middleware(ClearTransactionData::class)->group(function () {
 
     Auth::routes();
 
+
 //    Zalogowany jako user
     Route::middleware('auth')->group(function () {
-        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//        Sprawdzanie, czy kolejka się już zwolniła
+        Route::get('/queue/check', [App\Http\Controllers\QueueController::class, 'check'])->name('queue.check');
+
+//        Sprawdzanie, czy jest miejsce w kolejce
+        Route::middleware(CheckQueue::class)->group(function () {
+            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //    Dodanie nowych środków
-        Route::post('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('addMoney');
+            Route::post('/addMoney', [App\Http\Controllers\HomeController::class, 'addMoney'])->name('addMoney');
 
     //Dodawanie nowych srodkow-sprawdzanie sukcesu
         Route::get('/balanceSuccess', [App\Http\Controllers\HomeController::class, 'balanceSuccess'])->name('balanceSuccess');
 
 //    Strona z zakupem biletu
-        Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
+            Route::get('/ticket/{event}', [App\Http\Controllers\TicketController::class, 'index'])->name('ticket.index');
 
 //    Strona z podsumowaniem zakupu biletu
-        Route::post('/ticket/summary', [App\Http\Controllers\TicketController::class, 'summary'])->name('ticket.summary');
+            Route::post('/ticket/summary', [App\Http\Controllers\TicketController::class, 'summary'])->name('ticket.summary');
 
 //    Zapis biletu
-        Route::post('/ticket/store', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
+            Route::post('/ticket/store', [App\Http\Controllers\TicketController::class, 'store'])->name('ticket.store');
 
 //    Anulowanie rezerwacji
-        Route::post('/ticket/cancel/{id}', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
+            Route::post('/ticket/cancel/{id}', [App\Http\Controllers\TicketController::class, 'cancel'])->name('ticket.cancel');
 
 //    Opłacenie biletu
-        Route::post('/ticket/pay/{id}', [App\Http\Controllers\TicketController::class, 'pay'])->name('ticket.pay');
+            Route::post('/ticket/pay/{id}', [App\Http\Controllers\TicketController::class, 'pay'])->name('ticket.pay');
 
 //    Zwracanie biletu
-    Route::post('/ticket/return/{id}', [App\Http\Controllers\TicketController::class, 'return'])->name('ticket.return');
-});
+            Route::post('/ticket/return/{id}', [App\Http\Controllers\TicketController::class, 'return'])->name('ticket.return');
+        });
+    });
 
 
 
