@@ -23,48 +23,49 @@
         </div>
     </div>
 
-    <!-- Second card -->
-    <div class="container">
-        <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="section-title">{{ __('Dodaj Gatunek') }}</h4>
+<!-- Second card -->
+<div class="container">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h4 class="section-title">{{ __('Dodaj Gatunek') }}</h4>
 
-                    <!-- Formularz dodawania gatunku -->
-                    <form action="{{ route('categories.store') }}" method="POST">
-                        @csrf
-                        <div class="form-group mb-3">
-                            <input 
-                                type="text" 
-                                class="form-control @error('name') is-invalid @enderror" 
-                                name="name" 
-                                placeholder="Wprowadź nazwę gatunku"
-                                value="{{ old('name') }}"
-                                required
-                            >
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div style="text-align: center;">
-                            <button type="submit" class="main-button-style btn-success" style="width: 100%;">
-                                Dodaj gatunek
-                            </button>
-                        </div>
-                    </form>
-
-                    @foreach($categories as $category)
-                        <div class="mt-3">
-                            <span>{{ $category->name }}</span>
-                        </div>
-                    @endforeach
-
-                </div>
+        <!-- Formularz dodawania gatunku -->
+        <form action="{{ route('categories.store') }}" method="POST">
+            @csrf
+            <div class="mb-4">
+                <input 
+                    type="text" 
+                    name="name" 
+                    placeholder="Wprowadź nazwę gatunku"
+                    value="{{ old('name') }}"
+                    required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 @error('name') border-red-500 @enderror"
+                >
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
             </div>
-        </div>
+
+            <div class="text-center">
+                <button type="submit" class="main-button-style btn-success w-65">
+                    Dodaj gatunek
+                </button>
+            </div>
+        </form>
+
+        <!-- Lista dodanych kategorii -->
+        @if($categories->count())
+            <div class="mt-6 border-t pt-4">
+                <h5 class="text-lg font-medium text-gray-700 mb-2">Istniejące gatunki:</h5>
+                <ul class="list-disc list-inside space-y-1 text-gray-600">
+                    @foreach($categories as $category)
+                        <li>{{ $category->name }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
     </div>
-    </div>
+</div>
+
 
     <div class="container">
         <!-- Third card -->
