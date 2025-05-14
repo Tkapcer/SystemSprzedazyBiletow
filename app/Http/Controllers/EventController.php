@@ -7,6 +7,7 @@ use App\Models\Sector;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Venue;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -20,15 +21,18 @@ class EventController extends Controller
     public function index()
     {
         // Jeśli user jest adminem, chcemy żeby widział wszystkie eventy
-        if (Auth::guard('admin')->check()) {
-            $events = Event::orderBy('event_date')->get();
-        } else {
-            $events = Event::where('status', 'approved')->orderBy('event_date')->get();
-        }
+    if (Auth::guard('admin')->check()) {
+        $events = Event::with('categories', 'venue')->orderBy('event_date')->get();
+    } else {
+        $events = Event::with('categories', 'venue')->where('status', 'approved')->orderBy('event_date')->get();
+    }
 
-        return view('welcome', [
-            'events' => $events
-        ]);
+    $categories = Category::all(); // Dodane kategorie
+
+    return view('welcome', [
+        'events' => $events,
+        'categories' => $categories, // Dodane kategorie
+    ]);
     }
 
     /**
@@ -36,7 +40,8 @@ class EventController extends Controller
      */
     public function create()
     {
-
+        $categories = Category::all();
+        return view('...', compact('categories'));
     }
 
     /**
@@ -55,6 +60,8 @@ class EventController extends Controller
             'sectors.*.name' => 'required|string|max:255',
             'sectors.*.seats' => 'required|integer|min:1',
             'sectors.*.price' => 'required|numeric|min:0',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ], [
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
@@ -106,6 +113,9 @@ class EventController extends Controller
         foreach ($validated['sectors'] as $sectorData) {
             $event->sectors()->create($sectorData);
         }
+        // Przypisanie kategorii do wydarzenia
+        $categories = Arr::wrap($validated['categories'] ?? []);
+        $event->categories()->sync($categories);
 
         return redirect()->back();
     }
@@ -130,26 +140,30 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
+        * Show the form for editing the specified resource.
+        */
     public function edit(Event $event)
-{
-    if ($event->status == 'cancelled') {
-        return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
-    } else if ($event->status == 'expired') {
-        return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
-    } else {
-        // Pobierz wszystkie sale z sektorami
-        $venues = Venue::with('sectors')->get();
+    {
+        $categories = Category::all();
 
-        // Upewnij się, że sektory wydarzenia zawierają pivot z ceną
-        $event->load(['sectors' => function ($query) {
-            $query->withPivot('price');
-        }]);
+        if ($event->status == 'cancelled') {
+            return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
+        } else if ($event->status == 'expired') {
+            return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
+        } else {
+            // Pobierz wszystkie sale z sektorami
 
-        return view('organizer.editEvent', compact('event', 'venues'));
+            $categories = Category::all();
+            $venues = Venue::with('sectors')->get();
+
+            // Upewnij się, że sektory wydarzenia zawierają pivot z ceną
+            $event->load(['sectors' => function ($query) {
+                $query->withPivot('price');
+            }]);
+
+            return view('organizer.editEvent', compact('event', 'venues', 'categories'));
+        }
     }
-}
 
     /**
      * Update the specified resource in storage.
@@ -167,6 +181,8 @@ class EventController extends Controller
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ], [
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
@@ -201,6 +217,8 @@ class EventController extends Controller
                 // Status automatycznie ustawiany na "waiting"
                 'status' => 'waiting'
             ]);
+
+            $event->categories()->sync($validated['categories'] ?? []);
         });
 
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało zaktualizowane.');
@@ -228,6 +246,8 @@ class EventController extends Controller
         }
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało usunięte.');
     }
+
+
 
     /**
      * Remove the specified resource from storage.

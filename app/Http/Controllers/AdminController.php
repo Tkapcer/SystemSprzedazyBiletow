@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\Organizer;
+use App\Models\Category;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class AdminController extends Controller
     public function index()
     {
         return view('adminPanel', [
-//            'users' => User::where('type', 'organizer')->where('organizerStatus', 'waiting')->get()
+            'categories' => Category::all(), // <-- Add this key-value pair
             'organizers' => Organizer::orderByRaw("
                 CASE
                     WHEN status = 'waiting' THEN 1
@@ -33,9 +34,7 @@ class AdminController extends Controller
                     ELSE 5
                 END
             ")->get()
-        ]);/*return view('adminPanel', [
-            'users' => User::all()
-        ]);*/
+        ]);
     }
 
     public function confirmOrganizer($id) {

@@ -23,8 +23,52 @@
         </div>
     </div>
 
+<!-- Second card -->
+<div class="container">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h4 class="section-title">{{ __('Gatunki') }}</h4>
+
+        <!-- Formularz dodawania gatunku -->
+        <form action="{{ route('categories.store') }}" method="POST">
+            @csrf
+            <div class="mb-4">
+                <input 
+                    type="text" 
+                    name="name" 
+                    placeholder="Wprowadź nazwę gatunku"
+                    value="{{ old('name') }}"
+                    required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-200 @error('name') border-red-500 @enderror"
+                >
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="main-button-style btn-success w-65">
+                    Dodaj gatunek
+                </button>
+            </div>
+        </form>
+
+        <!-- Lista dodanych kategorii -->
+        @if($categories->count())
+            <div class="mt-6 border-t pt-4">
+                <h5 class="text-lg font-medium text-gray-700 mb-2">Istniejące gatunki:</h5>
+                <ul class="list-disc list-inside space-y-1 text-gray-600">
+                    @foreach($categories as $category)
+                        <li>{{ $category->name }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+</div>
+
+
     <div class="container">
-        <!-- Second card -->
+        <!-- Third card -->
         <div class="col-md-6">
             <div class="card">
                 <div class="section-title">{{ __('Organizatorzy') }}</div>
@@ -85,7 +129,7 @@
         </div>
     </div>
     <div class="container">
-        <!-- Third card -->
+        <!-- Fourth card -->
         <div class="col-md-6">
             <div class="card">
                 <div class="section-title">{{ __('Wydarzenia') }}</div>

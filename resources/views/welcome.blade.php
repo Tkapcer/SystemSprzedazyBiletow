@@ -15,10 +15,22 @@
             </select>
         </div>
 
+        <!-- Formularz do wyboru kategorii (gatunku) -->
+        <div class="sort-options">
+            <label for="category-select">Filtruj po gatunku:</label>
+            <select id="category-select" onchange="filterEvents()">
+                <option value="all">Wszystkie</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->name }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+
         <!-- Lista wydarzeń -->
         <div class="events-container" id="events-container">
             @foreach ($events as $event)
-                <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}">
+                <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}"   data-categories="{{ $event->categories->pluck('name')->map(fn($c) => strtolower(trim($c)))->implode(',') }}">
                     <a href="/event/{{ $event->id }}"> <!-- Dodaj link do biletu -->
                         <img class="event-image" src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
@@ -32,7 +44,8 @@
                             Data: {{ date('d.m.Y', strtotime($event->event_date)) }}<br>
                             Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>
                             Miejsce: {{ $event->venue->name }}<br>
-                            Lokalizacja: {{ $event->venue->location }}
+                            Lokalizacja: {{ $event->venue->location }} <br>
+                            Gatunek: {{ $event->categories->pluck('name')->implode(', ') }}<br>
                         </p>
                     </a>
                 </div>
@@ -150,5 +163,32 @@
                 eventsContainer.appendChild(event);
             });
         }
+
+        // Filtrowanie gatunku
+    function filterEvents() {
+    const selectedCategory = document.getElementById("category-select").value.toLowerCase();
+    const events = document.querySelectorAll(".event-card");
+
+    events.forEach(event => {
+        const raw = event.getAttribute("data-categories") || '';
+        const categories = raw
+            .split(',')
+            .map(cat => cat.trim().toLowerCase());
+
+        if (selectedCategory === "all" || categories.includes(selectedCategory)) {
+            event.style.display = "block";
+        } else {
+            event.style.display = "none";
+        }
+    });
+}
+
+
+    // Aby zadziałało również po sortowaniu
+    document.getElementById("sort-select").addEventListener("change", () => {
+        sortEvents();
+        filterEvents(); // Ponownie zastosuj filtr po sortowaniu
+    });
+
     </script>
 @endsection

@@ -8,8 +8,8 @@ class Category extends Model
 {
     protected $fillable = ['name'];
 
-    public function event()
+    public function events()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsToMany(Event::class);
     }
 }

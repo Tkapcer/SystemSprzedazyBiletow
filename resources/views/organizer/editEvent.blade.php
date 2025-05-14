@@ -45,6 +45,32 @@
                             @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
+                        <div class="mb-6">
+                            <label class="block text-lg font-semibold text-gray-800 mb-2">Kategorie</label>
+
+                            <div class="flex gap-4 overflow-x-auto pb-2">
+                                @foreach ($categories as $category)
+                                    <label for="category_{{ $category->id }}"
+                                        class="flex items-center gap-2 px-4 py-2 rounded-full border border-gray-300 bg-white shadow-sm cursor-pointer hover:bg-indigo-100 whitespace-nowrap">
+                                        <input 
+                                            id="category_{{ $category->id }}"
+                                            type="checkbox" 
+                                            name="categories[]" 
+                                            value="{{ $category->id }}"
+                                            class="accent-indigo-600 h-5 w-5"
+                                            {{ $event->categories->contains($category->id) ? 'checked' : '' }}
+                                        >
+                                        <span class="text-sm">{{ $category->name }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+
+                            @error('categories')
+                                <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+
                         <button type="submit" class="main-button-style">Zapisz zmiany</button>
                     </form>
                 </div>

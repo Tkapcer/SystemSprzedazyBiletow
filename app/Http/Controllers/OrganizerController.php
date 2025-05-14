@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Sector;
 use App\Models\User;
 use App\Models\Venue;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -42,7 +43,8 @@ class OrganizerController extends Controller
     public function createEvent()
     {
         $venues = Venue::with('sectors')->get();
-        return view('organizer.createEvent', compact('venues'));
+        $categories = Category::all();
+        return view('organizer.createEvent', compact('venues','categories'));
     }
 
     // new!!!!!!!!!!!!!!!!!!!!!!!!
@@ -71,6 +73,8 @@ class OrganizerController extends Controller
             'sectors' => 'nullable|array',
             'sectors.*.price' => 'nullable|numeric|min:0', // Walidacja ceny sektorów
 
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
 
             /*'sectors.*.name' => 'required|string|max:255',
             'sectors.*.seats' => 'required|integer|min:1',
@@ -129,6 +133,10 @@ class OrganizerController extends Controller
                     $event->sectors()->attach($sectorId, ['price' => $sectorData['price']]);
                 }
             }
+        }
+
+        if (!empty($validated['categories'])) {
+            $event->categories()->sync($validated['categories']);
         }
 
         return redirect()->route('organizer.panel');
