@@ -88,6 +88,10 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::get('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
 
         Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
+    //nowe !!!!!!!!!!!!!!!!!!!!!!!
+    Route::get('/organizer/organizerReportSystem', [App\Http\Controllers\OrganizerController::class, 'organizerReportSystem'])->name('organizerReportSystem');
+
+    Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
 
         Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('editEvent');
         Route::put('/events/{event}', [EventController::class, 'update'])->name('updateEvent');

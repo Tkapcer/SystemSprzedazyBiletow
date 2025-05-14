@@ -92,6 +92,13 @@
                         </table>
                     </div>
                 @endif
+
+                <div class="text-center mb-6">
+                    <a href="{{ route('organizerReportSystem') }}" class="main-button-style">
+                        System raportowania
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>
