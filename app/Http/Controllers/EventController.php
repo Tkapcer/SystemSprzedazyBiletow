@@ -210,32 +210,15 @@ class EventController extends Controller
     {
         if ($event->status != 'cancelled' && $event->status != 'expired') {
             DB::transaction(function () use ($event) {
-                $sectors = Sector::where('event_id', $event->id)->get();
-                foreach ($sectors as $sector) {
-                    $tickets = Ticket::with('user')->where('sector_id', $sector->id)->get();
-                    foreach ($tickets as $ticket) {
-//                        $user = User::where('id', $ticket->user_id)->get();
-                        if ($ticket->status == 'purchased') {
-                            $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
-                            $ticket->user->save();
-                        }
-                        $ticket->sector->event->status = 'cancelled';
-//                        $ticket->status = 'cancelled';
-                        $ticket->sector->event->save();
-                    }
-                    $sector->seats=-1;
-                    $sector->save();
-                }
 
-                /*$tickets = Ticket::with(['user', 'sector'])->where('event_id', $event->id)->get();
+                $tickets = Ticket::with('user')->where('event_id', $event->id)->get();
+
                 foreach ($tickets as $ticket) {
                     if ($ticket->status == 'purchased') {
-                        $ticket->user->balance += $ticket->sector->price * $ticket->number_of_seats;
+                        $ticket->user->balance += $ticket->sector->getPriceForSeat($event->id);
                         $ticket->user->save();
                     }
-                    $ticket->status = 'cancelled';
-                    // Tu i tak brakuje usuwania sektorów jak coś
-                }*/
+                }
 
                 $event->status='cancelled';
                 $event->save();
