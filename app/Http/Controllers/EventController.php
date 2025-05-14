@@ -7,6 +7,7 @@ use App\Models\Sector;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Venue;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -136,30 +137,30 @@ class EventController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
+        * Show the form for editing the specified resource.
+        */
     public function edit(Event $event)
-{
-    $categories = Category::all();
-    return view('...', compact('categories'));
+    {
+        $categories = Category::all();
 
-    if ($event->status == 'cancelled') {
-        return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
-    } else if ($event->status == 'expired') {
-        return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
-    } else {
-        // Pobierz wszystkie sale z sektorami
+        if ($event->status == 'cancelled') {
+            return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
+        } else if ($event->status == 'expired') {
+            return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
+        } else {
+            // Pobierz wszystkie sale z sektorami
 
-        $venues = Venue::with('sectors')->get();
+            $categories = Category::all();
+            $venues = Venue::with('sectors')->get();
 
-        // Upewnij się, że sektory wydarzenia zawierają pivot z ceną
-        $event->load(['sectors' => function ($query) {
-            $query->withPivot('price');
-        }]);
+            // Upewnij się, że sektory wydarzenia zawierają pivot z ceną
+            $event->load(['sectors' => function ($query) {
+                $query->withPivot('price');
+            }]);
 
-        return view('organizer.editEvent', compact('event', 'venues'));
+            return view('organizer.editEvent', compact('event', 'venues', 'categories'));
+        }
     }
-}
 
     /**
      * Update the specified resource in storage.
@@ -214,7 +215,7 @@ class EventController extends Controller
                 'status' => 'waiting'
             ]);
 
-            $event->categories()->sync($categories);
+            $event->categories()->sync($validated['categories'] ?? []);
         });
 
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało zaktualizowane.');

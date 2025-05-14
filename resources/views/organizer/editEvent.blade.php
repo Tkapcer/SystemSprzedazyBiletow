@@ -45,7 +45,31 @@
                             @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        
+                        <div class="mb-3">
+                            <label class="form-label">Kategorie</label>
+                            <div class="row">
+                                @foreach ($categories as $category)
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input 
+                                                class="form-check-input" 
+                                                type="checkbox" 
+                                                name="categories[]" 
+                                                value="{{ $category->id }}" 
+                                                id="category_{{ $category->id }}"
+                                                {{ $event->categories->contains($category->id) ? 'checked' : '' }}
+                                            >
+                                            <label class="form-check-label" for="category_{{ $category->id }}">
+                                                {{ $category->name }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error('categories')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <button type="submit" class="main-button-style">Zapisz zmiany</button>
                     </form>
