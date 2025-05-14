@@ -24,7 +24,8 @@
                             <strong>Data:</strong> {{ date('d.m.Y', strtotime($event->event_date)) }}<br>
                             <strong>Godzina:</strong> {{ date('H:i', strtotime($event->event_date)) }}<br>
                             <strong>Miejsce:</strong> {{ $event->venue->name }}<br>
-                            <strong>Lokalizacja:</strong> {{ $event->venue->location }}
+                            <strong>Lokalizacja:</strong> {{ $event->venue->location }}<br>
+                            <strong>Gatunek:</strong> {{ $event->categories->pluck('name')->implode(', ') }}<br>
                         </p>
                         <div class="description">
                             <br><p>{{ $event->description }}</p><br>

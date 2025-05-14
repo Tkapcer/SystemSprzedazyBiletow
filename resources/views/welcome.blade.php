@@ -32,7 +32,8 @@
                             Data: {{ date('d.m.Y', strtotime($event->event_date)) }}<br>
                             Godzina: {{ date('H:i', strtotime($event->event_date)) }}<br>
                             Miejsce: {{ $event->venue->name }}<br>
-                            Lokalizacja: {{ $event->venue->location }}
+                            Lokalizacja: {{ $event->venue->location }} <br>
+                            Gatunek: {{ $event->categories->pluck('name')->implode(', ') }}<br>
                         </p>
                     </a>
                 </div>
