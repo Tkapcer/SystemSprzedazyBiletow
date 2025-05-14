@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Organizer;
 use App\Models\Category;
 use App\Models\User;
+use App\Models\Venue;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -16,6 +17,9 @@ class AdminController extends Controller
     public function index()
     {
         return view('adminPanel', [
+            'venues' => Venue::all()->each(function ($venue) {
+                $venue->hasActiveEvent = $venue->hasActiveEvents();
+            }),
             'categories' => Category::all(), // <-- Add this key-value pair
             'organizers' => Organizer::orderByRaw("
                 CASE

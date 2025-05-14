@@ -81,6 +81,9 @@ Route::middleware(ClearTransactionData::class)->group(function () {
 //    Trasy dla zarządzania wydarzeniami
         Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
 
+//        Usunięcie sali
+        Route::delete('/venues/{venue}', [App\Http\Controllers\VenueController::class, 'destroy'])->name('venues.destroy');
+
     });
 
 //  Przeniesienie niepotwierdzonego organizatora

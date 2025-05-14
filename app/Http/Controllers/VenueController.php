@@ -35,4 +35,20 @@ class VenueController extends Controller
 
         return redirect()->route('venues.create')->with('status', 'Dodano nową lokalizacje');
     }
+
+    public function destroy($id) {
+        $validated = validator(['id' => $id], [
+            'id' => 'required|integer|exists:venues,id'
+        ])->validate();
+
+
+        $venue = Venue::findOrFail($validated['id']);
+
+        if ($venue->hasActiveEvents()) {
+            return redirect()->route('adminPanel')->withErrors('W danej sali są jakieś wydarzenia');
+        } else {
+            $venue->delete();
+            return redirect()->back()->with('status', 'Usunięto lokalizację');
+        }
+    }
 }

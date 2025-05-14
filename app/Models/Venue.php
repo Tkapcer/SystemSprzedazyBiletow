@@ -15,4 +15,8 @@ class Venue extends Model
     public function sectors() {
         return $this->hasMany(Sector::class);
     }
+
+    public function hasActiveEvents() {
+        return $this->event()->whereNotIn('status', ['cancelled', 'expired'])->exists();
+    }
 }

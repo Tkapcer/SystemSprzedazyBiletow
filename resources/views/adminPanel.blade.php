@@ -17,6 +17,71 @@
                                 <a href="{{ route('venues.create') }}" class="btn btn-primary mt-3">Dodaj nową lokalizacje sali</a>
                             </button>
                         </div>
+
+                        @if(!@empty($venues))
+                            <div class="mt-6 border-t pt-4">
+                                <h5 class="text-lg font-medium text-gray-700 mb-4">Istniejące obiekty:</h5>
+                                <table class="table-auto border-collapse border border-gray-300 w-full text-left">
+                                    <thead>
+                                    <tr>
+                                        <th class="border border-gray-300 px-4 py-2">Nazwa obiektu</th>
+                                        <th class="border border-gray-300 px-4 py-2">Nazwa sektora</th>
+                                        <th class="border border-gray-300 px-4 py-2">Liczba rzędów</th>
+                                        <th class="border border-gray-300 px-4 py-2">Liczba kolumn</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-center">Akcje</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($venues as $venue)
+                                        <tr>
+                                            <td class="border border-gray-300 px-4 py-2" rowspan="{{ $venue->sectors->count() > 0 ? $venue->sectors->count() : 1 }}">
+                                                {{ $venue->name }}
+                                            </td>
+
+                                        @if($venue->sectors->isNotEmpty())
+                                            @foreach($venue->sectors as $index => $sector)
+                                                @if($index > 0)
+                                                    <tr>
+                                                        @endif
+
+                                                        <td class="border border-gray-300 px-4 py-2">{{ $sector->name }}</td>
+                                                        <td class="border border-gray-300 px-4 py-2">{{ $sector->rows }}</td>
+                                                        <td class="border border-gray-300 px-4 py-2">{{ $sector->columns }}</td>
+
+                                                        @if($index === 0)
+                                                            <td class="border border-gray-300 px-4 py-2 text-center" rowspan="{{ $venue->sectors->count() }}">
+                                                                <form action="{{ route('venues.destroy', $venue->id) }}" method="POST" onsubmit="return confirm('Czy na pewno chcesz usunąć ten obiekt?');">
+                                                                    @csrf
+                                                                    @if(!$venue->hasActiveEvent)
+                                                                    @method('DELETE')
+                                                                        <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Usuń</button>
+                                                                    @endif
+                                                                </form>
+                                                            </td>
+                                                        @endif
+
+                                                        @if($index > 0)
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        @else
+                                            <td class="border border-gray-300 px-4 py-2 text-center" colspan="3">Brak sektorów</td>
+                                            <td class="border border-gray-300 px-4 py-2 text-center">
+                                                <form action="{{ route('venues.destroy', $venue->id) }}" method="POST" onsubmit="return confirm('Czy na pewno chcesz usunąć ten obiekt?');">
+                                                    @csrf
+                                                    @if(!$venue->hasActiveEvent)
+                                                        @method('DELETE')
+                                                        <button class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Usuń</button>
+                                                    @endif
+                                                </form>
+                                            </td>
+                                            @endif
+                                            </tr>
+                                            @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -32,9 +97,9 @@
         <form action="{{ route('categories.store') }}" method="POST">
             @csrf
             <div class="mb-4">
-                <input 
-                    type="text" 
-                    name="name" 
+                <input
+                    type="text"
+                    name="name"
                     placeholder="Wprowadź nazwę gatunku"
                     value="{{ old('name') }}"
                     required
