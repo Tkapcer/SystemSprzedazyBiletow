@@ -30,7 +30,7 @@
         <!-- Lista wydarzeń -->
         <div class="events-container" id="events-container">
             @foreach ($events as $event)
-                <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}"   data-categories="{{ $event->categories->pluck('name')->implode(',') }} ">
+                <div class="event-card" data-date="{{ $event->event_date }}" data-name="{{ $event->name }}"   data-categories="{{ $event->categories->pluck('name')->map(fn($c) => strtolower(trim($c)))->implode(',') }}">
                     <a href="/event/{{ $event->id }}"> <!-- Dodaj link do biletu -->
                         <img class="event-image" src="{{ asset('storage/' . $event->image_path) }}" alt="{{ $event->name }}">
                         <h3>{{ $event->name }}</h3>
@@ -165,20 +165,24 @@
         }
 
         // Filtrowanie gatunku
-        function filterEvents() {
-        const selectedCategory = document.getElementById("category-select").value.toLowerCase();
-        const events = document.querySelectorAll(".event-card");
+    function filterEvents() {
+    const selectedCategory = document.getElementById("category-select").value.toLowerCase();
+    const events = document.querySelectorAll(".event-card");
 
-        events.forEach(event => {
-            const categories = event.getAttribute("data-categories").toLowerCase().split(',');
+    events.forEach(event => {
+        const raw = event.getAttribute("data-categories") || '';
+        const categories = raw
+            .split(',')
+            .map(cat => cat.trim().toLowerCase());
 
-            if (selectedCategory === "all" || categories.includes(selectedCategory)) {
-                event.style.display = "block";
-            } else {
-                event.style.display = "none";
-            }
-        });
-    }
+        if (selectedCategory === "all" || categories.includes(selectedCategory)) {
+            event.style.display = "block";
+        } else {
+            event.style.display = "none";
+        }
+    });
+}
+
 
     // Aby zadziałało również po sortowaniu
     document.getElementById("sort-select").addEventListener("change", () => {
