@@ -4,15 +4,14 @@
     <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
         <div class="bg-white shadow-lg rounded-lg p-6 text-center max-w-md">
             <h1 class="text-2xl font-bold text-gray-800">Czekasz w kolejce...</h1>
-            <p class="text-gray-600 mt-2">Liczba osób przed Tobą: 
-                <span class="font-bold text-purple-500">{{ $position - 1 }}</span>
-            </p>
+                <p class="text-gray-600 text-[17px]">Liczba osób przed Tobą:</p>
+                <p class="text-purple-600 font-extrabold text-5xl mt-2">{{ $position }}</p>
             <p class="text-gray-600 mt-4">Proszę czekać, aż poprzedni użytkownik zakończy pracę.</p>
 
             <div class="mt-6">
                 <div class="relative w-50 h-4 bg-gray-300 rounded-full overflow-hidden">
                     <div class="absolute top-0 left-0 h-full bg-green-500 animate-pulse transition-all duration-1000 ease-in-out animate-pulse" 
-                         style="width: {{ 100 - (($position - 1) / 10 * 100) }}%;"></div>
+                         style="width: {{ 100 - (($position) / 10 * 100) }}%;"></div>
                 </div>
             </div>
 
