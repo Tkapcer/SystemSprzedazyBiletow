@@ -23,8 +23,51 @@
         </div>
     </div>
 
+    <!-- Second card -->
     <div class="container">
-        <!-- Second card -->
+        <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="section-title">{{ __('Dodaj Gatunek') }}</h4>
+
+                    <!-- Formularz dodawania gatunku -->
+                    <form action="{{ route('categories.store') }}" method="POST">
+                        @csrf
+                        <div class="form-group mb-3">
+                            <input 
+                                type="text" 
+                                class="form-control @error('name') is-invalid @enderror" 
+                                name="name" 
+                                placeholder="Wprowadź nazwę gatunku"
+                                value="{{ old('name') }}"
+                                required
+                            >
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="submit" class="main-button-style btn-success" style="width: 100%;">
+                                Dodaj gatunek
+                            </button>
+                        </div>
+                    </form>
+
+                    @foreach($categories as $category)
+                        <div class="mt-3">
+                            <span>{{ $category->name }}</span>
+                        </div>
+                    @endforeach
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="container">
+        <!-- Third card -->
         <div class="col-md-6">
             <div class="card">
                 <div class="section-title">{{ __('Organizatorzy') }}</div>
@@ -85,7 +128,7 @@
         </div>
     </div>
     <div class="container">
-        <!-- Third card -->
+        <!-- Fourth card -->
         <div class="col-md-6">
             <div class="card">
                 <div class="section-title">{{ __('Wydarzenia') }}</div>

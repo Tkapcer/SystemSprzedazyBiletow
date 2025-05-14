@@ -107,6 +107,7 @@
                                 @endforeach
                             </div>
 
+
                             <button type="submit" class="main-button-style">Dodaj wydarzenie</button>
                         </form>
                 </div>

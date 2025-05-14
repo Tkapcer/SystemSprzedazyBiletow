@@ -36,7 +36,8 @@ class EventController extends Controller
      */
     public function create()
     {
-
+        $categories = Category::all();
+        return view('...', compact('categories'));
     }
 
     /**
@@ -55,6 +56,8 @@ class EventController extends Controller
             'sectors.*.name' => 'required|string|max:255',
             'sectors.*.seats' => 'required|integer|min:1',
             'sectors.*.price' => 'required|numeric|min:0',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ], [
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
@@ -106,6 +109,9 @@ class EventController extends Controller
         foreach ($validated['sectors'] as $sectorData) {
             $event->sectors()->create($sectorData);
         }
+        // Przypisanie kategorii do wydarzenia
+        $categories = Arr::wrap($validated['categories'] ?? []);
+        $event->categories()->sync($categories);
 
         return redirect()->back();
     }
@@ -134,12 +140,16 @@ class EventController extends Controller
      */
     public function edit(Event $event)
 {
+    $categories = Category::all();
+    return view('...', compact('categories'));
+
     if ($event->status == 'cancelled') {
         return redirect()->back()->withErrors('Nie można edytować anulowanych wydarzeń');
     } else if ($event->status == 'expired') {
         return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
     } else {
         // Pobierz wszystkie sale z sektorami
+
         $venues = Venue::with('sectors')->get();
 
         // Upewnij się, że sektory wydarzenia zawierają pivot z ceną
@@ -167,6 +177,8 @@ class EventController extends Controller
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ], [
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
@@ -201,6 +213,8 @@ class EventController extends Controller
                 // Status automatycznie ustawiany na "waiting"
                 'status' => 'waiting'
             ]);
+
+            $event->categories()->sync($categories);
         });
 
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało zaktualizowane.');

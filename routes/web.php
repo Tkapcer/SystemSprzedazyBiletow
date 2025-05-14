@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckOrganizerConfirmed;
 use App\Http\Middleware\CheckOrganizerNotConfirmed;
@@ -69,6 +70,8 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::get('admin/createVenue', [App\Http\Controllers\VenueController::class, 'create'])->name('venues.create');
         Route::post('admin/storeVenue', [App\Http\Controllers\VenueController::class, 'store'])->name('venues.store');
 
+//    Trasy dla zarządzania wydarzeniami
+        Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
 
     });
 
@@ -97,5 +100,7 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::put('/events/{event}', [EventController::class, 'update'])->name('updateEvent');
 
         Route::get('/events/{event}/cancel', [EventController::class, 'cancel'])->name('cancelEvent');
+
+        Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
     });
 });

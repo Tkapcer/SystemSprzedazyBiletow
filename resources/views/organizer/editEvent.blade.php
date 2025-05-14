@@ -45,6 +45,8 @@
                             @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
+                        
+
                         <button type="submit" class="main-button-style">Zapisz zmiany</button>
                     </form>
                 </div>
