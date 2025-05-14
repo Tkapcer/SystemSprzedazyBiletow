@@ -21,9 +21,10 @@
                 <main class="main-container" id="main-container">
                     <div class="event-info">
                         <p>
-                            <strong>Data:</strong> {{ date('d F Y', strtotime($event->event_date)) }}<br>
+                            <strong>Data:</strong> {{ date('d.m.Y', strtotime($event->event_date)) }}<br>
                             <strong>Godzina:</strong> {{ date('H:i', strtotime($event->event_date)) }}<br>
-                            <strong>Lokalizacja:</strong> {{ $event->location }}
+                            <strong>Miejsce:</strong> {{ $event->venue->name }}<br>
+                            <strong>Lokalizacja:</strong> {{ $event->venue->location }}
                         </p>
                         <div class="description">
                             <br><p>{{ $event->description }}</p><br>

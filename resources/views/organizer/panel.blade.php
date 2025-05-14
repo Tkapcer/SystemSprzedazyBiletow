@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-4">
-        
+
         <div class="card shadow-sm rounded-lg">
 
             <div class="card-body">
@@ -21,6 +21,12 @@
                 <div class="text-center mb-6">
                     <a href="{{ route('createEvent') }}" class="main-button-style">
                         Dodaj nowe wydarzenie
+                    </a>
+                </div>
+
+                <div class="text-center mb-6">
+                    <a href="{{ route('report') }}" class="main-button-style">
+                        Raport
                     </a>
                 </div>
 
@@ -52,7 +58,7 @@
                                             </a>
                                         </td>
                                         <td class="py-2 px-4">{{ $event->event_date->format('d.m.Y H:i') }}</td>
-                                        <td class="py-2 px-4">{{ $event->location }}</td>
+                                        <td class="py-2 px-4">{{ $event->venue->location }}</td>
                                         <td class="py-2 px-4">
                                             @if ($event->status != 'cancelled' && $event->status != 'expired')
                                                 <a href="{{ route('editEvent', $event->id) }}" class="main-button-style">

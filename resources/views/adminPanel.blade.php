@@ -2,8 +2,29 @@
 
 @section('content')
 <div class="row">
+
+    <!-- First card -->
     <div class="container">
-        <!-- First card -->
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+
+                    <h4 class="section-title">Miejsca</h4>
+
+                        <div style="text-align: center;">
+                            <button type="submit" class="main-button-style btn-success" style="width: 100%;">
+                                <a href="{{ route('venues.create') }}" class="btn btn-primary mt-3">Dodaj nową lokalizacje sali</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Second card -->
         <div class="col-md-6">
             <div class="card">
                 <div class="section-title">{{ __('Organizatorzy') }}</div>
@@ -64,7 +85,7 @@
         </div>
     </div>
     <div class="container">
-        <!-- Second card -->
+        <!-- Third card -->
         <div class="col-md-6">
             <div class="card">
                 <div class="section-title">{{ __('Wydarzenia') }}</div>

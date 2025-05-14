@@ -13,15 +13,16 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('name'); // Nazwa wydarzenia
             $table->text('description')->nullable(); // Opis wydarzenia
-            $table->string('location'); // Lokalizacja wydarzenia
             $table->dateTime('event_date'); // Data i czas wydarzenia
             $table->string('image_path')->nullable(); // Ścieżka do przechowywania obrazu
-            $table->unsignedBigInteger('organizer_id');
-            $table->foreign('organizer_id')->references('id')->on('organizers')->onDelete('cascade');
-            $table->enum('status', ['waiting', 'approved', 'rejected', 'expired'])->default('waiting');
+            $table->enum('status', ['waiting', 'approved', 'rejected', 'expired', 'cancelled'])->default('waiting');
+
+            $table->foreignId('organizer_id')->constrained();
+            $table->foreignId('venue_id')->constrained();
+
+            $table->timestamps();
         });
     }
 

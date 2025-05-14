@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use App\Models\Seat;
 use App\Models\Sector;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
@@ -11,16 +13,55 @@ use Illuminate\Support\Str;
 
 class TicketController extends Controller
 {
+    /*public function getAvailableSeats(int $event_id, int $sector_id)
+    {
+        $sector = Sector::findOrFail($sector_id);
+        $allSeats = $sector->allSeats();
+
+        $takenSeats = Ticket::where('event_id', $event_id)->where('sector_id', $sector_id)->get(['row', 'column']);
+
+        $availableSeats = $allSeats->reject(function ($seat) use ($takenSeats) {
+            return $takenSeats->contains(function ($takenSeat) use ($seat) {
+                return $takenSeat->row == $seat['row'] && $takenSeat->column == $seat['column'];
+            });
+        });
+
+    }*/
+
     /**
      * Display a listing of the resource.
      */
-    public function index(\App\Models\Event $event)
+    public function index(Event $event)
     {
         /*$sectors = $event->sectors->filter(function ($sector) {
             return $sector->availableSeats() > 0;
         });*/
         $sectors = $event->sectors;
-        return view('ticket.index', compact('event', 'sectors'));
+
+        $sectorsWithSeats = $sectors->map(function ($sector) use ($event) {
+           $allSeats = $sector->getAllSeats($event->id);
+           return ['sector' => $sector, 'seats' => $allSeats];
+        });
+
+//        Jeśli nastąpi powrót z podsumowania to tu będą zapisane wybrane wcześniej miejsca
+        $selectedSeats = session('selectedSeats');
+        $selectedSeatsMap = collect();
+
+        if (!empty($selectedSeats)) {
+            if ($selectedSeats[0]->event_id == $event->id) {
+                $selectedSeatsMap = collect($selectedSeats)->map(function ($seat) {
+                    return [
+                        'sector_id' => $seat->sector_id,
+                        'row' => $seat->row,
+                        'column' => $seat->column,
+                    ];
+                });
+            } else {
+                session()->forget('selectedSeats');  // Wyczyść błędne dane
+            }
+        }
+
+        return view('ticket.index', compact('event', 'sectorsWithSeats', 'selectedSeatsMap'));
     }
 
     /**
@@ -31,10 +72,104 @@ class TicketController extends Controller
         //
     }
 
+    public function summary(Request $request)
+    {
+//        dd($request->all());
+        $request->validate([
+            'selected_seats' => 'required|array',
+            'selected_seats.*.*' => ['required', 'regex:/^\d+-\d+$/']
+        ], [
+            'selected_seats.required' => 'Proszę wybrać przynajmniej jedno miejsce.',
+            'selected_seats.*.*.required' => 'Proszę wybrać miejsca.',
+            'selected_seats.*.*.regex' => 'Błędne dane wybranego miejsca.'
+        ]);
+
+        $eventId = $request->input('eventId');
+        $event = Event::findOrFail($eventId);
+        $selectedSeatsByCoordinates = $request->input('selected_seats');
+        $selectedSeats = [];
+        $totalPrice = 0;
+
+        foreach ($selectedSeatsByCoordinates as $sectorId => $seatsCoordinates) {
+            $sector = Sector::findOrFail($sectorId);
+            $price = $sector->getPriceForSeat($eventId);
+
+            foreach ($seatsCoordinates as $seatCoordinates) {
+                list($row, $colum) = explode('-', $seatCoordinates);
+                $totalPrice += $price;
+
+                $seat  = new Seat(
+                    eventId: $eventId,
+                    sectorId: $sectorId,
+                    row: $row,
+                    column: $colum,
+                    price: $price,
+                );
+
+                $selectedSeats[] = $seat;
+            }
+        }
+
+        session(['selectedSeats' => $selectedSeats]);
+//        dd(session('selectedSeats'));
+
+        return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'));
+    }
+    public function store(Request $request) {
+        $request->validate([
+            'status' => 'required|in:purchased,reserved',
+        ], [
+            'status.required' => 'Pole status jest wymagane.',
+            'status.in' => 'Pole status musi być jedną z wartości: purchased lub reserved.',
+        ]);
+
+//        dd(session('selectedSeats'));
+        $selectedSeats = session('selectedSeats');
+        $event = Event::findOrFail($selectedSeats[0]->event_id);
+//        dd($selectedSeats);
+        $status = $request->input('status');
+        $totalPrice = 0;
+        foreach ($selectedSeats as $selectedSeat) {
+            $totalPrice += (float) $selectedSeat->price->toString();
+            if(!$selectedSeat->isAvailable()) {
+                return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'))->withErrors(['Wybrane miejsca są już niedostępne']);
+            }
+        }
+
+        $user = Auth::guard('web')->user();
+        if ($user->balance < $totalPrice && $status == 'purchased') {
+            return view('ticket.summary', compact('event', 'selectedSeats', 'totalPrice'))->withErrors(['Za mało hasju']);
+        }
+
+        DB::transaction(function () use ($user, $status, $selectedSeats, $totalPrice) {
+
+            if ($status == 'purchased') {
+                $user->balance -= $totalPrice;
+                $user->save();
+            }
+
+            foreach ($selectedSeats as $selectedSeat) {
+                Ticket::create([
+                    'status' => $status,
+                    'row' => $selectedSeat->row,
+                    'column' => $selectedSeat->column,
+                    'user_id' => $user->id,
+                    'event_id' => $selectedSeat->event_id,
+                    'sector_id' => $selectedSeat->sector_id,
+                    'code' => $status == 'purchased' ? strtoupper(Str::random(10)) : "",
+                ]);
+            }
+
+        });
+
+        $message = $status == 'purchased' ? 'Zakupiono bilet' : 'Zarezerwowano miejsce';
+        return redirect()->route('home')->with('success', $message);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store_STARY_NIE_UZYWANY(Request $request)
     {
 //        dd($request->all());
         // Sprawdzenie, czy 'sectors' zostało przekazane w żądaniu
@@ -72,9 +207,9 @@ class TicketController extends Controller
 
         foreach ($decodedSectors as $sectorData) {
             $sector = Sector::findOrFail($sectorData['sector_id']);
-            if ($sector->availableSeats() < $sectorData['number_of_seats']) {
+           /* if ($sector->availableSeats() < $sectorData['number_of_seats']) {
                 return back()->withErrors('Brak wystarczającej liczby wolnych miejsc w wybranym sektorze.');
-            }
+            }*/
 //            dd($sectorData);
 
             if ($request->status == 'purchased') {
@@ -126,7 +261,7 @@ class TicketController extends Controller
         }
 
         DB::transaction(function () use ($ticket, $user) {
-            $user->balance += $ticket->number_of_seats * $ticket->sector->price;
+            $user->balance += $ticket->sector->getPriceForSeat($ticket->event_id);
             $user->save();
             $ticket->delete();
         });
@@ -147,12 +282,12 @@ class TicketController extends Controller
             return redirect()->back()->withErrors('Nie masz tej rezerwacji.');
         }
 
-        if ($user->balance < $ticket->number_of_seats * $ticket->sector->price) {
+        if ($user->balance < $ticket->sector->getPriceForSeat($ticket->event_id)) {
             return redirect()->back()->withErrors('Brak wystarczających środków na koncie.');
         }
 
         DB::transaction(function () use ($ticket, $user) {
-           $user->balance -= $ticket->number_of_seats * $ticket->sector->price;
+           $user->balance -= $ticket->sector->getPriceForSeat($ticket->event_id);
            $user->save();
            $ticket->status = 'purchased';
            $ticket->code = strtoupper(Str::random(10));

@@ -16,8 +16,17 @@ class Event extends Model
         'event_date' => 'datetime', // Automatyczna konwersja na obiekt Carbon
     ];
 
+    public function venue()
+    {
+        return $this->belongsTo(Venue::class);
+    }
+
     public function sectors() {
-        return $this->hasMany(Sector::class);
+        return $this->belongsToMany(Sector::class, 'sector_prices')->withPivot('price');
+    }
+
+    public function tickets() {
+        return $this->hasMany(Ticket::class);
     }
 
     public function organizer() {

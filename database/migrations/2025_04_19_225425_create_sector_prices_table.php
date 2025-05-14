@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sectors', function (Blueprint $table) {
+        Schema::create('sector_prices', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedInteger('rows')->default(0);
-            $table->unsignedInteger('columns')->default(0);
-            $table->foreignId('venue_id')->constrained()->cascadeOnDelete();
+
+            $table->foreignId('event_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('sector_id')->constrained()->cascadeOnDelete();
+
+            $table->decimal('price', 8, 2)->default(0)->nullable();
+
+            $table->unique(['event_id', 'sector_id']);
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sectors');
+        Schema::dropIfExists('sector_prices');
     }
 };
