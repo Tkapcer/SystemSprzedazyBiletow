@@ -10,7 +10,7 @@ use App\Models\Venue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -161,17 +161,12 @@ class EventController extends Controller
         } else if ($event->status == 'expired') {
             return redirect()->back()->withErrors('Nie można edytować odbytych wydarzeń');
         }
+//        dd($request);
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'event_date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
-
-            'sectors' => 'required|array|min:1',
-            'sectors.*.id' => 'nullable|integer',
-            'sectors.*.name' => 'required|string|max:255',
-            'sectors.*.seats' => 'required|integer|min:1',
-            'sectors.*.price' => 'required|numeric|min:0',
         ], [
             'name.required' => 'Nazwa wydarzenia jest wymagana.',
             'name.string' => 'Nazwa wydarzenia musi być ciągiem znaków.',
@@ -188,22 +183,6 @@ class EventController extends Controller
             'image.image' => 'Proszę przesłać plik graficzny.',
             'image.mimes' => 'Dozwolone formaty obrazka to: jpeg, png, jpg, gif, svg, webp.',
             'image.max' => 'Rozmiar pliku obrazka nie może przekroczyć 2MB.',
-
-            'sectors.required' => 'Proszę dodać przynajmniej jeden sektor.',
-            'sectors.array' => 'Sekcje muszą być w formie tablicy.',
-            'sectors.min' => 'Wydarzenie musi mieć co najmniej jeden sektor.',
-
-            'sectors.*.name.required' => 'Nazwa sektora jest wymagana.',
-            'sectors.*.name.string' => 'Nazwa sektora musi być ciągiem znaków.',
-            'sectors.*.name.max' => 'Nazwa sektora nie może przekraczać 255 znaków.',
-
-            'sectors.*.seats.required' => 'Liczba miejsc w sektorze jest wymagana.',
-            'sectors.*.seats.integer' => 'Liczba miejsc musi być liczbą całkowitą.',
-            'sectors.*.seats.min' => 'Liczba miejsc musi być większa niż 0.',
-
-            'sectors.*.price.required' => 'Cena za miejsce w sektorze jest wymagana.',
-            'sectors.*.price.numeric' => 'Cena musi być liczbą.',
-            'sectors.*.price.min' => 'Cena nie może być mniejsza niż 0.',
         ]);
 
         DB::transaction(function () use ($validated, $event, $request) {
@@ -222,60 +201,6 @@ class EventController extends Controller
                 // Status automatycznie ustawiany na "waiting"
                 'status' => 'waiting'
             ]);
-
-            // Identyfikatory sektorów z żądania
-            $newSectorIds = collect($validated['sectors'])->pluck('id')->filter();
-
-            // Obsługa istniejących sektorów
-            foreach ($event->sectors as $sector) {
-                // Jeśli ID sektora nie znajduje się w żądaniu, oznacza próbę usunięcia
-                if (!$newSectorIds->contains($sector->id)) {
-                    $reservedSeats = $sector->tickets->sum('number_of_seats'); // Liczba sprzedanych miejsc
-
-                    if ($reservedSeats > 0) {
-                        throw ValidationException::withMessages([
-                            'sectors' => "Sektor '{$sector->name}' nie może zostać usunięty, ponieważ sprzedano w nim {$reservedSeats} miejsc.",
-                        ]);
-                    }
-
-                    // Można usunąć sektor
-                    $sector->delete();
-                } else {
-                    // Sektor istnieje – sprawdzamy poprawność danych
-                    $updatedSector = collect($validated['sectors'])->firstWhere('id', $sector->id);
-
-                    if ($updatedSector) {
-                        $reservedSeats = $sector->tickets->sum('number_of_seats'); // Liczba sprzedanych miejsc
-
-                        // Liczba miejsc nie może być mniejsza niż sprzedane miejsca
-                        if ($updatedSector['seats'] < $reservedSeats) {
-                            throw ValidationException::withMessages([
-                                'sectors' => "Liczba miejsc w sektorze '{$sector->name}' nie może być mniejsza niż {$reservedSeats}, ponieważ tyle miejsc zostało już sprzedanych.",
-                            ]);
-                        }
-
-                        // Sprawdź, czy dane sektora zostały zmienione
-                        $changesDetected = (
-                            $updatedSector['name'] != $sector->name ||
-                            $updatedSector['price'] != $sector->price ||
-                            $updatedSector['seats'] != $sector->seats
-                        );
-
-                        // Jeśli wykryto zmiany, zaktualizuj sektor
-                        if ($changesDetected) {
-                            $sector->update($updatedSector);
-                        }
-                    }
-                }
-            }
-
-            // Dodawanie nowych sektorów
-            foreach ($validated['sectors'] as $sectorData) {
-                if (!isset($sectorData['id'])) {
-                    // Sektor nie ma ID – dodajemy go jako nowy
-                    $event->sectors()->create($sectorData);
-                }
-            }
         });
 
         return redirect()->route('organizer.panel')->with('success', 'Wydarzenie zostało zaktualizowane.');

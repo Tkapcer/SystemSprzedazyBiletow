@@ -45,59 +45,6 @@
                             @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        <!-- Sala -->
-                        <div class="mb-3">
-                            <label for="venue_id" class="form-label">Sala</label>
-                            <select class="form-control @error('venue_id') is-invalid @enderror"
-                                    id="venue_id" name="venue_id" required>
-                                <option value="">-- Wybierz salę --</option>
-                                @foreach($venues as $venue)
-                                    <option value="{{ $venue->id }}" {{ (old('venue_id', $event->venue_id) == $venue->id) ? 'selected' : '' }}>
-                                        {{ $venue->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('venue_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-
-                        <!-- Sektory -->
-                        <div id="sectors-container">
-                            @foreach ($venues as $venue)
-                                <div class="sectors-list" data-venue-id="{{ $venue->id }}" style="display: none;">
-                                    <h5>Sektory dla sali: {{ $venue->name }}</h5>
-                                    <table class="table">
-                                        <thead>
-                                        <tr>
-                                            <th>Nazwa sektora</th>
-                                            <th>Rzędy</th>
-                                            <th>Kolumny</th>
-                                            <th>Cena</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach ($venue->sectors as $sector)
-                                            @php
-                                                $eventSector = $event->sectors->firstWhere('id', $sector->id);
-                                            @endphp
-                                            <tr>
-                                                <td>{{ $sector->name }}</td>
-                                                <td>{{ $sector->rows }}</td>
-                                                <td>{{ $sector->columns }}</td>
-                                                <td>
-                                                    <input type="number"
-                                                           class="form-control"
-                                                           name="sectors[{{ $sector->id }}][price]"
-                                                           placeholder="Podaj cenę"
-                                                           value="{{ old('sectors.' . $sector->id . '.price', $eventSector ? $eventSector->pivot->price : '') }}">
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @endforeach
-                        </div>
-
                         <button type="submit" class="main-button-style">Zapisz zmiany</button>
                     </form>
                 </div>
@@ -105,32 +52,4 @@
         </div>
     </div>
 </div>
-
-<!-- Skrypt do dynamicznego wyświetlania sektorów -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const venueSelect = document.getElementById('venue_id');
-        const sectorContainers = document.querySelectorAll('.sectors-list');
-
-        function toggleSectorDisplay(venueId) {
-            sectorContainers.forEach(container => {
-                container.style.display = 'none';
-            });
-
-            if (venueId) {
-                const selectedContainer = document.querySelector(`.sectors-list[data-venue-id="${venueId}"]`);
-                if (selectedContainer) {
-                    selectedContainer.style.display = 'block';
-                }
-            }
-        }
-
-        // Inicjalizacja - pokaż sektory dla aktualnie wybranej sali
-        toggleSectorDisplay(venueSelect.value);
-
-        venueSelect.addEventListener('change', function () {
-            toggleSectorDisplay(this.value);
-        });
-    });
-</script>
 @endsection
