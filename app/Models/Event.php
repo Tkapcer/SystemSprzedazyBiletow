@@ -32,4 +32,8 @@ class Event extends Model
     public function organizer() {
         return $this->belongsTo(Organizer::class);
     }
+
+    public function categories() {
+        return $this->belongsToMany(Category::class);
+    }
 }
