@@ -63,7 +63,7 @@
 
                     <!-- Events card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
-                         data-card-id="events" onclick="toggleInsightCard('events')">
+                        data-card-id="events" onclick="toggleInsightCard('events')">
                         <div class="text-sm text-gray-600 mb-1">Wydarzenia</div>
                         <div class="text-2xl font-bold">18</div>
                     </div>
@@ -83,371 +83,210 @@
                     </div>
                 </div>
 
+
                 <!-- Detailed insight cards - hidden by default -->
                 <div id="insight-details" class="hidden mb-6">
+                    
                     <!-- Revenue details -->
                     <div id="revenue-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
+                        <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Szczegóły dochodu</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('revenue'); return false;">eksport CSV</a>
+                            <h3 class="font-semibold">Szczegóły dochodów</h3>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('revenue'); return false;">Eksport CSV</a>
                         </div>
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Tabela dochodu -->
+
+                        <!-- Scrollable content layout -->
+                        <div class="flex flex-col md:flex-row gap-4 max-h-[450px] overflow-auto">
+
+                            <!-- Revenue table -->
                             <div class="w-full md:w-1/2">
                                 <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-gray-200">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
                                         <thead class="bg-gray-50">
                                             <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
                                                     Wydarzenie
                                                 </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
                                                     Dochód (zł)
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Koncert symfoniczny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    25,600
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Wystawa malarstwa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    8,750
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Spektakl teatralny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    12,600
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Gala operowa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    22,400
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Widowisko taneczne
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    12,000
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Festiwal filmowy
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    6,100
-                                                </td>
-                                            </tr>
+                                        <tbody id="revenueTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Wykres -->
+                            <!-- Revenue chart -->
                             <div class="w-full md:w-1/2">
-                                <div class="h-64 w-full bg-white">
+                                <div class="h-64 overflow-auto">
                                     <canvas id="revenueChart"></canvas>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
                     <!-- Occupancy details -->
                     <div id="occupancy-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
+                        <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły obłożenia</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('occupancy'); return false;">eksport CSV</a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('occupancy'); return false;">Eksport CSV</a>
                         </div>
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Tabela obłożenia -->
+
+                        <!-- Scrollable content layout -->
+                        <div class="flex flex-col md:flex-row gap-4 max-h-[450px] overflow-auto">
+
+                            <!-- Occupancy table -->
                             <div class="w-full md:w-1/2">
                                 <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-gray-200">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
                                         <thead class="bg-gray-50">
                                             <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
                                                     Wydarzenie
                                                 </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
                                                     Obłożenie (%)
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Koncert symfoniczny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    85
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Wystawa malarstwa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    62
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Spektakl teatralny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    78
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Gala operowa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    70
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Widowisko taneczne
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    56
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Festiwal filmowy
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    48
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Recital fortepianowy
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    0
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Konferencja naukowa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    0
-                                                </td>
-                                            </tr>
+                                        <tbody id="occupancyTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Wykres -->
+                            <!-- Occupancy chart -->
                             <div class="w-full md:w-1/2">
-                                <div class="h-64 w-full bg-white">
+                                <div class="h-64 overflow-auto">
                                     <canvas id="occupancyChart"></canvas>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
-                    <!-- Tickets details - zmodyfikowana wersja -->
+                    <!-- Tickets details -->
                     <div id="tickets-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
+                        <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły sprzedanych biletów</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('tickets'); return false;">eksport CSV</a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('tickets'); return false;">Eksport CSV</a>
                         </div>
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Tabela sprzedanych biletów -->
+
+                        <!-- Scrollable content layout -->
+                        <div class="flex flex-col md:flex-row gap-4 max-h-[450px] overflow-auto">
+
+                            <!-- Tickets sales table -->
                             <div class="w-full md:w-1/2">
                                 <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-gray-200">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
                                         <thead class="bg-gray-50">
                                             <tr>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
                                                     Wydarzenie
                                                 </th>
-                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Liczba sprzedanych
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
+                                                    Sprzedane bilety
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Koncert symfoniczny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    320
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Wystawa malarstwa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    175
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Spektakl teatralny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    210
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Gala operowa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    280
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Widowisko taneczne
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    150
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Festiwal filmowy
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    110
-                                                </td>
-                                            </tr>
+                                        <tbody id="ticketsTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Wykres -->
+                            <!-- Tickets chart -->
                             <div class="w-full md:w-1/2">
-                                <div class="h-64 w-full bg-white">
+                                <div class="h-64 overflow-auto">
                                     <canvas id="ticketsChart"></canvas>
                                 </div>
                             </div>
+
                         </div>
                     </div>
 
                     <!-- Reservations details -->
                     <div id="reservations-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
+                        <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły aktywnych rezerwacji</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('reservations'); return false;">eksport CSV</a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('reservations'); return false;">Eksport CSV</a>
+                        </div>
+
+                        <!-- Scrollable content layout -->
+                        <div class="flex flex-col md:flex-row gap-4 max-h-[450px] overflow-auto">
+
+                            <!-- Reservations table -->
+                            <div class="w-full md:w-1/2">
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                        <thead class="bg-gray-50">
+                                            <tr>
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
+                                                    Wydarzenie
+                                                </th>
+                                                <th scope="col" class="px-4 py-2 text-left font-medium text-gray-500 uppercase tracking-wider">
+                                                    Aktywne rezerwacje
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="reservationsTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Reservations chart -->
+                            <div class="w-full md:w-1/2">
+                                <div class="h-64 overflow-auto">
+                                    <canvas id="reservationsChart"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Events Details -->
+                    <div id="events-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-semibold">Szczegóły wydarzeń</h3>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('events'); return false;">Eksport CSV</a>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Tabela rezerwacji -->
+                            <!-- Event List -->
                             <div class="w-full md:w-1/2">
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead class="bg-gray-50">
                                             <tr>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Nazwa wydarzenia
+                                                    Nadchodzące
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Liczba rezerwacji
+                                                    Zakończone
+                                                </th>
+                                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                    Anulowane
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Gala operowa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    120
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Widowisko taneczne
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    85
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Festiwal filmowy
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    137
-                                                </td>
-                                            </tr>
+                                        <tbody id="eventsTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Wykres -->
-                            <div class="w-full md:w-1/2">
-                                <div class="h-64 w-full bg-white">
-                                    <canvas id="reservationsChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Events details - zmodyfikowana wersja -->
-                    <div id="events-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Szczegóły wydarzeń</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('events'); return false;">eksport CSV</a>
-                        </div>
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Lista wydarzeń -->
-                            <div class="w-full md:w-1/2">
-                                <div class="mb-4">
-                                    <h4 class="text-sm font-medium text-gray-700 mb-2">Odbyte:</h4>
-                                    <ul class="list-disc pl-5 text-gray-600">
-                                        <li>Koncert symfoniczny</li>
-                                        <li>Wystawa malarstwa</li>
-                                        <li>Spektakl teatralny</li>
-                                    </ul>
-                                </div>
-                                <div class="mb-4">
-                                    <h4 class="text-sm font-medium text-gray-700 mb-2">Nadchodzące:</h4>
-                                    <ul class="list-disc pl-5 text-gray-600">
-                                        <li>Gala operowa</li>
-                                        <li>Widowisko taneczne</li>
-                                        <li>Festiwal filmowy</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-700 mb-2">Odwołane:</h4>
-                                    <ul class="list-disc pl-5 text-gray-600">
-                                        <li>Recital fortepianowy</li>
-                                        <li>Konferencja naukowa</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <!-- Wykres -->
+                            <!-- Events chart -->
                             <div class="w-full md:w-1/2">
                                 <div class="h-64 w-full bg-white">
                                     <canvas id="eventsChart"></canvas>
@@ -456,66 +295,35 @@
                         </div>
                     </div>
 
-                    <!-- Venues details -->
+                    <!-- Venues Details -->
                     <div id="venues-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły sal</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('venues'); return false;">eksport CSV</a>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('venues'); return false;">Eksport CSV</a>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Lista sal -->
+                            <!-- Venues List -->
                             <div class="w-full md:w-1/2">
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead class="bg-gray-50">
                                             <tr>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Nazwa sali
+                                                    Sala
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Liczba wydarzeń
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Sala koncertowa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    5
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Teatr główny
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    6
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Galeria sztuki
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    4
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Sala konferencyjna
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    3
-                                                </td>
-                                            </tr>
+                                        <tbody id="venuesTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Wykres -->
+                            <!-- Venues chart -->
                             <div class="w-full md:w-1/2">
                                 <div class="h-64 w-full bg-white">
                                     <canvas id="venuesChart"></canvas>
@@ -527,71 +335,32 @@
                     <!-- Categories details -->
                     <div id="categories-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold">Szczegóły kategorii</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('categories'); return false;">eksport CSV</a>
+                            <h3 class="font-semibold">Szczegóły gatunków</h3>
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('categories'); return false;">Eksport CSV</a>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
-                            <!-- Lista kategorii -->
+                            <!-- Categories List -->
                             <div class="w-full md:w-1/2">
                                 <div class="overflow-x-auto">
                                     <table class="min-w-full divide-y divide-gray-200">
                                         <thead class="bg-gray-50">
                                             <tr>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                    Nazwa kategorii
+                                                    Gatunek
                                                 </th>
                                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                     Liczba wydarzeń
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Koncerty
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    4
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Teatr
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    3
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Wystawa
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    2
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Film
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    6
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    Konferencje
-                                                </td>
-                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    3
-                                                </td>
-                                            </tr>
+                                        <tbody id="categoriesTableBody" class="bg-white divide-y divide-gray-200">
+                                            <!-- Rows will be dynamically added here -->
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
 
-                            <!-- Wykres -->
+                            <!-- Categories chart -->
                             <div class="w-full md:w-1/2">
                                 <div class="h-64 w-full bg-white">
                                     <canvas id="categoriesChart"></canvas>
@@ -599,6 +368,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -616,6 +386,275 @@
 </div>
 
 <!-- Scripts for reporting system -->
+
+<!-- TEST DATA - CHARTS - TEST DATA - CHARTS - TEST DATA - CHARTS - TEST DATA -->
+<script>
+    // Revenue chart data
+    const revenueData = {
+        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
+        datasets: [{
+            label: 'Dochód (zł)',
+            data: [25600, 8750, 12600, 22400, 12000, 6100]
+        }]
+    };
+
+    // Occupancy chart data
+    const occupancyData = {
+        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy', 'Recital fortepianowy', 'Konferencja naukowa'],
+        datasets: [{
+            label: 'Obłożenie (%)',
+            data: [85, 62, 78, 70, 56, 48, 0, 0]
+        }]
+    };
+
+    // Tickets chart data
+    const ticketsData = {
+        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
+        datasets: [{
+            label: 'Liczba sprzedanych biletów',
+            data: [320, 175, 210, 280, 150, 110]
+        }]
+    };
+
+    // Reservations chart data
+    const reservationsData = {
+        labels: ['Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
+        datasets: [{
+            label: 'Liczba rezerwacji',
+            data: [120, 85, 137]
+        }]
+    };
+
+    // Events chart data
+    const eventsData = {
+        labels: ['Odbyte', 'Nadchodzące', 'Odwołane'],
+        datasets: [{
+            label: 'Liczba wydarzeń',
+            data: [3, 3, 2]
+        }]
+    };
+
+    // Venues chart data
+    const venuesData = {
+        labels: ['Sala koncertowa', 'Teatr główny', 'Galeria sztuki', 'Sala konferencyjna'],
+        datasets: [{
+            label: 'Liczba wydarzeń',
+            data: [5, 6, 4, 3]
+        }]
+    };
+
+    // Categories chart data
+    const categoriesData = {
+        labels: ['Koncerty', 'Teatr', 'Wystawa', 'Film', 'Konferencje'],
+        datasets: [{
+            label: 'Liczba wydarzeń',
+            data: [4, 3, 2, 6, 3]
+        }]
+    };
+</script>
+
+<!-- TEST DATA - TABLES - TEST DATA - TABLES - TEST DATA - TABLES - TEST DATA -->
+<script>
+    // Revenue table data
+    const revenueTableData = [
+        { event: 'Koncert symfoniczny', revenue: 25600 },
+        { event: 'Wystawa malarstwa', revenue: 8750 },
+        { event: 'Spektakl teatralny', revenue: 12600 },
+        { event: 'Gala operowa', revenue: 22400 },
+        { event: 'Widowisko taneczne', revenue: 12000 },
+        { event: 'Festiwal filmowy', revenue: 6100 }
+    ];
+
+    // Occupancy table data
+    const occupancyTableData = [
+        { event: 'Koncert symfoniczny', occupancy: 85 },
+        { event: 'Wystawa malarstwa', occupancy: 62 },
+        { event: 'Spektakl teatralny', occupancy: 78 },
+        { event: 'Gala operowa', occupancy: 70 },
+        { event: 'Widowisko taneczne', occupancy: 56 },
+        { event: 'Festiwal filmowy', occupancy: 48 },
+        { event: 'Recital fortepianowy', occupancy: 0 },
+        { event: 'Konferencja naukowa', occupancy: 0 }
+    ];
+
+    // Tickets table data
+    const ticketsTableData = [
+        { event: 'Koncert symfoniczny', ticketsSold: 320 },
+        { event: 'Wystawa malarstwa', ticketsSold: 175 },
+        { event: 'Spektakl teatralny', ticketsSold: 210 },
+        { event: 'Gala operowa', ticketsSold: 280 },
+        { event: 'Widowisko taneczne', ticketsSold: 150 },
+        { event: 'Festiwal filmowy', ticketsSold: 110 }
+    ];
+
+    // Reservations table data
+    const reservationsTableData = [
+        { event: 'Gala operowa', reservations: 120 },
+        { event: 'Widowisko taneczne', reservations: 85 },
+        { event: 'Festiwal filmowy', reservations: 137 }
+    ];
+
+    // Events table data
+    const eventsTableData = [
+        { status: 'Odbyte', eventCount: 3 },
+        { status: 'Nadchodzące', eventCount: 3 },
+        { status: 'Odwołane', eventCount: 2 }
+    ];
+
+    // Venues table data
+    const venuesTableData = [
+        { venue: 'Sala koncertowa', eventCount: 5 },
+        { venue: 'Teatr główny', eventCount: 6 },
+        { venue: 'Galeria sztuki', eventCount: 4 },
+        { venue: 'Sala konferencyjna', eventCount: 3 }
+    ];
+
+    // Categories table data
+    const categoriesTableData = [
+        { category: 'Koncerty', eventCount: 4 },
+        { category: 'Teatr', eventCount: 3 },
+        { category: 'Wystawa', eventCount: 2 },
+        { category: 'Film', eventCount: 6 },
+        { category: 'Konferencje', eventCount: 3 }
+    ];
+</script>
+
+ <!-- Link to have working charts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
+
+<!-- Card details tables initializers -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Table initialization helper
+        function initializeTable(tableId, tableData) {
+            const tableBody = document.getElementById(tableId);
+            if (tableBody) {
+                tableBody.innerHTML = ''; // Clear any existing rows
+
+                // Populate the table with rows
+                tableData.forEach(rowData => {
+                    const row = document.createElement('tr');
+
+                    // Loop through each property in rowData object and add it as a table cell
+                    Object.values(rowData).forEach(cellData => {
+                        const cell = document.createElement('td');
+                        cell.classList.add('px-4', 'py-2', 'text-gray-700');
+                        cell.textContent = cellData;
+                        row.appendChild(cell);
+                    });
+
+                    tableBody.appendChild(row);
+                });
+            } else {
+                console.error(`Table body with ID ${tableId} not found!`);
+            }
+        }
+
+        // Initialize all tables
+        initializeTable('revenueTableBody', revenueTableData);
+        initializeTable('occupancyTableBody', occupancyTableData);
+        initializeTable('ticketsTableBody', ticketsTableData);
+        initializeTable('reservationsTableBody', reservationsTableData);
+        initializeTable('eventsTableBody', eventsTableData);
+        initializeTable('venuesTableBody', venuesTableData);
+        initializeTable('categoriesTableBody', categoriesTableData);
+    });
+</script>
+
+<!-- Card details charts initializers -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Chart initialization helper
+        function initializeChart(ctx, data) {
+            if (ctx) {
+                return new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            return null;
+        }
+
+        // Initialize all charts
+        const revenueCtx = document.getElementById('revenueChart');
+        const occupancyCtx = document.getElementById('occupancyChart');
+        const ticketsCtx = document.getElementById('ticketsChart');
+        const reservationsCtx = document.getElementById('reservationsChart');
+        const eventsCtx = document.getElementById('eventsChart');
+        const venuesCtx = document.getElementById('venuesChart');
+        const categoriesCtx = document.getElementById('categoriesChart');
+
+        if (revenueCtx) initializeChart(revenueCtx.getContext('2d'), revenueData);
+        if (occupancyCtx) initializeChart(occupancyCtx.getContext('2d'), occupancyData);
+        if (ticketsCtx) initializeChart(ticketsCtx.getContext('2d'), ticketsData);
+        if (reservationsCtx) initializeChart(reservationsCtx.getContext('2d'), reservationsData);
+        if (eventsCtx) initializeChart(eventsCtx.getContext('2d'), eventsData);
+        if (venuesCtx) initializeChart(venuesCtx.getContext('2d'), venuesData);
+        if (categoriesCtx) initializeChart(categoriesCtx.getContext('2d'), categoriesData);
+    });
+</script>
+
+ <!-- CSV export handler -->
+<script>
+    function exportCSV(tableId) {
+        const tableBody = document.getElementById(`${tableId}Body`);
+        if (!tableBody) {
+            console.error(`Table body with ID ${tableId} not found!`);
+            return;
+        }
+
+        // Get the table itself to access headers
+        const table = tableBody.closest('table');
+        const headers = table.querySelector('thead');
+        if (!headers) {
+            console.error(`Table headers for ${tableId} not found!`);
+            return;
+        }
+
+        // Get header data
+        const headerCells = headers.querySelectorAll('th');
+        const headerRow = Array.from(headerCells).map(cell => cell.textContent.trim());
+        let csvContent = headerRow.join(',') + '\n'; // Add headers to the CSV content
+
+        // Get data from table rows
+        const rows = tableBody.querySelectorAll('tr');
+        if (rows.length === 0) {
+            console.error(`No rows found in table with ID ${tableId}`);
+            return;
+        }
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const rowData = Array.from(cells).map(cell => cell.textContent.trim());
+            csvContent += rowData.join(',') + '\n'; // Add each row's data
+        });
+
+        // Create a Blob and trigger the download
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${tableId}.csv`; // Name the file based on the table ID
+        link.click();
+        URL.revokeObjectURL(url); // Clean up after download
+    }
+</script>
+
+<!-- Toggle switch -->
 <script>
     // Initialize view mode handling
     document.addEventListener('DOMContentLoaded', function() {
@@ -651,16 +690,15 @@
             }
         });
     });
+</script>
 
-    // Toggle insight card details
+<!-- Card toggling functionality -->
+<script>
     function toggleInsightCard(cardId) {
-        // Get the details container and specific card details
         const detailsContainer = document.getElementById('insight-details');
         const cardDetails = document.getElementById(cardId + '-details');
         const allDetails = document.querySelectorAll('.insight-detail');
         const allCards = document.querySelectorAll('.insight-card');
-
-        // Get the clicked card
         const clickedCard = document.querySelector(`[data-card-id="${cardId}"]`);
 
         // Reset all cards styling
@@ -669,271 +707,21 @@
             card.classList.add('border-gray-200');
         });
 
-        // If the card was already active and visible, hide everything
+        // If already active, hide everything
         if (!cardDetails.classList.contains('hidden')) {
             detailsContainer.classList.add('hidden');
             allDetails.forEach(detail => detail.classList.add('hidden'));
             return;
         }
 
-        // Otherwise, show this card's details and hide others
+        // Show selected card details
         detailsContainer.classList.remove('hidden');
         allDetails.forEach(detail => detail.classList.add('hidden'));
         cardDetails.classList.remove('hidden');
 
-        // Highlight the active card
+        // Highlight active card
         clickedCard.classList.remove('border-gray-200');
         clickedCard.classList.add('border-blue-500');
     }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
-<script>
-    // Inicjalizacja wykresów po załadowaniu strony
-    document.addEventListener('DOMContentLoaded', function() {
-        // Dane dla wykresu wydarzeń
-        const eventsData = {
-            labels: ['Odbyte', 'Nadchodzące', 'Odwołane'],
-            datasets: [{
-                label: 'Liczba wydarzeń',
-                data: [3, 3, 2],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.6)',
-                    'rgba(54, 162, 235, 0.6)',
-                    'rgba(255, 99, 132, 0.6)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 99, 132, 1)'
-                ],
-                borderWidth: 1
-            }]
-        };
-
-        // Dane dla wykresu sprzedanych biletów
-        const ticketsData = {
-            labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
-            datasets: [{
-                label: 'Liczba sprzedanych biletów',
-                data: [320, 175, 210, 280, 150, 110],
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        // Inicjalizacja wykresu wydarzeń
-        const eventsCtx = document.getElementById('eventsChart').getContext('2d');
-        const eventsChart = new Chart(eventsCtx, {
-            type: 'bar',
-            data: eventsData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
-            }
-        });
-
-        // Inicjalizacja wykresu sprzedanych biletów
-        const ticketsCtx = document.getElementById('ticketsChart').getContext('2d');
-        const ticketsChart = new Chart(ticketsCtx, {
-            type: 'bar',
-            data: ticketsData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            precision: 0
-                        }
-                    }
-                }
-            }
-        });
-    });
-
-    // Inicjalizacja pozostałych wykresów
-document.addEventListener('DOMContentLoaded', function() {
-    // Dane dla wykresu rezerwacji
-    const reservationsData = {
-        labels: ['Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
-        datasets: [{
-            label: 'Liczba rezerwacji',
-            data: [120, 85, 137],
-            backgroundColor: 'rgba(153, 102, 255, 0.6)',
-            borderColor: 'rgba(153, 102, 255, 1)',
-            borderWidth: 1
-        }]
-    };
-
-    // Dane dla wykresu dochodu
-    const revenueData = {
-        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
-        datasets: [{
-            label: 'Dochód (zł)',
-            data: [25600, 8750, 12600, 22400, 12000, 6100],
-            backgroundColor: 'rgba(255, 159, 64, 0.6)',
-            borderColor: 'rgba(255, 159, 64, 1)',
-            borderWidth: 1
-        }]
-    };
-
-    // Dane dla wykresu obłożenia
-    const occupancyData = {
-        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy', 'Recital fortepianowy', 'Konferencja naukowa'],
-        datasets: [{
-            label: 'Obłożenie (%)',
-            data: [85, 62, 78, 70, 56, 48, 0, 0],
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1
-        }]
-    };
-
-    // Dane dla wykresu sal
-    const venuesData = {
-        labels: ['Sala koncertowa', 'Teatr główny', 'Galeria sztuki', 'Sala konferencyjna'],
-        datasets: [{
-            label: 'Liczba wydarzeń',
-            data: [5, 6, 4, 3],
-            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
-        }]
-    };
-
-    // Dane dla wykresu kategorii
-    const categoriesData = {
-        labels: ['Koncerty', 'Teatr', 'Wystawa', 'Film', 'Konferencje'],
-        datasets: [{
-            label: 'Liczba wydarzeń',
-            data: [4, 3, 2, 6, 3],
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-        }]
-    };
-
-    // Funkcja do inicjalizacji wykresu
-    function initializeChart(ctx, data) {
-        if (ctx) {
-            return new Chart(ctx, {
-                type: 'bar',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                precision: 0
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        return null;
-    }
-
-    // Inicjalizacja wykresów
-    const reservationsCtx = document.getElementById('reservationsChart');
-    const revenueCtx = document.getElementById('revenueChart');
-    const occupancyCtx = document.getElementById('occupancyChart');
-    const venuesCtx = document.getElementById('venuesChart');
-    const categoriesCtx = document.getElementById('categoriesChart');
-
-    if (reservationsCtx) initializeChart(reservationsCtx.getContext('2d'), reservationsData);
-    if (revenueCtx) initializeChart(revenueCtx.getContext('2d'), revenueData);
-    if (occupancyCtx) initializeChart(occupancyCtx.getContext('2d'), occupancyData);
-    if (venuesCtx) initializeChart(venuesCtx.getContext('2d'), venuesData);
-    if (categoriesCtx) initializeChart(categoriesCtx.getContext('2d'), categoriesData);
-});
-
-// Rozszerz funkcję exportCSV o obsługę pozostałych typów
-function exportCSV(type) {
-    let csvContent = '';
-    let filename = '';
-
-    // Przygotuj odpowiednie dane w zależności od typu
-    if (type === 'events') {
-        csvContent = 'Status,Nazwa wydarzenia\n';
-        csvContent += 'Odbyte,Koncert symfoniczny\n';
-        csvContent += 'Odbyte,Wystawa malarstwa\n';
-        csvContent += 'Odbyte,Spektakl teatralny\n';
-        csvContent += 'Nadchodzące,Gala operowa\n';
-        csvContent += 'Nadchodzące,Widowisko taneczne\n';
-        csvContent += 'Nadchodzące,Festiwal filmowy\n';
-        csvContent += 'Odwołane,Recital fortepianowy\n';
-        csvContent += 'Odwołane,Konferencja naukowa\n';
-        filename = 'wydarzenia_raport.csv';
-    } else if (type === 'tickets') {
-        csvContent = 'Wydarzenie,Liczba sprzedanych biletów\n';
-        csvContent += 'Koncert symfoniczny,320\n';
-        csvContent += 'Wystawa malarstwa,175\n';
-        csvContent += 'Spektakl teatralny,210\n';
-        csvContent += 'Gala operowa,280\n';
-        csvContent += 'Widowisko taneczne,150\n';
-        csvContent += 'Festiwal filmowy,110\n';
-        filename = 'sprzedane_bilety_raport.csv';
-    } else if (type === 'reservations') {
-        csvContent = 'Wydarzenie,Liczba rezerwacji\n';
-        csvContent += 'Gala operowa,120\n';
-        csvContent += 'Widowisko taneczne,85\n';
-        csvContent += 'Festiwal filmowy,137\n';
-        filename = 'rezerwacje_raport.csv';
-    } else if (type === 'revenue') {
-        csvContent = 'Wydarzenie,Dochód (zł)\n';
-        csvContent += 'Koncert symfoniczny,25600\n';
-        csvContent += 'Wystawa malarstwa,8750\n';
-        csvContent += 'Spektakl teatralny,12600\n';
-        csvContent += 'Gala operowa,22400\n';
-        csvContent += 'Widowisko taneczne,12000\n';
-        csvContent += 'Festiwal filmowy,6100\n';
-        filename = 'dochod_raport.csv';
-    } else if (type === 'occupancy') {
-        csvContent = 'Wydarzenie,Obłożenie (%)\n';
-        csvContent += 'Koncert symfoniczny,85\n';
-        csvContent += 'Wystawa malarstwa,62\n';
-        csvContent += 'Spektakl teatralny,78\n';
-        csvContent += 'Gala operowa,70\n';
-        csvContent += 'Widowisko taneczne,56\n';
-        csvContent += 'Festiwal filmowy,48\n';
-        csvContent += 'Recital fortepianowy,0\n';
-        csvContent += 'Konferencja naukowa,0\n';
-        filename = 'oblozenie_raport.csv';
-    } else if (type === 'venues') {
-        csvContent = 'Nazwa sali,Liczba wydarzeń\n';
-        csvContent += 'Sala koncertowa,5\n';
-        csvContent += 'Teatr główny,6\n';
-        csvContent += 'Galeria sztuki,4\n';
-        csvContent += 'Sala konferencyjna,3\n';
-        filename = 'sale_raport.csv';
-    } else if (type === 'categories') {
-        csvContent = 'Nazwa kategorii,Liczba wydarzeń\n';
-        csvContent += 'Koncerty,4\n';
-        csvContent += 'Teatr,3\n';
-        csvContent += 'Wystawa,2\n';
-        csvContent += 'Film,6\n';
-        csvContent += 'Konferencje,3\n';
-        filename = 'kategorie_raport.csv';
-    }
-
-    // W prawdziwej implementacji tutaj byłoby pobieranie pliku
-    console.log(`Eksport CSV dla ${type}:`, csvContent);
-
-    // Dla prototypu wyświetl tylko komunikat
-    alert(`Eksport CSV dla ${filename} (funkcjonalność w prototypie)`);
-}
 </script>
 @endsection

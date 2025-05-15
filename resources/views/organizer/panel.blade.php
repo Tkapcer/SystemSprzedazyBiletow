@@ -26,7 +26,7 @@
 
                 <div class="text-center mb-6">
                     <a href="{{ route('report') }}" class="main-button-style">
-                        Raport
+                        System raportowania
                     </a>
                 </div>
 
@@ -102,12 +102,6 @@
                         </table>
                     </div>
                 @endif
-
-                <div class="text-center mb-6">
-                    <a href="{{ route('organizerReportSystem') }}" class="main-button-style">
-                        System raportowania
-                    </a>
-                </div>
 
             </div>
         </div>
