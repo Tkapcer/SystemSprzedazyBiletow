@@ -7,9 +7,15 @@ use Illuminate\Http\JsonResponse;
 
 class ReportController extends Controller
 {
+    //Events
+    public function getTotalEvents()
+    {
+        $totalEvents = Event::count();
+        return response()->json(['totalEvents' => $totalEvents]);
+    }
+
     public function eventsSummaryReport(): JsonResponse
     {
-        // Pobieramy tylko te statusy, które nas interesują
         $statusMap = [
             'approved' => 'Nadchodzące',
             'expired' => 'Zakończone',
@@ -21,7 +27,6 @@ class ReportController extends Controller
             ->orderBy('event_date', 'asc')
             ->get();
 
-        // Grupowanie nazw wydarzeń według statusów z mapowaniem
         $grouped = [
             'Nadchodzące' => [],
             'Zakończone' => [],
@@ -33,7 +38,6 @@ class ReportController extends Controller
             $grouped[$mappedStatus][] = $event->name;
         }
 
-        // Ustal maksymalną liczbę wierszy
         $maxRows = max(array_map('count', $grouped));
 
         $rows = [];
@@ -54,4 +58,25 @@ class ReportController extends Controller
             ]
         ]);
     }
+
+    //Venues
+    public function getTotalVenues()
+    {
+        $totalVenues = Venue::count();
+        return response()->json(['totalVenues' => $totalVenues]);
+    }
+
+    public function getVenueDetails()
+    {
+        $venues = Venue::withCount('events')->get();
+        return response()->json(['venues' => $venues]);
+    }
+
+    //Categories
+    public function getTotalCategories()
+    {
+        $totalCategories = Categories::count();
+        return response()->json(['totalCategories' => $totalCategories]);
+    }
+
 }

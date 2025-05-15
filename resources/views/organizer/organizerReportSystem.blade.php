@@ -16,7 +16,7 @@
             @endif
 
             <!-- View mode toggle switch -->
-            <div class="mb-6">
+            <!-- <div class="mb-6">
                 <div class="flex items-center">
                     <label class="flex items-center cursor-pointer">
                         <span class="mr-3 text-sm font-medium text-gray-700">Całościowe</span>
@@ -25,10 +25,10 @@
                             <div class="block bg-gray-300 w-14 h-7 rounded-full"></div>
                             <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition"></div>
                         </div>
-                        <span class="ml-3 text-sm font-medium text-gray-700">Cząstkowe</span>
+                        <span class="ml-3 text-sm font-medium text-gray-700">Szczegółowe</span>
                     </label>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Overall view (całościowe) - default view -->
             <div id="overall-view">
@@ -37,49 +37,49 @@
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="revenue" onclick="toggleInsightCard('revenue')">
                         <div class="text-sm text-gray-600 mb-1">Łączny dochód</div>
-                        <div class="text-2xl font-bold">87,450 zł</div>
+                        <div class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Occupancy rate card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="occupancy" onclick="toggleInsightCard('occupancy')">
                         <div class="text-sm text-gray-600 mb-1">Obłożenie</div>
-                        <div class="text-2xl font-bold">72%</div>
+                        <div class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Tickets sold card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="tickets" onclick="toggleInsightCard('tickets')">
                         <div class="text-sm text-gray-600 mb-1">Sprzedanych biletów</div>
-                        <div class="text-2xl font-bold">1,245</div>
+                        <div class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Active reservations card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="reservations" onclick="toggleInsightCard('reservations')">
                         <div class="text-sm text-gray-600 mb-1">Aktywnych rezerwacji</div>
-                        <div class="text-2xl font-bold">342</div>
+                        <div class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Events card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                         data-card-id="events" onclick="toggleInsightCard('events')">
                         <div class="text-sm text-gray-600 mb-1">Wydarzenia</div>
-                        <div class="text-2xl font-bold">18</div>
+                        <div id="eventsCount" class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Venues card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="venues" onclick="toggleInsightCard('venues')">
                         <div class="text-sm text-gray-600 mb-1">Sale</div>
-                        <div class="text-2xl font-bold">4</div>
+                        <div id="venuesCount" class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Categories card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="categories" onclick="toggleInsightCard('categories')">
-                        <div class="text-sm text-gray-600 mb-1">Kategorie</div>
-                        <div class="text-2xl font-bold">5</div>
+                        <div class="text-sm text-gray-600 mb-1">Gatunki</div>
+                        <div id="categoriesCount" class="text-2xl font-bold"></div>
                     </div>
                 </div>
 
@@ -92,7 +92,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły dochodów</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('revenue'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('revenue'); return false;">Eksport CSV</a> -->
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -134,7 +134,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły obłożenia</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('occupancy'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('occupancy'); return false;">Eksport CSV</a> -->
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -176,7 +176,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły sprzedanych biletów</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('tickets'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('tickets'); return false;">Eksport CSV</a> -->
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -218,7 +218,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły aktywnych rezerwacji</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('reservations'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('reservations'); return false;">Eksport CSV</a> -->
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -259,7 +259,7 @@
                     <div id="events-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły wydarzeń</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('events'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('events'); return false;">Eksport CSV</a> -->
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
                             <!-- Event List -->
@@ -299,7 +299,7 @@
                     <div id="venues-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły sal</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('venues'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('venues'); return false;">Eksport CSV</a> -->
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
                             <!-- Venues List -->
@@ -336,7 +336,7 @@
                     <div id="categories-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły gatunków</h3>
-                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('categories'); return false;">Eksport CSV</a>
+                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('categories'); return false;">Eksport CSV</a> -->
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
                             <!-- Categories List -->
@@ -372,7 +372,7 @@
                 </div>
             </div>
 
-            <!-- Partial view (cząstkowe) - hidden by default -->
+            <!-- Partial view (szczegółowe) - hidden by default -->
             <div id="partial-view" class="hidden">
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4">
                     <h3 class="font-semibold mb-3">Wykres danych</h3>
@@ -387,129 +387,13 @@
 
 <!-- Scripts for reporting system -->
 
-<!-- TEST DATA - CHARTS - TEST DATA - CHARTS - TEST DATA - CHARTS - TEST DATA -->
-<script>
-    // Revenue chart data
-    const revenueData = {
-        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
-        datasets: [{
-            label: 'Dochód (zł)',
-            data: [25600, 8750, 12600, 22400, 12000, 6100]
-        }]
-    };
-
-    // Occupancy chart data
-    const occupancyData = {
-        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy', 'Recital fortepianowy', 'Konferencja naukowa'],
-        datasets: [{
-            label: 'Obłożenie (%)',
-            data: [85, 62, 78, 70, 56, 48, 0, 0]
-        }]
-    };
-
-    // Tickets chart data
-    const ticketsData = {
-        labels: ['Koncert symfoniczny', 'Wystawa malarstwa', 'Spektakl teatralny', 'Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
-        datasets: [{
-            label: 'Liczba sprzedanych biletów',
-            data: [320, 175, 210, 280, 150, 110]
-        }]
-    };
-
-    // Reservations chart data
-    const reservationsData = {
-        labels: ['Gala operowa', 'Widowisko taneczne', 'Festiwal filmowy'],
-        datasets: [{
-            label: 'Liczba rezerwacji',
-            data: [120, 85, 137]
-        }]
-    };
-
-    // Venues chart data
-    const venuesData = {
-        labels: ['Sala koncertowa', 'Teatr główny', 'Galeria sztuki', 'Sala konferencyjna'],
-        datasets: [{
-            label: 'Liczba wydarzeń',
-            data: [5, 6, 4, 3]
-        }]
-    };
-
-    // Categories chart data
-    const categoriesData = {
-        labels: ['Koncerty', 'Teatr', 'Wystawa', 'Film', 'Konferencje'],
-        datasets: [{
-            label: 'Liczba wydarzeń',
-            data: [4, 3, 2, 6, 3]
-        }]
-    };
-</script>
-
-<!-- TEST DATA - TABLES - TEST DATA - TABLES - TEST DATA - TABLES - TEST DATA -->
-<script>
-    // Revenue table data
-    const revenueTableData = [
-        { event: 'Koncert symfoniczny', revenue: 25600 },
-        { event: 'Wystawa malarstwa', revenue: 8750 },
-        { event: 'Spektakl teatralny', revenue: 12600 },
-        { event: 'Gala operowa', revenue: 22400 },
-        { event: 'Widowisko taneczne', revenue: 12000 },
-        { event: 'Festiwal filmowy', revenue: 6100 }
-    ];
-
-    // Occupancy table data
-    const occupancyTableData = [
-        { event: 'Koncert symfoniczny', occupancy: 85 },
-        { event: 'Wystawa malarstwa', occupancy: 62 },
-        { event: 'Spektakl teatralny', occupancy: 78 },
-        { event: 'Gala operowa', occupancy: 70 },
-        { event: 'Widowisko taneczne', occupancy: 56 },
-        { event: 'Festiwal filmowy', occupancy: 48 },
-        { event: 'Recital fortepianowy', occupancy: 0 },
-        { event: 'Konferencja naukowa', occupancy: 0 }
-    ];
-
-    // Tickets table data
-    const ticketsTableData = [
-        { event: 'Koncert symfoniczny', ticketsSold: 320 },
-        { event: 'Wystawa malarstwa', ticketsSold: 175 },
-        { event: 'Spektakl teatralny', ticketsSold: 210 },
-        { event: 'Gala operowa', ticketsSold: 280 },
-        { event: 'Widowisko taneczne', ticketsSold: 150 },
-        { event: 'Festiwal filmowy', ticketsSold: 110 }
-    ];
-
-    // Reservations table data
-    const reservationsTableData = [
-        { event: 'Gala operowa', reservations: 120 },
-        { event: 'Widowisko taneczne', reservations: 85 },
-        { event: 'Festiwal filmowy', reservations: 137 }
-    ];
-
-    // Venues table data
-    const venuesTableData = [
-        { Venue: 'Sala koncertowa', Events: 'Koncert symfoniczny, Gala operowa, Recital fortepianowy' },
-        { Venue: 'Teatr główny', Events: 'Spektakl teatralny, Widowisko taneczne' },
-        { Venue: 'Galeria sztuki', Events: 'Wystawa malarstwa' },
-        { Venue: 'Sala konferencyjna', Events: 'Festiwal filmowy, Konferencja naukowa' }
-    ];
-
-    // Categories table data
-    const categoriesTableData = [
-        { Category: 'Koncerty', Events: 'Koncert symfoniczny, Gala operowa, Recital fortepianowy' },
-        { Category: 'Wystawa', Events: 'Wystawa malarstwa' },
-        { Category: 'Teatr', Events: 'Spektakl teatralny, Widowisko taneczne' },
-        { Category: 'Film', Events: 'Festiwal filmowy' },
-        { Category: 'Konferencje', Events: 'Konferencja naukowa' }
-    ];
-</script>
-
 <!-- Link to have working charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
 
-<!-- Card details tables and charts initializers -->
+<!-- Card details tables and charts initializers with connected database -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // General table initialization helper
+        // Helper function to initialize tables
         function initializeTable(tableId, tableData) {
             const tableBody = document.getElementById(tableId);
             if (tableBody) {
@@ -534,7 +418,7 @@
             }
         }
 
-        // General chart initialization helper
+        // Helper function to initialize charts
         function initializeChart(ctx, data) {
             if (ctx) {
                 return new Chart(ctx, {
@@ -558,86 +442,127 @@
             return null;
         }
 
-        // Fetch data and initialize tables and charts
+        // Fetch total number of events from the ReportController
+        fetch('/report/total-events')
+            .then(res => res.json())
+            .then(data => {
+                const eventsCountElement = document.getElementById('eventsCount');
+                if (eventsCountElement) {
+                    // Update the number of events in the element
+                    eventsCountElement.textContent = data.totalEvents || '0';  // Use 0 as fallback if no data
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching total events:', error);
+                const eventsCountElement = document.getElementById('eventsCount');
+                if (eventsCountElement) {
+                    eventsCountElement.textContent = 'Error'; // Show error if fetch fails
+                }
+            });
+
+        // Fetch total number of venues from the ReportController
+        fetch('/report/total-venues')
+            .then(res => res.json())
+            .then(data => {
+                const venuesCountElement = document.getElementById('venuesCount');
+                if (venuesCountElement) {
+                    // Update the number of venues in the element
+                    venuesCountElement.textContent = data.totalVenues || '0';  // Use 0 as fallback if no data
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching total venues:', error);
+                const venuesCountElement = document.getElementById('venuesCount');
+                if (venuesCountElement) {
+                    venuesCountElement.textContent = 'Error'; // Show error if fetch fails
+                }
+            });
+
+        // Fetch event summary report
         fetch('/organizer/eventsSummaryReport')
-        .then(res => {
-            if (!res.ok) throw new Error('Błąd pobierania danych');
-            return res.json();
-        })
-        .then(data => {
-            // Initialize all tables
-            const tableData = data.tableData;
-            initializeTable('revenueTableBody', revenueTableData);
-            initializeTable('occupancyTableBody', occupancyTableData);
-            initializeTable('ticketsTableBody', ticketsTableData);
-            initializeTable('reservationsTableBody', reservationsTableData);
-            initializeTable('venuesTableBody', venuesTableData);
-            initializeTable('categoriesTableBody', categoriesTableData);
-            initializeTable('eventsTableBody', tableData);
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
+            .then(data => {
+                // Initialize the events table
+                const tableData = data.tableData;
+                initializeTable('eventsTableBody', tableData);
 
-            // Initialize all charts
-            const chartData = data.chartData;
-            const eventsChart = document.getElementById('eventsChart');
-            if (eventsChart) {
-                const chartDataForEvents = {
-                    labels: ['Nadchodzące', 'Zakończone', 'Anulowane'],
-                    datasets: [{
-                        label: 'Liczba wydarzeń',
-                        data: [
-                            chartData['Nadchodzące'],
-                            chartData['Zakończone'],
-                            chartData['Anulowane']
-                        ]
-                    }]
-                };
-                initializeChart(eventsChart.getContext('2d'), chartDataForEvents);
-            }
+                // Initialize the events chart
+                const chartData = data.chartData;
+                const eventsChart = document.getElementById('eventsChart');
+                if (eventsChart) {
+                    const chartDataForEvents = {
+                        labels: ['Nadchodzące', 'Zakończone', 'Anulowane'],
+                        datasets: [{
+                            label: 'Liczba wydarzeń',
+                            data: [
+                                chartData['Nadchodzące'],
+                                chartData['Zakończone'],
+                                chartData['Anulowane']
+                            ]
+                        }]
+                    };
+                    initializeChart(eventsChart.getContext('2d'), chartDataForEvents);
+                }
+            })
+            .catch(error => console.error('Błąd raportu wydarzeń:', error));
 
-            // You can repeat the process for other charts like 'revenueChart', 'occupancyChart', etc.
-            const revenueChart = document.getElementById('revenueChart');
-            if (revenueChart) initializeChart(revenueChart.getContext('2d'), revenueData);
+        // Fetch venue details
+        fetch('/report/venue-details')
+            .then(res => res.json())
+            .then(data => {
+                // Initialize the venues table
+                const venuesTableBody = document.getElementById('venuesTableBody');
+                if (venuesTableBody) {
+                    venuesTableBody.innerHTML = '';  // Clear any existing rows
+                    data.venues.forEach(venue => {
+                        const row = document.createElement('tr');
+                        const venueNameCell = document.createElement('td');
+                        venueNameCell.classList.add('px-6', 'py-3', 'text-left');
+                        venueNameCell.textContent = venue.name;  // Assuming 'name' field exists
 
-            const occupancyChart = document.getElementById('occupancyChart');
-            if (occupancyChart) initializeChart(occupancyChart.getContext('2d'), occupancyData);
+                        const eventsCountCell = document.createElement('td');
+                        eventsCountCell.classList.add('px-6', 'py-3', 'text-left');
+                        eventsCountCell.textContent = venue.events_count;  // Assuming 'events_count' field exists
 
-            const ticketsChart = document.getElementById('ticketsChart');
-            if (ticketsChart) initializeChart(ticketsChart.getContext('2d'), ticketsData);
+                        row.appendChild(venueNameCell);
+                        row.appendChild(eventsCountCell);
+                        venuesTableBody.appendChild(row);
+                    });
+                }
 
-            const reservationsChart = document.getElementById('reservationsChart');
-            if (reservationsChart) initializeChart(reservationsChart.getContext('2d'), reservationsData);
-
-            const venuesChart = document.getElementById('venuesChart');
-            if (venuesChart) initializeChart(venuesChart.getContext('2d'), venuesData);
-
-            const categoriesChart = document.getElementById('categoriesChart');
-            if (categoriesChart) initializeChart(categoriesChart.getContext('2d'), categoriesData);
-        })
-        .catch(error => console.error('Błąd raportu wydarzeń:', error));
-    });
-</script>
-
-<!-- Connection to database -->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('/organizer/eventsSummaryReport')
-        .then(res => {
-            if (!res.ok) throw new Error('Błąd pobierania danych');
-            return res.json();
-        })
-        .then(data => {
-            initializeTable('eventsTableBody', data.tableData);
-
-            const chart = Chart.getChart('eventsChart');
-            if (chart) {
-            chart.data.datasets[0].data = [
-                data.chartData['Nadchodzące'],
-                data.chartData['Zakończone'],
-                data.chartData['Anulowane']
-            ];
-            chart.update();
-            }
-        })
-        .catch(error => console.error('Błąd raportu wydarzeń:', error));
+                // Initialize the venues chart
+                const venuesChartCtx = document.getElementById('venuesChart');
+                if (venuesChartCtx) {
+                    const venuesChart = new Chart(venuesChartCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.venues.map(venue => venue.name),
+                            datasets: [{
+                                label: 'Liczba wydarzeń',
+                                data: data.venues.map(venue => venue.events_count),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching venue details:', error);
+            });
     });
 </script>
 

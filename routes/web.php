@@ -105,7 +105,13 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
     //nowe !!!!!!!!!!!!!!!!!!!!!!!
     Route::get('/organizer/organizerReportSystem', [App\Http\Controllers\OrganizerController::class, 'organizerReportSystem'])->name('organizerReportSystem');
+
+    Route::get('/report/total-events', [App\Http\Controllers\ReportController::class, 'getTotalEvents']);
     Route::get('/organizer/eventsSummaryReport', [ReportController::class, 'eventsSummaryReport'])->name('eventsSummaryReport');
+    Route::get('/report/total-venues', [App\Http\Controllers\ReportController::class, 'getTotalVenues']);
+    Route::get('/report/venue-details', [App\Http\Controllers\ReportController::class, 'getVenueDetails']);
+
+    Route::get('/report/total-categories', [App\Http\Controllers\ReportController::class, 'getTotalCategories']);
 
     Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
 
