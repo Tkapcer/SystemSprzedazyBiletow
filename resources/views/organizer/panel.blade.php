@@ -61,7 +61,7 @@
 
                                         @if ($event->venue)
                                             <td class="py-2 px-4">
-                                                $event->venue->location
+                                                {{$event->venue->location}}
                                             </td>
                                         @else
                                             <td class="py-2 px-4">
