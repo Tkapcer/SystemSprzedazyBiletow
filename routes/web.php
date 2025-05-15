@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckOrganizerConfirmed;
 use App\Http\Middleware\CheckOrganizerNotConfirmed;
@@ -104,6 +105,7 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
     //nowe !!!!!!!!!!!!!!!!!!!!!!!
     Route::get('/organizer/organizerReportSystem', [App\Http\Controllers\OrganizerController::class, 'organizerReportSystem'])->name('organizerReportSystem');
+    Route::get('/organizer/eventsSummaryReport', [ReportController::class, 'eventsSummaryReport'])->name('eventsSummaryReport');
 
     Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
 

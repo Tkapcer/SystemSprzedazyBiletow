@@ -425,15 +425,6 @@
         }]
     };
 
-    // Events chart data
-    const eventsData = {
-        labels: ['Odbyte', 'Nadchodzące', 'Odwołane'],
-        datasets: [{
-            label: 'Liczba wydarzeń',
-            data: [3, 3, 2]
-        }]
-    };
-
     // Venues chart data
     const venuesData = {
         labels: ['Sala koncertowa', 'Teatr główny', 'Galeria sztuki', 'Sala konferencyjna'],
@@ -494,38 +485,31 @@
         { event: 'Festiwal filmowy', reservations: 137 }
     ];
 
-    // Events table data
-    const eventsTableData = [
-        { status: 'Odbyte', eventCount: 3 },
-        { status: 'Nadchodzące', eventCount: 3 },
-        { status: 'Odwołane', eventCount: 2 }
-    ];
-
     // Venues table data
     const venuesTableData = [
-        { venue: 'Sala koncertowa', eventCount: 5 },
-        { venue: 'Teatr główny', eventCount: 6 },
-        { venue: 'Galeria sztuki', eventCount: 4 },
-        { venue: 'Sala konferencyjna', eventCount: 3 }
+        { Venue: 'Sala koncertowa', Events: 'Koncert symfoniczny, Gala operowa, Recital fortepianowy' },
+        { Venue: 'Teatr główny', Events: 'Spektakl teatralny, Widowisko taneczne' },
+        { Venue: 'Galeria sztuki', Events: 'Wystawa malarstwa' },
+        { Venue: 'Sala konferencyjna', Events: 'Festiwal filmowy, Konferencja naukowa' }
     ];
 
     // Categories table data
     const categoriesTableData = [
-        { category: 'Koncerty', eventCount: 4 },
-        { category: 'Teatr', eventCount: 3 },
-        { category: 'Wystawa', eventCount: 2 },
-        { category: 'Film', eventCount: 6 },
-        { category: 'Konferencje', eventCount: 3 }
+        { Category: 'Koncerty', Events: 'Koncert symfoniczny, Gala operowa, Recital fortepianowy' },
+        { Category: 'Wystawa', Events: 'Wystawa malarstwa' },
+        { Category: 'Teatr', Events: 'Spektakl teatralny, Widowisko taneczne' },
+        { Category: 'Film', Events: 'Festiwal filmowy' },
+        { Category: 'Konferencje', Events: 'Konferencja naukowa' }
     ];
 </script>
 
- <!-- Link to have working charts -->
+<!-- Link to have working charts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js"></script>
 
-<!-- Card details tables initializers -->
+<!-- Card details tables and charts initializers -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Table initialization helper
+        // General table initialization helper
         function initializeTable(tableId, tableData) {
             const tableBody = document.getElementById(tableId);
             if (tableBody) {
@@ -550,22 +534,7 @@
             }
         }
 
-        // Initialize all tables
-        initializeTable('revenueTableBody', revenueTableData);
-        initializeTable('occupancyTableBody', occupancyTableData);
-        initializeTable('ticketsTableBody', ticketsTableData);
-        initializeTable('reservationsTableBody', reservationsTableData);
-        initializeTable('eventsTableBody', eventsTableData);
-        initializeTable('venuesTableBody', venuesTableData);
-        initializeTable('categoriesTableBody', categoriesTableData);
-    });
-</script>
-
-<!-- Card details charts initializers -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-
-        // Chart initialization helper
+        // General chart initialization helper
         function initializeChart(ctx, data) {
             if (ctx) {
                 return new Chart(ctx, {
@@ -589,22 +558,86 @@
             return null;
         }
 
-        // Initialize all charts
-        const revenueCtx = document.getElementById('revenueChart');
-        const occupancyCtx = document.getElementById('occupancyChart');
-        const ticketsCtx = document.getElementById('ticketsChart');
-        const reservationsCtx = document.getElementById('reservationsChart');
-        const eventsCtx = document.getElementById('eventsChart');
-        const venuesCtx = document.getElementById('venuesChart');
-        const categoriesCtx = document.getElementById('categoriesChart');
+        // Fetch data and initialize tables and charts
+        fetch('/organizer/eventsSummaryReport')
+        .then(res => {
+            if (!res.ok) throw new Error('Błąd pobierania danych');
+            return res.json();
+        })
+        .then(data => {
+            // Initialize all tables
+            const tableData = data.tableData;
+            initializeTable('revenueTableBody', revenueTableData);
+            initializeTable('occupancyTableBody', occupancyTableData);
+            initializeTable('ticketsTableBody', ticketsTableData);
+            initializeTable('reservationsTableBody', reservationsTableData);
+            initializeTable('venuesTableBody', venuesTableData);
+            initializeTable('categoriesTableBody', categoriesTableData);
+            initializeTable('eventsTableBody', tableData);
 
-        if (revenueCtx) initializeChart(revenueCtx.getContext('2d'), revenueData);
-        if (occupancyCtx) initializeChart(occupancyCtx.getContext('2d'), occupancyData);
-        if (ticketsCtx) initializeChart(ticketsCtx.getContext('2d'), ticketsData);
-        if (reservationsCtx) initializeChart(reservationsCtx.getContext('2d'), reservationsData);
-        if (eventsCtx) initializeChart(eventsCtx.getContext('2d'), eventsData);
-        if (venuesCtx) initializeChart(venuesCtx.getContext('2d'), venuesData);
-        if (categoriesCtx) initializeChart(categoriesCtx.getContext('2d'), categoriesData);
+            // Initialize all charts
+            const chartData = data.chartData;
+            const eventsChart = document.getElementById('eventsChart');
+            if (eventsChart) {
+                const chartDataForEvents = {
+                    labels: ['Nadchodzące', 'Zakończone', 'Anulowane'],
+                    datasets: [{
+                        label: 'Liczba wydarzeń',
+                        data: [
+                            chartData['Nadchodzące'],
+                            chartData['Zakończone'],
+                            chartData['Anulowane']
+                        ]
+                    }]
+                };
+                initializeChart(eventsChart.getContext('2d'), chartDataForEvents);
+            }
+
+            // You can repeat the process for other charts like 'revenueChart', 'occupancyChart', etc.
+            const revenueChart = document.getElementById('revenueChart');
+            if (revenueChart) initializeChart(revenueChart.getContext('2d'), revenueData);
+
+            const occupancyChart = document.getElementById('occupancyChart');
+            if (occupancyChart) initializeChart(occupancyChart.getContext('2d'), occupancyData);
+
+            const ticketsChart = document.getElementById('ticketsChart');
+            if (ticketsChart) initializeChart(ticketsChart.getContext('2d'), ticketsData);
+
+            const reservationsChart = document.getElementById('reservationsChart');
+            if (reservationsChart) initializeChart(reservationsChart.getContext('2d'), reservationsData);
+
+            const venuesChart = document.getElementById('venuesChart');
+            if (venuesChart) initializeChart(venuesChart.getContext('2d'), venuesData);
+
+            const categoriesChart = document.getElementById('categoriesChart');
+            if (categoriesChart) initializeChart(categoriesChart.getContext('2d'), categoriesData);
+        })
+        .catch(error => console.error('Błąd raportu wydarzeń:', error));
+    });
+</script>
+
+<!-- Connection to database -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/organizer/eventsSummaryReport')
+        .then(res => {
+            if (!res.ok) throw new Error('Błąd pobierania danych');
+            return res.json();
+        })
+        .then(data => {
+            initializeTable('eventsTableBody', data.tableData);
+
+            const chart = Chart.getChart('eventsChart');
+            if (chart) {
+            chart.data.datasets[0].data = [
+                data.chartData['Nadchodzące'],
+                data.chartData['Zakończone'],
+                data.chartData['Anulowane']
+            ];
+            chart.update();
+            }
+        })
+        .catch(error => console.error('Błąd raportu wydarzeń:', error));
     });
 </script>
 
