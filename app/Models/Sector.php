@@ -29,7 +29,7 @@ class Sector extends Model
     }
 
     public function getPriceForSeat($event_id) {
-        return $this->event()->where('event_id', $event_id)->first()->pivot->price;
+        return $this->event()->where('event_id', $event_id)->first()->pivot->price ?? 0;
     }
 
     public function getAllSeats($event_id): \Illuminate\Support\Collection

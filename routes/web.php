@@ -92,34 +92,47 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         ->middleware(CheckOrganizerNotConfirmed::class)
         ->name('statusInfo');
 
-
+//  Zalogowany jako potwierdzony organizator
     Route::middleware(CheckOrganizerConfirmed::class)->group(function () {
+//        Panel organizatora
         Route::get('/organizerPanel', [App\Http\Controllers\OrganizerController::class, 'indexConfirmed'])->name('organizer.panel');
 
+//        Strona z raportowaniem
         Route::get('/organizer/report', [App\Http\Controllers\OrganizerController::class, 'indexReport'])->name('report');
 
+//        Strona z tworzenie wydarzenia
         Route::post('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
-
         Route::get('/organizer/createEvent', [App\Http\Controllers\OrganizerController::class, 'createEvent'])->name('createEvent');
 
+//        Zapis wydarzenia
         Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
-    //nowe !!!!!!!!!!!!!!!!!!!!!!!
-    Route::get('/organizer/organizerReportSystem', [App\Http\Controllers\OrganizerController::class, 'organizerReportSystem'])->name('organizerReportSystem');
 
-    Route::get('/report/total-events', [App\Http\Controllers\ReportController::class, 'getTotalEvents']);
-    Route::get('/organizer/eventsSummaryReport', [ReportController::class, 'eventsSummaryReport'])->name('eventsSummaryReport');
-    Route::get('/report/total-venues', [App\Http\Controllers\ReportController::class, 'getTotalVenues']);
-    Route::get('/report/venue-details', [App\Http\Controllers\ReportController::class, 'getVenueDetails']);
+        //nowe !!!!!!!!!!!!!!!!!!!!!!!
+        Route::get('/organizer/organizerReportSystem', [App\Http\Controllers\OrganizerController::class, 'organizerReportSystem'])->name('organizerReportSystem');
 
-    Route::get('/report/total-categories', [App\Http\Controllers\ReportController::class, 'getTotalCategories']);
+        Route::get('/report/total-events', [App\Http\Controllers\ReportController::class, 'getTotalEvents']);
+        Route::get('/organizer/eventsSummaryReport', [ReportController::class, 'eventsSummaryReport'])->name('eventsSummaryReport');
+        Route::get('/report/total-venues', [App\Http\Controllers\ReportController::class, 'getTotalVenues']);
+        Route::get('/report/venue-details', [App\Http\Controllers\ReportController::class, 'getVenueDetails']);
 
-    Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');
+//        Zwraca Łączny przychód organizatora
+        Route::get('/report/total-revenue', [App\Http\Controllers\ReportController::class, 'getTotalRevenue']);
+//        Zwraca ilość sprzedanych biletów przez organizatora
+        Route::get('/report/sold-tickets', [App\Http\Controllers\ReportController::class, 'getSoldTickets']);
+//        Zwraca ilość aktywnych wydarzeń na wydarzenia organizatora
+        Route::get('/report/active-reservations', [App\Http\Controllers\ReportController::class, 'getActiveReservations']);
 
+        Route::get('/report/total-categories', [App\Http\Controllers\ReportController::class, 'getTotalCategories']);
+
+//        Route::post('/organizer/storeEvent', [App\Http\Controllers\OrganizerController::class, 'storeEvent'])->name('organizer.storeEvent');  //Zdublowane
+
+//        Edycja wydarzenia
         Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('editEvent');
         Route::put('/events/{event}', [EventController::class, 'update'])->name('updateEvent');
 
+//        Anulowanie wydarzenia
         Route::get('/events/{event}/cancel', [EventController::class, 'cancel'])->name('cancelEvent');
 
-        Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+//        Route::get('/events/create', [EventController::class, 'create'])->name('events.create');  //Nie wiem co to, chyba jakieś stare do tworzenia kategorii, ale nie działa
     });
 });

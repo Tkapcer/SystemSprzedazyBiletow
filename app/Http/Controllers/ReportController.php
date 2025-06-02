@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Event;
+use App\Models\Ticket;
+//use GuzzleHttp\Psr7\Request;  //Wątpię, żeby o to chodziło. Raczej ma być to niżej
+use App\Models\Venue;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -75,8 +81,32 @@ class ReportController extends Controller
     //Categories
     public function getTotalCategories()
     {
-        $totalCategories = Categories::count();
+        $totalCategories = Category::count();   //To było wcześniej Categories jak coś, ale chyba tak ma być
         return response()->json(['totalCategories' => $totalCategories]);
+    }
+
+    public function getTotalRevenue(Request $request)
+    {
+        $from = $request->query('from');
+        $to = $request->query('to');
+
+        return response()->json(['totalRevenue' => auth('organizer')->user()->revenue($from, $to)]);
+    }
+
+    public function getSoldTickets(Request $request)
+    {
+        $from = $request->query('from');
+        $to = $request->query('to');
+
+        return response()->json(['soldTickets' => auth('organizer')->user()->soldTickers($from, $to)]);
+    }
+
+    public function getActiveReservations(Request $request)
+    {
+        $from = $request->query('from');
+        $to = $request->query('to');
+
+        return response()->json(['totalRevenue' => auth('organizer')->user()->activeReservations($from, $to)]);
     }
 
 }
