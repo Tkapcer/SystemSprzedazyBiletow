@@ -16,10 +16,10 @@
             @endif
 
             <!-- View mode toggle switch -->
-            <!-- <div class="mb-6">
+            <div class="mb-6">
                 <div class="flex items-center">
                     <label class="flex items-center cursor-pointer">
-                        <span class="mr-3 text-sm font-medium text-gray-700">Całościowe</span>
+                        <span class="mr-3 text-sm font-medium text-gray-700">Ogólne</span>
                         <div class="relative">
                             <input type="checkbox" id="view_mode" name="view_mode" value="partial" class="sr-only">
                             <div class="block bg-gray-300 w-14 h-7 rounded-full"></div>
@@ -28,9 +28,9 @@
                         <span class="ml-3 text-sm font-medium text-gray-700">Szczegółowe</span>
                     </label>
                 </div>
-            </div> -->
+            </div>
 
-            <!-- Overall view (całościowe) - default view -->
+            <!-- Overall view (ogólne) - default view -->
             <div id="overall-view">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <!-- Total revenue card -->
@@ -372,15 +372,86 @@
                 </div>
             </div>
 
-            <!-- Partial view (szczegółowe) - hidden by default -->
+            <!-- Detailed view (szczegółowe) - hidden by default -->
             <div id="partial-view" class="hidden">
                 <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4">
-                    <h3 class="font-semibold mb-3">Wykres danych</h3>
-                    <div class="h-96 w-full bg-gray-100 flex items-center justify-center">
-                        <p class="text-gray-500">Tutaj będzie wyświetlany wykres danych</p>
+                    <h3 class="font-semibold mb-3">Filtrowanie</h3>
+
+                    <!-- Filters -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    
+                        <!-- Events -->
+                        <div>
+                            <label for="eventSelect" class="block text-sm font-medium text-gray-700">Wydarzenia</label>
+                            <select id="eventSelect" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                <option value="">Wszystkie</option>
+                            </select>
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+                            <label for="categorySelect" class="block text-sm font-medium text-gray-700">Gatunek</label>
+                            <select id="categorySelect" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                <option value="">Wszystkie</option>
+                            </select>
+                        </div>
+
+                        <!-- Venues -->
+                        <div>
+                            <label for="venueSelect" class="block text-sm font-medium text-gray-700">Sala</label>
+                            <select id="venueSelect" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                                <option value="">Wszystkie</option>
+                            </select>
+                        </div>
+
+                        <!-- Dates -->
+                        <div>
+                            <label for="dateRange" class="block text-sm font-medium text-gray-700">Zakres dat</label>
+                            <input type="date" id="startDate" class="mt-1 w-full border-gray-300 rounded-md shadow-sm mb-1" />
+                            <input type="date" id="endDate" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" />
+                        </div>
                     </div>
+
+                    <!-- Wybór osi -->
+                    <div class="mb-6">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Wybierz dane do wyświetlenia:</p>
+                        <div class="flex items-center gap-6">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="dataType" value="revenue" class="form-radio text-blue-600" checked>
+                                <span class="ml-2">Dochód</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="dataType" value="occupancy" class="form-radio text-blue-600">
+                                <span class="ml-2">Obłożenie</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="dataType" value="tickets" class="form-radio text-blue-600">
+                                <span class="ml-2">Sprzedane bilety</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="dataType" value="reservations" class="form-radio text-blue-600">
+                                <span class="ml-2">Rezerwacje</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Confirmation button -->
+                    <div class="mb-6">
+                        <button id="applyFiltersBtn" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            Zastosuj filtry
+                        </button>
+                    </div>
+
+                    <!-- Chart with filtered data -->
+                    <h3 class="font-semibold mb-3">Wykres danych</h3>
+                    <div class="h-96 w-full bg-gray-100 flex items-center justify-center relative">
+                        <canvas id="filteredDataChart" class="w-full h-full"></canvas>
+                        <p id="chartPlaceholder" class="text-gray-500 absolute">Kliknij przycisk by zobaczyć wykres</p>
+                    </div>
+
                 </div>
             </div>
+
         </div>
     </div>
 </div>
@@ -779,6 +850,91 @@
             .catch(error => {
                 console.error('Error fetching active reservations by event:', error);
             });
+
+        // Detailed chart with filtered data
+        let filteredChartInstance = null;
+        function destroyPreviousChart() {
+            if (filteredChartInstance) {
+                filteredChartInstance.destroy();
+                filteredChartInstance = null;
+            }
+        }
+        function showChartPlaceholder(show) {
+            const placeholder = document.getElementById('chartPlaceholder');
+            if (placeholder) {
+                placeholder.style.display = show ? 'block' : 'none';
+            }
+        }
+        document.getElementById('applyFiltersBtn').addEventListener('click', function () {
+            const eventId = document.getElementById('eventSelect').value;
+            const categoryId = document.getElementById('categorySelect').value;
+            const venueId = document.getElementById('venueSelect').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const dataType = document.querySelector('input[name="dataType"]:checked')?.value;
+
+            if (!dataType) {
+                alert('Wybierz typ danych do wyświetlenia.');
+                return;
+            }
+
+            const payload = {
+                eventId,
+                categoryId,
+                venueId,
+                startDate,
+                endDate,
+                dataType
+            };
+
+            fetch('/report/filtered-data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error('Błąd pobierania danych.');
+                    return res.json();
+                })
+                .then(response => {
+                    const { label, data, formatter } = response;
+                    if (!data.length) {
+                        alert('Brak danych dla wybranych filtrów.');
+                        destroyPreviousChart();
+                        showChartPlaceholder(true);
+                        return;
+                    }
+                    const ctx = document.getElementById('filteredDataChart').getContext('2d');
+                    destroyPreviousChart();
+                    showChartPlaceholder(false);
+                    filteredChartInstance = initializeChart(ctx, {
+                        labels: data.map(item => item.label),
+                        datasets: [{
+                            label: label,
+                            data: data.map(item => item.value),
+                            borderWidth: 1,
+                        }]
+                    });
+
+                    if (filteredChartInstance && formatter) {
+                        const chartOptions = filteredChartInstance.options;
+                        if (chartOptions && chartOptions.scales?.x?.ticks) {
+                            chartOptions.scales.x.ticks.callback = function (value) {
+                                if (formatter === 'currency') return value + ' zł';
+                                if (formatter === 'percent') return value + '%';
+                                return value;
+                            };
+                            filteredChartInstance.update();
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error('Błąd ładowania wykresu filtrów:', err);
+                });
+        });
 
     });
 </script>
