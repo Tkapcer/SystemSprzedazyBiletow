@@ -93,7 +93,7 @@ class Organizer extends Authenticatable
         }
 
         $eventsQuery->with(['sectors.tickets' => function ($query) {
-            $query->where('status', 'reservation');
+            $query->where('status', 'reserved');
         }]);
 
         if ($fromDate) {
