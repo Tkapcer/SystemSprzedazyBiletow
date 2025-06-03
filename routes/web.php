@@ -93,7 +93,7 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         ->name('statusInfo');
 
 //  Zalogowany jako potwierdzony organizator
-    Route::middleware(CheckOrganizerConfirmed::class)->group(function () {
+    Route::middleware(CheckOrganizerConfirmed::class)->group(callback: function () {
 //        Panel organizatora
         Route::get('/organizerPanel', [App\Http\Controllers\OrganizerController::class, 'indexConfirmed'])->name('organizer.panel');
 
@@ -127,6 +127,10 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::get('/report/active-reservations', [App\Http\Controllers\ReportController::class, 'getActiveReservations']);
 //        Zwraca kolekcję event_name => liczba aktywnych rezerwacji
         Route::get('/report/active-reservations-by-event', [App\Http\Controllers\ReportController::class, 'getActiveReservationsByEvent']);
+//        Zwraca średnie obłożenie dla wszystkich potwierdzonych i odbytych wydarzeń
+        Route::get('/report/average-occupancy', [App\Http\Controllers\ReportController::class, 'getAverageOccupancy']);
+//        Zwraca kolekcję event_name => obłożenie eventu
+        Route::get('/report/occupancy-by-event', [App\Http\Controllers\ReportController::class, 'getOccupancyByEvent']);
 
         Route::get('/report/total-categories', [App\Http\Controllers\ReportController::class, 'getTotalCategories']);
 

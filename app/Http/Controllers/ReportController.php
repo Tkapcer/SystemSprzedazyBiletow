@@ -151,4 +151,30 @@ class ReportController extends Controller
         return response()->json(['activeReservationsByEvent' => $activeReservationsByEvent]);
     }
 
+    public function getAverageOccupancy() {
+        $occupancy = 0;
+
+        $events = Event::where('organizer_id', auth('organizer')->user()->id)
+            ->whereIn('status', ['approved', 'expired'])->get();
+
+        foreach ($events as $event) {
+            $occupancy += $event->occupancy();
+        }
+
+        return response()->json(['averageOccupancy' => $occupancy / count($events)]);
+    }
+
+    public function getOccupancyByEvent() {
+        $occupancy = [];
+
+        $events = Event::where('organizer_id', auth('organizer')->user()->id)
+            ->whereIn('status', ['approved', 'expired'])->get();
+
+        foreach ($events as $event) {
+            $occupancy[$event->name] = $event->occupancy();
+        }
+
+        return response()->json($occupancy);
+    }
+
 }

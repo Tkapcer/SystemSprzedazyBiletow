@@ -36,4 +36,20 @@ class Event extends Model
     public function categories() {
         return $this->belongsToMany(Category::class);
     }
+
+    public function occupancy()
+    {
+        $sectors = $this->sectors()->get();
+
+        $totalSeats = 0;
+        $occupiedSeats = 0;
+
+        foreach ($sectors as $sector) {
+            $seats = $sector->getAllSeats($this->id);
+            $totalSeats += $seats->count();
+            $occupiedSeats += $seats->where('available', false)->count();
+        }
+
+        return $occupiedSeats / $totalSeats;
+    }
 }
