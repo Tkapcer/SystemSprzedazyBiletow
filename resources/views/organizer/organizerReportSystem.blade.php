@@ -452,6 +452,23 @@
                 }
             });
         }
+        // Fetch total revenue from the ReportController
+        fetch('/report/total-revenue')
+            .then(res => res.json())
+            .then(data => {
+                const revenueElement = document.getElementById('revenueTotal');
+                if (revenueElement) {
+                    const revenue = parseFloat(data.totalRevenue || 0).toFixed(2);
+                    revenueElement.textContent = `${revenue} zł`;
+                }
+            })
+            .catch(error => {
+                console.error('Błąd podczas pobierania łącznego dochodu:', error);
+                const revenueElement = document.getElementById('revenueTotal');
+                if (revenueElement) {
+                    revenueElement.textContent = 'Błąd';
+                }
+            });
 
         // Fetch total number of events from the ReportController
         fetch('/report/total-events')
@@ -477,8 +494,7 @@
             .then(data => {
                 const venuesCountElement = document.getElementById('venuesCount');
                 if (venuesCountElement) {
-                    // Update the number of venues in the element
-                    venuesCountElement.textContent = data.totalVenues || '0';  // Use 0 as fallback if no data
+                    venuesCountElement.textContent = data.totalVenues || '0';
                 }
             })
             .catch(error => {
@@ -540,8 +556,88 @@
                 }
             });
 
-        // Fetch event summary report
-        fetch('/organizer/eventsSummaryReport')
+        // Fetch occupancy from the ReportController
+        fetch('/report/average-occupancy')
+            .then(res => res.json())
+            .then(data => {
+                const occupancyPrecent = document.getElementById('occupancyPrecent');
+                if (occupancyPrecent) {
+                    occupancyPrecent.textContent = (data.averageOccupancy || 0) + '%';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching average occupancy:', error);
+                const occupancyPrecent = document.getElementById('occupancyPrecent');
+                if (occupancyPrecent) {
+                    occupancyPrecent.textContent = 'Error';
+                }
+            });
+
+        // Fetch occupancy details
+        fetch('/report/occupancy-by-event')
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
+            .then(data => {
+                // Initialize table
+                const tableData = Object.entries(data).map(([eventName, occupancy]) => ({
+                    name: eventName,
+                    occupancy: occupancy
+                }));
+                initializeTable('occupancyTableBody', tableData);
+
+                // Initialize chart
+                const occupancyChart = document.getElementById('occupancyChart');
+                if (occupancyChart) {
+                    initializeChart(occupancyChart.getContext('2d'), {
+                        labels: tableData.map(item => item.name),
+                        datasets: [{
+                            label: 'Obłożenie (%)',
+                            data: tableData.map(item => item.occupancy),
+                            borderWidth: 1
+                        }]
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching occupancy by event:', error);
+            });
+
+        // Fetch revenue details
+        fetch('/report/revenue-by-event')
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
+            .then(data => {
+                // Prepare table data
+                const revenueData = data.revenueByEvent || {};
+                const tableData = Object.entries(revenueData).map(([eventName, revenue]) => ({
+                    name: eventName,
+                    revenue: parseFloat(revenue).toFixed(2)
+                }));
+                initializeTable('revenueTableBody', tableData);
+
+                // Prepare chart
+                const revenueChartCanvas = document.getElementById('revenueChart');
+                if (revenueChartCanvas) {
+                    initializeChart(revenueChartCanvas.getContext('2d'), {
+                        labels: tableData.map(item => item.name),
+                        datasets: [{
+                            label: 'Dochód (zł)',
+                            data: tableData.map(item => item.revenue),
+                            borderWidth: 1
+                        }]
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Błąd podczas pobierania dochodu per wydarzenie:', error);
+            });
+        
+            // Fetch event summary report
+            fetch('/organizer/eventsSummaryReport')
             .then(res => {
                 if (!res.ok) throw new Error('Błąd pobierania danych');
                 return res.json();
@@ -625,7 +721,7 @@
             })
             .catch(error => console.error('Błąd raportu kategorii:', error));
 
-        // Fetch sold tickets by event
+        // Fetch sold tickets details
         fetch('/report/sold-tickets-by-event')
             .then(res => {
                 if (!res.ok) throw new Error('Błąd pobierania danych');
@@ -652,9 +748,12 @@
             })
             .catch(error => console.error('Błąd pobierania sprzedanych biletów:', error));
 
-        // Fetch active reservations by event
+        // Fetch active reservations details
         fetch('/report/active-reservations-by-event')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
             .then(data => {
                 const reservationsByEvent = data.activeReservationsByEvent || {};
                 // Initialize reservations table

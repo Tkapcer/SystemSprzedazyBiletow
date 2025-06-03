@@ -173,7 +173,9 @@ class ReportController extends Controller
             $occupancy += $event->occupancy();
         }
 
-        return response()->json(['averageOccupancy' => $occupancy / count($events)]);
+        return response()->json([
+            'averageOccupancy' => count($events) > 0 ? ($occupancy / count($events)) : 0
+        ]);
     }
 
     public function getOccupancyByEvent() {
