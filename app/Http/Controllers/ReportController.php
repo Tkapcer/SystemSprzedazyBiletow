@@ -141,7 +141,7 @@ class ReportController extends Controller
         $from = $request->query('from');
         $to = $request->query('to');
 
-        return response()->json(['totalRevenue' => auth('organizer')->user()->activeReservations($event_id, $from, $to)]);
+        return response()->json(['activeReservations' => auth('organizer')->user()->activeReservations($event_id, $from, $to)]);
     }
 
     public function getActiveReservationsByEvent() {

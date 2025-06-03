@@ -37,28 +37,28 @@
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="revenue" onclick="toggleInsightCard('revenue')">
                         <div class="text-sm text-gray-600 mb-1">Łączny dochód</div>
-                        <div class="text-2xl font-bold"></div>
+                        <div id="revenueTotal" class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Occupancy rate card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="occupancy" onclick="toggleInsightCard('occupancy')">
                         <div class="text-sm text-gray-600 mb-1">Obłożenie</div>
-                        <div class="text-2xl font-bold"></div>
+                        <div id="occupancyPrecent" class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Tickets sold card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="tickets" onclick="toggleInsightCard('tickets')">
                         <div class="text-sm text-gray-600 mb-1">Sprzedanych biletów</div>
-                        <div class="text-2xl font-bold"></div>
+                        <div id="ticketsCount" class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Active reservations card -->
                     <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 cursor-pointer insight-card"
                          data-card-id="reservations" onclick="toggleInsightCard('reservations')">
                         <div class="text-sm text-gray-600 mb-1">Aktywnych rezerwacji</div>
-                        <div class="text-2xl font-bold"></div>
+                        <div id="reservationsCount" class="text-2xl font-bold"></div>
                     </div>
 
                     <!-- Events card -->
@@ -506,6 +506,40 @@
                 }
             });
 
+        // Fetch total number of sold tickets from the ReportController
+        fetch('/report/sold-tickets')
+            .then(res => res.json())
+            .then(data => {
+                const ticketsCountElement = document.getElementById('ticketsCount');
+                if (ticketsCountElement) {
+                ticketsCountElement.textContent = data.soldTickets || '0';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching total sold tickets:', error);
+                const ticketsCountElement = document.getElementById('ticketsCount');
+                if (ticketsCountElement) {
+                ticketsCountElement.textContent = 'Error';
+                }
+            });
+        
+        // Fetch total number of active reservations from the ReportController
+        fetch('/report/active-reservations')
+            .then(res => res.json())
+            .then(data => {
+                const reservationsCountElement = document.getElementById('reservationsCount');
+                if (reservationsCountElement) {
+                    reservationsCountElement.textContent = data.activeReservations || '0';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching total active reservations:', error);
+                const reservationsCountElement = document.getElementById('reservationsCount');
+                if (reservationsCountElement) {
+                    reservationsCountElement.textContent = 'Error';
+                }
+            });
+
         // Fetch event summary report
         fetch('/organizer/eventsSummaryReport')
             .then(res => {
@@ -590,6 +624,63 @@
                 }
             })
             .catch(error => console.error('Błąd raportu kategorii:', error));
+
+        // Fetch sold tickets by event
+        fetch('/report/sold-tickets-by-event')
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
+            .then(data => {
+                const tableData = Object.entries(data.soldTicketsByEvent).map(([name, count]) => ({
+                    name,
+                    soldTickets: count
+                }));
+                initializeTable('ticketsTableBody', tableData);
+
+                const ticketsChart = document.getElementById('ticketsChart');
+                if (ticketsChart) {
+                    initializeChart(ticketsChart.getContext('2d'), {
+                        labels: tableData.map(item => item.name),
+                        datasets: [{
+                        label: 'Sprzedane bilety',
+                        data: tableData.map(item => item.soldTickets),
+                        borderWidth: 1
+                        }]
+                    });
+                }
+            })
+            .catch(error => console.error('Błąd pobierania sprzedanych biletów:', error));
+
+        // Fetch active reservations by event
+        fetch('/report/active-reservations-by-event')
+            .then(res => res.json())
+            .then(data => {
+                const reservationsByEvent = data.activeReservationsByEvent || {};
+                // Initialize reservations table
+                const tableData = Object.entries(reservationsByEvent).map(([eventName, count]) => ({
+                name: eventName,
+                activeReservations: count
+                }));
+                initializeTable('reservationsTableBody', tableData);
+
+                // Initialize reservations chart
+                const reservationsChart = document.getElementById('reservationsChart');
+                if (reservationsChart) {
+                initializeChart(reservationsChart.getContext('2d'), {
+                    labels: tableData.map(item => item.name),
+                    datasets: [{
+                    label: 'Aktywne rezerwacje',
+                    data: tableData.map(item => item.activeReservations),
+                    borderWidth: 1
+                    }]
+                });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching active reservations by event:', error);
+            });
+
     });
 </script>
 
