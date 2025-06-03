@@ -46,6 +46,9 @@ class HomeController extends Controller
         ]);
 
         $amount = $request->input('amount');
+        if ( $amount < 2) {
+            return redirect()->back()->withErrors(['amount' => 'Kwota doładowania to minimum 2 PLN.']);
+        }
     /*
         $user->balance += $amout;
         $user->save();

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Sector;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class SectorFactory extends Factory
 {
+
+    protected $model = Sector::class;
     /**
      * Define the model's default state.
      *
@@ -18,6 +21,10 @@ class SectorFactory extends Factory
     {
         return [
             //
+            'name' => 'Balkon',
+            'rows' => '14',
+            'columns' => '4',
+            //'venue_id' => '1',
         ];
     }
 }
