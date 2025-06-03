@@ -50,6 +50,6 @@ class Event extends Model
             $occupiedSeats += $seats->where('available', false)->count();
         }
 
-        return $occupiedSeats / $totalSeats;
+        return $totalSeats > 0 ? round(($occupiedSeats / $totalSeats) * 100, 2) : 0;
     }
 }
