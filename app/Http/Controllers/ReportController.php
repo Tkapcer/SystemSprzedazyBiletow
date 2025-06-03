@@ -85,6 +85,12 @@ class ReportController extends Controller
         return response()->json(['totalCategories' => $totalCategories]);
     }
 
+     public function getCategoryDetails()
+    {
+        $categories = Category::withCount('events')->get();
+        return response()->json(['categories' => $categories]);
+    }
+
     public function getTotalRevenue(Request $request)
     {
         $event_id = $request->query('event_id');

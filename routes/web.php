@@ -114,6 +114,7 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::get('/organizer/eventsSummaryReport', [ReportController::class, 'eventsSummaryReport'])->name('eventsSummaryReport');
         Route::get('/report/total-venues', [App\Http\Controllers\ReportController::class, 'getTotalVenues']);
         Route::get('/report/venue-details', [App\Http\Controllers\ReportController::class, 'getVenueDetails']);
+        Route::get('/report/category-details', [App\Http\Controllers\ReportController::class, 'getCategoryDetails']);
 
 //        Zwraca Łączny przychód organizatora
         Route::get('/report/total-revenue', [App\Http\Controllers\ReportController::class, 'getTotalRevenue']);

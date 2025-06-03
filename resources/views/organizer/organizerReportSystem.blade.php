@@ -419,27 +419,38 @@
         }
 
         // Helper function to initialize charts
-        function initializeChart(ctx, data) {
-            if (ctx) {
-                return new Chart(ctx, {
-                    type: 'bar',
-                    data: data,
-                    options: {
-                        indexAxis: 'y',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: {
-                                beginAtZero: true,
-                                ticks: {
-                                    precision: 0
-                                }
+        function initializeChart(ctx, itemsOrChartData, labelName = 'Liczba wydarzeń') {
+            if (!ctx) return null;
+
+            const isPrebuilt = itemsOrChartData.labels && itemsOrChartData.datasets;
+            const chartData = isPrebuilt
+                ? itemsOrChartData
+                : {
+                    labels: itemsOrChartData.map(item => item.name),
+                    datasets: [{
+                        label: labelName,
+                        data: itemsOrChartData.map(item => item.events_count),
+                        borderWidth: 1
+                    }]
+                };
+
+            return new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
                             }
                         }
                     }
-                });
-            }
-            return null;
+                }
+            });
         }
 
         // Fetch total number of events from the ReportController
@@ -478,6 +489,23 @@
                 }
             });
 
+        // Fetch total number of categories from the ReportController
+        fetch('/report/total-categories')
+            .then(res => res.json())
+            .then(data => {
+                const categoriesCountElement = document.getElementById('categoriesCount');
+                if (categoriesCountElement) {
+                    categoriesCountElement.textContent = data.totalCategories || '0';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching total categories:', error);
+                const categoriesCountElement = document.getElementById('categoriesCount');
+                if (categoriesCountElement) {
+                    categoriesCountElement.textContent = 'Error';
+                }
+            });
+
         // Fetch event summary report
         fetch('/organizer/eventsSummaryReport')
             .then(res => {
@@ -486,83 +514,82 @@
             })
             .then(data => {
                 // Initialize the events table
-                const tableData = data.tableData;
-                initializeTable('eventsTableBody', tableData);
+                initializeTable('eventsTableBody', data.tableData);
 
                 // Initialize the events chart
-                const chartData = data.chartData;
                 const eventsChart = document.getElementById('eventsChart');
                 if (eventsChart) {
-                    const chartDataForEvents = {
+                    initializeChart(eventsChart.getContext('2d'), {
                         labels: ['Nadchodzące', 'Zakończone', 'Anulowane'],
                         datasets: [{
                             label: 'Liczba wydarzeń',
                             data: [
-                                chartData['Nadchodzące'],
-                                chartData['Zakończone'],
-                                chartData['Anulowane']
-                            ]
+                                data.chartData['Nadchodzące'],
+                                data.chartData['Zakończone'],
+                                data.chartData['Anulowane']
+                            ],
+                            borderWidth: 1
                         }]
-                    };
-                    initializeChart(eventsChart.getContext('2d'), chartDataForEvents);
+                    });
                 }
             })
             .catch(error => console.error('Błąd raportu wydarzeń:', error));
 
         // Fetch venue details
         fetch('/report/venue-details')
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
             .then(data => {
                 // Initialize the venues table
-                const venuesTableBody = document.getElementById('venuesTableBody');
-                if (venuesTableBody) {
-                    venuesTableBody.innerHTML = '';  // Clear any existing rows
-                    data.venues.forEach(venue => {
-                        const row = document.createElement('tr');
-                        const venueNameCell = document.createElement('td');
-                        venueNameCell.classList.add('px-6', 'py-3', 'text-left');
-                        venueNameCell.textContent = venue.name;  // Assuming 'name' field exists
-
-                        const eventsCountCell = document.createElement('td');
-                        eventsCountCell.classList.add('px-6', 'py-3', 'text-left');
-                        eventsCountCell.textContent = venue.events_count;  // Assuming 'events_count' field exists
-
-                        row.appendChild(venueNameCell);
-                        row.appendChild(eventsCountCell);
-                        venuesTableBody.appendChild(row);
-                    });
-                }
+                initializeTable('venuesTableBody', data.venues.map(venue => ({
+                    name: venue.name,
+                    events_count: venue.events_count
+                })));
 
                 // Initialize the venues chart
-                const venuesChartCtx = document.getElementById('venuesChart');
-                if (venuesChartCtx) {
-                    const venuesChart = new Chart(venuesChartCtx, {
-                        type: 'bar',
-                        data: {
-                            labels: data.venues.map(venue => venue.name),
-                            datasets: [{
-                                label: 'Liczba wydarzeń',
-                                data: data.venues.map(venue => venue.events_count),
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
+                const venuesChart = document.getElementById('venuesChart');
+                if (venuesChart) {
+                    initializeChart(venuesChart.getContext('2d'), {
+                        labels: data.venues.map(venue => venue.name),
+                        datasets: [{
+                            label: 'Liczba wydarzeń',
+                            data: data.venues.map(venue => venue.events_count),
+                            borderWidth: 1
+                        }]
                     });
                 }
             })
-            .catch(error => {
-                console.error('Error fetching venue details:', error);
-            });
+            .catch(error => console.error('Błąd raportu sal:', error));
+
+        // Fetch category details
+        fetch('/report/category-details')
+            .then(res => {
+                if (!res.ok) throw new Error('Błąd pobierania danych');
+                return res.json();
+            })
+            .then(data => {
+                // Initialize the categories table
+                initializeTable('categoriesTableBody', data.categories.map(category => ({
+                    name: category.name,
+                    events_count: category.events_count
+                })));
+
+                // Initialize the categories chart
+                const categoriesChart = document.getElementById('categoriesChart');
+                if (categoriesChart) {
+                    initializeChart(categoriesChart.getContext('2d'), {
+                        labels: data.categories.map(category => category.name),
+                        datasets: [{
+                            label: 'Liczba wydarzeń',
+                            data: data.categories.map(category => category.events_count),
+                            borderWidth: 1
+                        }]
+                    });
+                }
+            })
+            .catch(error => console.error('Błąd raportu kategorii:', error));
     });
 </script>
 
