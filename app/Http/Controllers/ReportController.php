@@ -87,26 +87,29 @@ class ReportController extends Controller
 
     public function getTotalRevenue(Request $request)
     {
+        $event_id = $request->query('event_id');
         $from = $request->query('from');
         $to = $request->query('to');
 
-        return response()->json(['totalRevenue' => auth('organizer')->user()->revenue($from, $to)]);
+        return response()->json(['totalRevenue' => auth('organizer')->user()->revenue($event_id, $from, $to)]);
     }
 
     public function getSoldTickets(Request $request)
     {
+        $event_id = $request->query('event_id');
         $from = $request->query('from');
         $to = $request->query('to');
 
-        return response()->json(['soldTickets' => auth('organizer')->user()->soldTickers($from, $to)]);
+        return response()->json(['soldTickets' => auth('organizer')->user()->soldTickers($event_id, $from, $to)]);
     }
 
     public function getActiveReservations(Request $request)
     {
+        $event_id = $request->query('event_id');
         $from = $request->query('from');
         $to = $request->query('to');
 
-        return response()->json(['totalRevenue' => auth('organizer')->user()->activeReservations($from, $to)]);
+        return response()->json(['totalRevenue' => auth('organizer')->user()->activeReservations($event_id, $from, $to)]);
     }
 
 }

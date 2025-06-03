@@ -17,13 +17,18 @@ class Organizer extends Authenticatable
         return $this->hasMany(Event::class);
     }
 
-    public function revenue($fromDate = null, $toDate = null) {
+    public function revenue($event_id = null, $fromDate = null, $toDate = null) {
         $revenue = 0;
 
-        $eventsQuery = $this->events()
-            ->with(['sectors.tickets' => function ($query) {
-                $query->where('status', 'purchased');
-            }]);
+        $eventsQuery = $this->events();
+
+        if ($event_id) {
+            $eventsQuery->where('id', $event_id);
+        }
+
+        $eventsQuery->with(['sectors.tickets' => function ($query) {
+            $query->where('status', 'purchased');
+        }]);
 
         if ($fromDate) {
             $eventsQuery->where('updated_at', '>=', $fromDate);
@@ -46,12 +51,17 @@ class Organizer extends Authenticatable
         return $revenue;
     }
 
-    public function soldTickers($fromDate = null, $toDate = null)
+    public function soldTickers($event_id = null, $fromDate = null, $toDate = null)
     {
-        $eventsQuery = $this->events()
-            ->with(['sectors.tickets' => function ($query) {
-                $query->where('status', 'purchased');
-            }]);
+        $eventsQuery = $this->events();
+
+        if ($event_id) {
+            $eventsQuery->where('id', $event_id);
+        }
+
+        $eventsQuery->with(['sectors.tickets' => function ($query) {
+            $query->where('status', 'purchased');
+        }]);
 
         if ($fromDate) {
             $eventsQuery->where('updated_at', '>=', $fromDate);
@@ -74,12 +84,17 @@ class Organizer extends Authenticatable
         return $soldTickets;
     }
 
-    public function activeReservations($fromDate = null, $toDate = null)
+    public function activeReservations($event_id = null, $fromDate = null, $toDate = null)
     {
-        $eventsQuery = $this->events()
-            ->with(['sectors.tickets' => function ($query) {
-                $query->where('status', 'reservation');
-            }]);
+        $eventsQuery = $this->events();
+
+        if ($event_id) {
+            $eventsQuery->where('id', $event_id);
+        }
+
+        $eventsQuery->with(['sectors.tickets' => function ($query) {
+            $query->where('status', 'reservation');
+        }]);
 
         if ($fromDate) {
             $eventsQuery->where('updated_at', '>=', $fromDate);
