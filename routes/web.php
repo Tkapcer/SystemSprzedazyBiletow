@@ -122,7 +122,7 @@ Route::middleware(ClearTransactionData::class)->group(function () {
         Route::get('/report/revenue-by-event', [App\Http\Controllers\ReportController::class, 'getRevenueByEvent']);
 //        Zwraca ilość sprzedanych biletów przez organizatora
         Route::get('/report/sold-tickets', [App\Http\Controllers\ReportController::class, 'getSoldTickets']);
-//        Zwraca kolekcję event_name => liczba sprzedanych biletów
+//        Zwraca kolekcję event_name => liczba sprzedanych biletów (uwzględnia datę between i minimalny przychód)
         Route::get('/report/sold-tickets-by-event', [App\Http\Controllers\ReportController::class, 'getSoldTicketsByEvent']);
 //        Zwraca ilość aktywnych wydarzeń na wydarzenia organizatora
         Route::get('/report/active-reservations', [App\Http\Controllers\ReportController::class, 'getActiveReservations']);

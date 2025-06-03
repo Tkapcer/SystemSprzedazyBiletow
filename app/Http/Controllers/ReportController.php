@@ -106,14 +106,20 @@ class ReportController extends Controller
         return response()->json(['totalRevenue' => auth('organizer')->user()->revenue($event_id, $from, $to)]);
     }
 
-    public function getRevenueByEvent() {
+    public function getRevenueByEvent(Request $request) {
+        $from = $request->query('from');
+        $to = $request->query('to');
+        $minRevenue = $request->query('min_revenue');
+
         $user = auth('organizer')->user();
         $events = Event::where('organizer_id', $user->id)->get();
 
         $revenueByEvent = [];
 
         foreach ($events as $event) {
-            $revenueByEvent[$event->name] = $user->revenue($event->id);
+            if ($minRevenue <= $user->revenue($event->id, $from, $to)) {
+                $revenueByEvent[$event->name] = $user->revenue($event->id, $from, $to);
+            }
         }
 
         return response()->json(['revenueByEvent' => $revenueByEvent]);
