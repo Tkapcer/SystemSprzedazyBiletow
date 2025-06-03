@@ -94,6 +94,19 @@ class ReportController extends Controller
         return response()->json(['totalRevenue' => auth('organizer')->user()->revenue($event_id, $from, $to)]);
     }
 
+    public function getRevenueByEvent() {
+        $user = auth('organizer')->user();
+        $events = Event::where('organizer_id', $user->id)->get();
+
+        $revenueByEvent = [];
+
+        foreach ($events as $event) {
+            $revenueByEvent[$event->name] = $user->revenue($event->id);
+        }
+
+        return response()->json(['revenueByEvent' => $revenueByEvent]);
+    }
+
     public function getSoldTickets(Request $request)
     {
         $event_id = $request->query('event_id');
@@ -103,6 +116,19 @@ class ReportController extends Controller
         return response()->json(['soldTickets' => auth('organizer')->user()->soldTickers($event_id, $from, $to)]);
     }
 
+    public function getSoldTicketsByEvent() {
+        $user = auth('organizer')->user();
+        $events = Event::where('organizer_id', $user->id)->get();
+
+        $soldTicketsByEvent = [];
+
+        foreach ($events as $event) {
+            $soldTicketsByEvent[$event->name] = $user->soldTickers($event->id);
+        }
+
+        return response()->json(['soldTicketsByEvent' => $soldTicketsByEvent]);
+    }
+
     public function getActiveReservations(Request $request)
     {
         $event_id = $request->query('event_id');
@@ -110,6 +136,19 @@ class ReportController extends Controller
         $to = $request->query('to');
 
         return response()->json(['totalRevenue' => auth('organizer')->user()->activeReservations($event_id, $from, $to)]);
+    }
+
+    public function getActiveReservationsByEvent() {
+        $user = auth('organizer')->user();
+        $events = Event::where('organizer_id', $user->id)->get();
+
+        $activeReservationsByEvent = [];
+
+        foreach ($events as $event) {
+            $activeReservationsByEvent[$event->name] = $user->activeReservations($event->id);
+        }
+
+        return response()->json(['activeReservationsByEvent' => $activeReservationsByEvent]);
     }
 
 }

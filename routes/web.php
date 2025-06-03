@@ -117,10 +117,16 @@ Route::middleware(ClearTransactionData::class)->group(function () {
 
 //        Zwraca Łączny przychód organizatora
         Route::get('/report/total-revenue', [App\Http\Controllers\ReportController::class, 'getTotalRevenue']);
+//        Zwraca kolekcję event_name => przychód
+        Route::get('/report/revenue-by-event', [App\Http\Controllers\ReportController::class, 'getRevenueByEvent']);
 //        Zwraca ilość sprzedanych biletów przez organizatora
         Route::get('/report/sold-tickets', [App\Http\Controllers\ReportController::class, 'getSoldTickets']);
+//        Zwraca kolekcję event_name => liczba sprzedanych biletów
+        Route::get('/report/sold-tickets-by-event', [App\Http\Controllers\ReportController::class, 'getSoldTicketsByEvent']);
 //        Zwraca ilość aktywnych wydarzeń na wydarzenia organizatora
         Route::get('/report/active-reservations', [App\Http\Controllers\ReportController::class, 'getActiveReservations']);
+//        Zwraca kolekcję event_name => liczba aktywnych rezerwacji
+        Route::get('/report/active-reservations-by-event', [App\Http\Controllers\ReportController::class, 'getActiveReservationsByEvent']);
 
         Route::get('/report/total-categories', [App\Http\Controllers\ReportController::class, 'getTotalCategories']);
 
