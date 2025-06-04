@@ -27,17 +27,19 @@ class Organizer extends Authenticatable
         }
 
         $events = $eventsQuery->with('sectors')->get();
-//
+
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
                 $price = $sector->getPriceForSeat($event->id);
-                $ticketQuery = $sector->tickets->where('status', 'purchased')->where('event_id', $event->id);
+                $ticketQuery = Ticket::where('sector_id', $sector->id)
+                    ->where('event_id', $event->id)
+                    ->where('status', 'purchased');
 
                 if ($fromDate) {
                     $ticketQuery->where('updated_at', '>=', $fromDate);
                 }
                 if ($toDate) {
-                    $ticketQuery->where('updated_at', '<=', $toDate);
+                     $ticketQuery->where('updated_at', '<=', $toDate);
                 }
 
                 $ticketCount = $ticketQuery->count();
@@ -62,7 +64,9 @@ class Organizer extends Authenticatable
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
-                $ticketQuery = $sector->tickets->where('status', 'purchased')->where('event_id', $event->id);
+                $ticketQuery = Ticket::where('sector_id', $sector->id)
+                    ->where('event_id', $event->id)
+                    ->where('status', 'purchased');
 
                 if ($fromDate) {
                     $ticketQuery->where('updated_at', '>=', $fromDate);
@@ -92,7 +96,9 @@ class Organizer extends Authenticatable
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
-                $ticketQuery = $sector->tickets->where('status', 'reserved')->where('event_id', $event->id);
+                $ticketQuery = Ticket::where('sector_id', $sector->id)
+                    ->where('event_id', $event->id)
+                    ->where('status', 'reserved');
 
                 if ($fromDate) {
                     $ticketQuery->where('updated_at', '>=', $fromDate);
