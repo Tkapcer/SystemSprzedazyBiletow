@@ -27,7 +27,7 @@ class Organizer extends Authenticatable
         }
 
         $events = $eventsQuery->with('sectors')->get();
-
+//
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
                 $price = $sector->getPriceForSeat($event->id);
