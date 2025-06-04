@@ -229,7 +229,7 @@ class ReportController extends Controller
         if ($endDate) {
             $events->whereDate('event_date', '<=', $endDate);
         }*/
-//        komentarz bo cos mi commit nie działa
+
         $resultData = [];
 
         foreach ($events->get() as $event) {
