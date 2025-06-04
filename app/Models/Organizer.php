@@ -39,7 +39,7 @@ class Organizer extends Authenticatable
         }*/
 
         $events = $eventsQuery->get();
-
+//        komentarz bo cos mi commit nie działa
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
                 $price = $sector->getPriceForSeat($event->id);
