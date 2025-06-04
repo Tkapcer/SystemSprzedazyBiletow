@@ -197,4 +197,111 @@ class ReportController extends Controller
         return response()->json($occupancy);
     }
 
+    // For chart with detailed filtered data
+
+    public function getFilteredData(Request $request)
+    {
+        $user = auth('organizer')->user();
+
+        $dataType = $request->input('dataType', 'revenue');
+        $eventId = $request->input('eventId');
+        $categoryId = $request->input('categoryId');
+        $venueId = $request->input('venueId');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+        $minRevenue = $request->input('minRevenue');
+
+        $events = Event::query()
+            ->where('organizer_id', $user->id);
+
+        if ($eventId) {
+            $events->where('id', $eventId);
+        }
+        if ($categoryId) {
+            $events->where('category_id', $categoryId);
+        }
+        if ($venueId) {
+            $events->where('venue_id', $venueId);
+        }
+        if ($startDate) {
+            $events->whereDate('event_date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $events->whereDate('event_date', '<=', $endDate);
+        }
+
+        $resultData = [];
+
+        foreach ($events->get() as $event) {
+            $label = $event->name;
+
+            switch ($dataType) {
+                case 'revenue':
+                    $value = $user->revenue($event->id, $startDate, $endDate);
+                    $labelText = 'Dochód (zł)';
+                    $formatter = 'currency';
+                    break;
+
+                case 'tickets':
+                    $value = $user->soldTickers($event->id, $startDate, $endDate);
+                    $labelText = 'Sprzedane bilety';
+                    $formatter = null;
+                    break;
+
+                case 'reservations':
+                    $value = $user->activeReservations($event->id, $startDate, $endDate);
+                    $labelText = 'Rezerwacje';
+                    $formatter = null;
+                    break;
+
+                case 'occupancy':
+                    $value = $event->occupancy();
+                    $labelText = 'Obłożenie (%)';
+                    $formatter = 'percent';
+                    break;
+
+                default:
+                    $value = 0;
+                    $labelText = 'Dane';
+                    $formatter = null;
+            }
+
+            if ($dataType === 'revenue' && $minRevenue !== null && $value < $minRevenue) {
+                continue;
+            }
+
+            $resultData[] = [
+                'label' => $label,
+                'value' => $value
+            ];
+        }
+
+        return response()->json([
+            'label' => $labelText,
+            'formatter' => $formatter,
+            'data' => $resultData
+        ]);
+    }
+
+    public function getEventsDropdown()
+    {
+        $events = Event::where('organizer_id', auth('organizer')->id())
+                    ->select('id', 'name')
+                    ->orderBy('name')
+                    ->get();
+        return response()->json($events);
+    }
+
+    public function getCategoriesDropdown()
+    {
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+        return response()->json($categories);
+    }
+
+    public function getVenuesDropdown()
+    {
+        $venues = Venue::select('id', 'name')->orderBy('name')->get();
+        return response()->json($venues);
+    }
+
 }
