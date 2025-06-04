@@ -30,20 +30,29 @@ class Organizer extends Authenticatable
             $query->where('status', 'purchased');
         }]);
 
-        if ($fromDate) {
+       /* if ($fromDate) {
             $eventsQuery->where('updated_at', '>=', $fromDate);
         }
 
         if ($toDate) {
             $eventsQuery->where('updated_at', '<=', $toDate);
-        }
+        }*/
 
         $events = $eventsQuery->get();
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
                 $price = $sector->getPriceForSeat($event->id);
-                $ticketCount = $sector->tickets->count();
+                $ticketQuery = $sector->tickets;
+
+                if ($fromDate) {
+                    $ticketQuery->where('updated_at', '>=', $fromDate);
+                }
+                if ($toDate) {
+                    $ticketQuery->where('updated_at', '<=', $toDate);
+                }
+
+                $ticketCount = $ticketQuery->count();
                 $revenue += $ticketCount * $price;
             }
         }
@@ -63,13 +72,13 @@ class Organizer extends Authenticatable
             $query->where('status', 'purchased');
         }]);
 
-        if ($fromDate) {
+       /* if ($fromDate) {
             $eventsQuery->where('updated_at', '>=', $fromDate);
         }
 
         if ($toDate) {
             $eventsQuery->where('updated_at', '<=', $toDate);
-        }
+        }*/
 
         $events = $eventsQuery->get();
 
@@ -77,7 +86,16 @@ class Organizer extends Authenticatable
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
-                $soldTickets += $sector->tickets->count();
+                $ticketQuery = $sector->tickets;
+
+                if ($fromDate) {
+                    $ticketQuery->where('updated_at', '>=', $fromDate);
+                }
+                if ($toDate) {
+                    $ticketQuery->where('updated_at', '<=', $toDate);
+                }
+
+                $soldTickets += $ticketQuery->count();
             }
         }
 
@@ -110,7 +128,16 @@ class Organizer extends Authenticatable
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
-                $activeReservations += $sector->tickets->count();
+                $ticketQuery = $sector->tickets;
+
+                if ($fromDate) {
+                    $ticketQuery->where('updated_at', '>=', $fromDate);
+                }
+                if ($toDate) {
+                    $ticketQuery->where('updated_at', '<=', $toDate);
+                }
+
+                $activeReservations += $ticketQuery->count();
             }
         }
 

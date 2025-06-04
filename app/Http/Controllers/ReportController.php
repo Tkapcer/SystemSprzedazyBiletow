@@ -223,12 +223,12 @@ class ReportController extends Controller
         if ($venueId) {
             $events->where('venue_id', $venueId);
         }
-        if ($startDate) {
+        /*if ($startDate) {
             $events->whereDate('event_date', '>=', $startDate);
         }
         if ($endDate) {
             $events->whereDate('event_date', '<=', $endDate);
-        }
+        }*/
 
         $resultData = [];
 
