@@ -404,6 +404,12 @@
                             </select>
                         </div>
 
+                        <!-- Minimum revenue -->
+                        <div>
+                            <label for="minRevenue" class="block text-sm font-medium text-gray-700">Minimalny dochód (zł)</label>
+                            <input type="number" id="minRevenue" class="mt-1 w-full border-gray-300 rounded-md shadow-sm" min="0" placeholder="0" />
+                        </div>
+
                         <!-- Dates -->
                         <div>
                             <label for="dateRange" class="block text-sm font-medium text-gray-700">Zakres dat</label>
@@ -852,6 +858,28 @@
             });
 
         // Detailed chart with filtered data
+
+        function populateSelect(url, selectId, defaultOption = 'Wszystkie') {
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById(selectId);
+                    if (select) {
+                        select.innerHTML = `<option value="">${defaultOption}</option>`;
+                        data.forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.id;
+                            option.textContent = item.name;
+                            select.appendChild(option);
+                        });
+                    }
+                })
+                .catch(err => console.error(`Błąd pobierania danych dla ${selectId}:`, err));
+        }
+        populateSelect('/report/events-dropdown', 'eventSelect', 'Wszystkie wydarzenia');
+        populateSelect('/report/categories-dropdown', 'categorySelect', 'Wszystkie kategorie');
+        populateSelect('/report/venues-dropdown', 'venueSelect', 'Wszystkie sale');
+
         let filteredChartInstance = null;
         function destroyPreviousChart() {
             if (filteredChartInstance) {
@@ -872,6 +900,8 @@
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             const dataType = document.querySelector('input[name="dataType"]:checked')?.value;
+            const minRevenue = document.getElementById('minRevenue').value;
+
 
             if (!dataType) {
                 alert('Wybierz typ danych do wyświetlenia.');
@@ -884,7 +914,8 @@
                 venueId,
                 startDate,
                 endDate,
-                dataType
+                dataType,
+                minRevenue: minRevenue ? parseFloat(minRevenue) : null
             };
 
             fetch('/report/filtered-data', {

@@ -133,6 +133,10 @@ Route::middleware(ClearTransactionData::class)->group(function () {
 //        Zwraca kolekcję event_name => obłożenie eventu
         Route::get('/report/occupancy-by-event', [App\Http\Controllers\ReportController::class, 'getOccupancyByEvent']);
         Route::post('/report/filtered-data', [ReportController::class, 'getFilteredData']);
+        
+        Route::get('/report/events-dropdown', [ReportController::class, 'getEventsDropdown']);
+        Route::get('/report/categories-dropdown', [ReportController::class, 'getCategoriesDropdown']);
+        Route::get('/report/venues-dropdown', [ReportController::class, 'getVenuesDropdown']);
 
         Route::get('/report/total-categories', [App\Http\Controllers\ReportController::class, 'getTotalCategories']);
 

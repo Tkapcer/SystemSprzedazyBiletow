@@ -197,6 +197,8 @@ class ReportController extends Controller
         return response()->json($occupancy);
     }
 
+    // For chart with detailed filtered data
+
     public function getFilteredData(Request $request)
     {
         $user = auth('organizer')->user();
@@ -207,6 +209,7 @@ class ReportController extends Controller
         $venueId = $request->input('venueId');
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
+        $minRevenue = $request->input('minRevenue');
 
         $events = Event::query()
             ->where('organizer_id', $user->id);
@@ -263,6 +266,10 @@ class ReportController extends Controller
                     $formatter = null;
             }
 
+            if ($dataType === 'revenue' && $minRevenue !== null && $value < $minRevenue) {
+                continue;
+            }
+
             $resultData[] = [
                 'label' => $label,
                 'value' => $value
@@ -275,4 +282,26 @@ class ReportController extends Controller
             'data' => $resultData
         ]);
     }
+
+    public function getEventsDropdown()
+    {
+        $events = Event::where('organizer_id', auth('organizer')->id())
+                    ->select('id', 'name')
+                    ->orderBy('name')
+                    ->get();
+        return response()->json($events);
+    }
+
+    public function getCategoriesDropdown()
+    {
+        $categories = Category::select('id', 'name')->orderBy('name')->get();
+        return response()->json($categories);
+    }
+
+    public function getVenuesDropdown()
+    {
+        $venues = Venue::select('id', 'name')->orderBy('name')->get();
+        return response()->json($venues);
+    }
+
 }
