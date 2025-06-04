@@ -26,24 +26,12 @@ class Organizer extends Authenticatable
             $eventsQuery->where('id', $event_id);
         }
 
-        $eventsQuery->with(['sectors.tickets' => function ($query) {
-            $query->where('status', 'purchased');
-        }]);
+        $events = $eventsQuery->with('sectors')->get();
 
-       /* if ($fromDate) {
-            $eventsQuery->where('updated_at', '>=', $fromDate);
-        }
-
-        if ($toDate) {
-            $eventsQuery->where('updated_at', '<=', $toDate);
-        }*/
-
-        $events = $eventsQuery->get();
-//        komentarz bo cos mi commit nie działa
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
                 $price = $sector->getPriceForSeat($event->id);
-                $ticketQuery = $sector->tickets->where('event_id', $event->id);
+                $ticketQuery = $sector->tickets->where('status', 'purchased');
 
                 if ($fromDate) {
                     $ticketQuery->where('updated_at', '>=', $fromDate);
@@ -68,25 +56,13 @@ class Organizer extends Authenticatable
             $eventsQuery->where('id', $event_id);
         }
 
-        $eventsQuery->with(['sectors.tickets' => function ($query) {
-            $query->where('status', 'purchased');
-        }]);
-
-       /* if ($fromDate) {
-            $eventsQuery->where('updated_at', '>=', $fromDate);
-        }
-
-        if ($toDate) {
-            $eventsQuery->where('updated_at', '<=', $toDate);
-        }*/
-
-        $events = $eventsQuery->get();
+        $events = $eventsQuery->with('sectors')->get();
 
         $soldTickets = 0;
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
-                $ticketQuery = $sector->tickets->where('event_id', $event->id);
+                $ticketQuery = $sector->tickets->where('status', 'purchased');
 
                 if ($fromDate) {
                     $ticketQuery->where('updated_at', '>=', $fromDate);
@@ -110,25 +86,13 @@ class Organizer extends Authenticatable
             $eventsQuery->where('id', $event_id);
         }
 
-        $eventsQuery->with(['sectors.tickets' => function ($query) {
-            $query->where('status', 'reserved');
-        }]);
-
-        /*if ($fromDate) {
-            $eventsQuery->where('updated_at', '>=', $fromDate);
-        }
-
-        if ($toDate) {
-            $eventsQuery->where('updated_at', '<=', $toDate);
-        }*/
-
-        $events = $eventsQuery->get();
+        $events = $eventsQuery->with('sectors')->get();
 
         $activeReservations = 0;
 
         foreach ($events as $event) {
             foreach ($event->sectors as $sector) {
-                $ticketQuery = $sector->tickets->where('event_id', $event->id);
+                $ticketQuery = $sector->tickets->where('status', 'reserved');
 
                 if ($fromDate) {
                     $ticketQuery->where('updated_at', '>=', $fromDate);
