@@ -182,7 +182,7 @@ class ReportController extends Controller
         }
 
         return response()->json([
-            'averageOccupancy' => count($events) > 0 ? ($occupancy / count($events)) : 0
+            'averageOccupancy' => round(count($events) > 0 ? ($occupancy / count($events)) : 0, 2)
         ]);
     }
 
