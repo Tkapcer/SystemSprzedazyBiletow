@@ -92,7 +92,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły dochodów</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('revenue'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('revenue'); return false;">Eksport CSV</a>
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -134,7 +134,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły obłożenia</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('occupancy'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('occupancy'); return false;">Eksport CSV</a>
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -176,7 +176,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły sprzedanych biletów</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('tickets'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('tickets'); return false;">Eksport CSV</a>
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -218,7 +218,7 @@
                         <!-- Header with export option -->
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły aktywnych rezerwacji</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('reservations'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('reservations'); return false;">Eksport CSV</a>
                         </div>
 
                         <!-- Scrollable content layout -->
@@ -259,7 +259,7 @@
                     <div id="events-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły wydarzeń</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('events'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('events'); return false;">Eksport CSV</a>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
                             <!-- Event List -->
@@ -299,7 +299,7 @@
                     <div id="venues-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły sal</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('venues'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('venues'); return false;">Eksport CSV</a>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
                             <!-- Venues List -->
@@ -336,7 +336,7 @@
                     <div id="categories-details" class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4 insight-detail hidden">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="font-semibold">Szczegóły gatunków</h3>
-                            <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('categories'); return false;">Eksport CSV</a> -->
+                            <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('categories'); return false;">Eksport CSV</a>
                         </div>
                         <div class="flex flex-col md:flex-row gap-4">
                             <!-- Categories List -->
@@ -389,12 +389,12 @@
                         </div>
 
                         <!-- Category -->
-                        <div>
+                        <!-- <div>
                             <label for="categorySelect" class="block text-sm font-medium text-gray-700">Gatunek</label>
                             <select id="categorySelect" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                                 <option value="">Wszystkie</option>
                             </select>
-                        </div>
+                        </div> -->
 
                         <!-- Venues -->
                         <div>
@@ -418,17 +418,13 @@
                         </div>
                     </div>
 
-                    <!-- Wybór osi -->
+                    <!-- Chart axis -->
                     <div class="mb-6">
                         <p class="text-sm font-medium text-gray-700 mb-2">Wybierz dane do wyświetlenia:</p>
                         <div class="flex items-center gap-6">
                             <label class="inline-flex items-center">
                                 <input type="radio" name="dataType" value="revenue" class="form-radio text-blue-600" checked>
                                 <span class="ml-2">Dochód</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="dataType" value="occupancy" class="form-radio text-blue-600">
-                                <span class="ml-2">Obłożenie</span>
                             </label>
                             <label class="inline-flex items-center">
                                 <input type="radio" name="dataType" value="tickets" class="form-radio text-blue-600">
@@ -449,7 +445,10 @@
                     </div>
 
                     <!-- Chart with filtered data -->
-                    <h3 class="font-semibold mb-3">Wykres danych</h3>
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-semibold">Wykres danych</h3>
+                        <!-- <a href="#" class="text-blue-500 hover:text-blue-700 text-sm" onclick="exportCSV('filtered'); return false;">Eksport CSV</a> -->
+                    </div>
                     <div class="h-96 w-full bg-gray-100 flex items-center justify-center relative">
                         <canvas id="filteredDataChart" class="w-full h-full"></canvas>
                         <p id="chartPlaceholder" class="text-gray-500 absolute">Kliknij przycisk by zobaczyć wykres</p>
@@ -877,7 +876,7 @@
                 .catch(err => console.error(`Błąd pobierania danych dla ${selectId}:`, err));
         }
         populateSelect('/report/events-dropdown', 'eventSelect', 'Wszystkie wydarzenia');
-        populateSelect('/report/categories-dropdown', 'categorySelect', 'Wszystkie kategorie');
+        //populateSelect('/report/categories-dropdown', 'categorySelect', 'Wszystkie kategorie');
         populateSelect('/report/venues-dropdown', 'venueSelect', 'Wszystkie sale');
 
         let filteredChartInstance = null;
@@ -895,7 +894,7 @@
         }
         document.getElementById('applyFiltersBtn').addEventListener('click', function () {
             const eventId = document.getElementById('eventSelect').value;
-            const categoryId = document.getElementById('categorySelect').value;
+            //const categoryId = document.getElementById('categorySelect').value;
             const venueId = document.getElementById('venueSelect').value;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
@@ -910,7 +909,7 @@
 
             const payload = {
                 eventId,
-                categoryId,
+                //categoryId,
                 venueId,
                 startDate,
                 endDate,
@@ -970,49 +969,34 @@
     });
 </script>
 
- <!-- CSV export handler -->
+<!-- CSV export handler -->
 <script>
-    function exportCSV(tableId) {
-        const tableBody = document.getElementById(`${tableId}Body`);
-        if (!tableBody) {
-            console.error(`Table body with ID ${tableId} not found!`);
-            return;
-        }
-
-        // Get the table itself to access headers
-        const table = tableBody.closest('table');
-        const headers = table.querySelector('thead');
-        if (!headers) {
-            console.error(`Table headers for ${tableId} not found!`);
-            return;
-        }
-
-        // Get header data
-        const headerCells = headers.querySelectorAll('th');
-        const headerRow = Array.from(headerCells).map(cell => cell.textContent.trim());
-        let csvContent = headerRow.join(',') + '\n'; // Add headers to the CSV content
-
-        // Get data from table rows
-        const rows = tableBody.querySelectorAll('tr');
-        if (rows.length === 0) {
-            console.error(`No rows found in table with ID ${tableId}`);
-            return;
-        }
-
-        rows.forEach(row => {
-            const cells = row.querySelectorAll('td');
-            const rowData = Array.from(cells).map(cell => cell.textContent.trim());
-            csvContent += rowData.join(',') + '\n'; // Add each row's data
+    function exportCSV(type) {
+        let rows = [];
+        let headers = [];
+        
+        const tableBody = document.getElementById(`${type}TableBody`);
+        const tableHead = tableBody.closest("table").querySelector("thead");
+        headers = Array.from(tableHead.querySelectorAll("th")).map(th => th.innerText.trim());
+        const dataRows = tableBody.querySelectorAll("tr");
+        dataRows.forEach(row => {
+            const cells = Array.from(row.querySelectorAll("td")).map(td => td.innerText.trim());
+            rows.push(cells);
         });
 
-        // Create a Blob and trigger the download
-        const blob = new Blob([csvContent], { type: 'text/csv' });
+        if (rows.length === 0) {
+            alert("Brak danych do eksportu.");
+            return;
+        }
+
+        const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
         const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${tableId}.csv`; // Name the file based on the table ID
-        link.click();
-        URL.revokeObjectURL(url); // Clean up after download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${type}_data.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 </script>
 
