@@ -74,14 +74,16 @@ class ReportController extends Controller
 
     public function getVenueDetails()
     {
-        $venues = Venue::with('events')->get();
+        $venues = Venue::withCount('events')->get();
 
-        $venueDetails = [];
-
-        foreach ($venues as $venue) {
-            $venueDetails[$venue->name] = $venue->events->count();
-        }
-        return response()->json($venueDetails);
+        return response()->json([
+            'venues' => $venues->map(function ($venue) {
+                return [
+                    'name' => $venue->name,
+                    'events_count' => $venue->events_count
+                ];
+            })
+        ]);
     }
 
     //Categories
