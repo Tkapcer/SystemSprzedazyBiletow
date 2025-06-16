@@ -35,6 +35,6 @@ class Venue extends Model
     }
 
     public function hasActiveEvents() {
-        return $this->event()->whereNotIn('status', ['cancelled', 'expired'])->exists();
+        return $this->events()->whereNotIn('status', ['cancelled', 'expired'])->exists();
     }
 }
