@@ -50,7 +50,7 @@ class Organizer extends Authenticatable
         return $revenue;
     }
 
-    public function soldTickers($event_id = null, $fromDate = null, $toDate = null)
+    public function soldTickers($event_id = null, $fromDate = null, $toDate = null, $minRevenue = null)
     {
         $eventsQuery = $this->events();
 
@@ -63,6 +63,9 @@ class Organizer extends Authenticatable
         $soldTickets = 0;
 
         foreach ($events as $event) {
+            if ($minRevenue && $this->revenue($event->id, $fromDate, $toDate) < $minRevenue) {
+                continue;
+            }
             foreach ($event->sectors as $sector) {
                 $ticketQuery = Ticket::where('sector_id', $sector->id)
                     ->where('event_id', $event->id)
@@ -82,7 +85,7 @@ class Organizer extends Authenticatable
         return $soldTickets;
     }
 
-    public function activeReservations($event_id = null, $fromDate = null, $toDate = null)
+    public function activeReservations($event_id = null, $fromDate = null, $toDate = null, $minRevenue = null)
     {
         $eventsQuery = $this->events();
 
@@ -95,6 +98,9 @@ class Organizer extends Authenticatable
         $activeReservations = 0;
 
         foreach ($events as $event) {
+            if ($minRevenue && $this->revenue($event->id, $fromDate, $toDate) < $minRevenue) {
+                continue;
+            }
             foreach ($event->sectors as $sector) {
                 $ticketQuery = Ticket::where('sector_id', $sector->id)
                     ->where('event_id', $event->id)

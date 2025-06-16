@@ -245,13 +245,13 @@ class ReportController extends Controller
                     break;
 
                 case 'tickets':
-                    $value = $user->soldTickers($event->id, $startDate, $endDate);
+                    $value = $user->soldTickers($event->id, $startDate, $endDate, $minRevenue);
                     $labelText = 'Sprzedane bilety';
                     $formatter = null;
                     break;
 
                 case 'reservations':
-                    $value = $user->activeReservations($event->id, $startDate, $endDate);
+                    $value = $user->activeReservations($event->id, $startDate, $endDate, $minRevenue);
                     $labelText = 'Rezerwacje';
                     $formatter = null;
                     break;
