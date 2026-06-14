@@ -3,8 +3,11 @@
 ### Informacje o projekcie
 * **Typ projektu:** Projekt grupowy realizowany w ramach studiów.
 * **Przedmioty akademickie:**
-    * Projekt zainicjowany i zaprojektowany na przedmiocie **Inżynieria oprogramowania**.
-    * Projekt rozwijany i rozbudowany na przedmiocie **Tworzenie aplikacji bazodanowych**.
+    * Projekt zainicjowany na przedmiocie **Inżynieria oprogramowania** – w ramach tych zajęć powstała w pełni funkcjonalna, bazowa wersja aplikacji.
+    * Projekt rozwijany i rozbudowany na przedmiocie **Tworzenie aplikacji bazodanowych** – na tym etapie aplikacja została wzbogacona o zaawansowane opcje.
+
+## Status projektu
+> Projekt został pomyślnie ukończony, zaliczony i **nie jest już aktywnie rozwijany ani utrzymywany**. Kod odzwierciedla stan aplikacji w momencie zakończenia przedmiotów akademickich.
 
 ---
 
