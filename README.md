@@ -1,66 +1,69 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Viva La Billet - System sprzedaży i rezerwacji biletów
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### Informacje o projekcie
+* **Typ projektu:** Projekt grupowy realizowany w ramach studiów.
+* **Przedmioty akademickie:**
+    * Projekt zainicjowany i zaprojektowany na przedmiocie **Inżynieria oprogramowania**.
+    * Projekt rozwijany i rozbudowany na przedmiocie **Tworzenie aplikacji bazodanowych**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Opis projektu
+**Viva La Billet** to system zaprojektowany w celu kompleksowej obsługi sprzedaży oraz rezerwacji biletów na wydarzenia kulturalne. Platforma oferuje intuicyjną i przyjazną interakcję zarówno dla klientów poszukujących biletów, jak i dla organizatorów zarządzających wydarzeniami.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Kluczowe funkcjonalności:
+* **Zarządzanie wydarzeniami:** Organizatorzy mają możliwość tworzenia i edytowania własnych wydarzeń. Mogą określić nazwę, opis, gatunek, lokalizację, datę i godzinę, a także przypisać dostępne bilety wraz z ich szczegółami (miejsce, strefa, cena).
+* **Zakup i rezerwacja biletów:** Klienci mają możliwość wyboru miejsc, ich kupna lub rezerwacji na wybrane wydarzenia. Po zakupie lub rezerwacji system automatycznie zmniejsza liczbę dostępnych biletów.
+* **Wbudowany portfel i bramka płatnicza:** Transakcje realizowane są przy użyciu środków zgromadzonych w wirtualnym saldzie klienta. Saldo jest doładowywane za pośrednictwem zewnętrznej bramki płatniczej Stripe.
+* **Historia transakcji:** Użytkownicy mają dostęp do archiwum zakupionych i zarezerwowanych biletów, co pozwala na wygodne przeglądanie historii transakcji.
+* **System kolejkowania (Poczekalnia):** W celu zapewnienia stabilności działania systemu w sytuacjach dużego obciążenia zaimplementowano mechanizm kolejki. Klienci próbujący uzyskać dostęp do systemu w momencie przeciążenia zostają automatycznie umieszczeni w poczekalni. System stopniowo wpuszcza użytkowników w zależności od zwolnienia miejsca.
+* **System raportowania:** Narzędzie dedykowane dla organizatorów, umożliwiające analizowanie statystyk sprzedaży oraz generowanie raportów. Dane w raportach można filtrować i sortować według: wydarzeń, sal, minimalnego dochodu oraz zakresu dat.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Architektura i Technologie
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+System został zaprojektowany z wykorzystaniem technologii zapewniających płynną integrację frontendu z backendem. Aplikacja bazuje na architektonicznym wzorcu **MVC (Model-View-Controller)**, co gwarantuje strukturalne rozdzielenie logiki biznesowej od warstwy prezentacji.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+* **Backend:** Framework **Laravel**. Odpowiada za logikę biznesową, obsługę żądań HTTP, walidację danych, przekierowania oraz komunikację z bazami danych.
+* **Frontend:** Biblioteka **Vue.js** wspierana przez klasyczne technologie **HTML5** i **CSS**, co zapewnia dynamiczne oraz interaktywne komponenty interfejsu użytkownika.
+* **Bazy danych:**
+    * **SQLite:** Główna baza danych odpowiedzialna za przechowywanie danych trwałe (użytkownicy, organizatorzy, wydarzenia, bilety, lokalizacje). Relacje opierają się na powiązaniach 1:N oraz N:M.
+    * **MySQL (Silnik MEMORY):** Pamięciowa baza danych wykorzystywana dedykowanie do obsługi mechanizmu kolejki, umożliwiająca błyskawiczne operacje w pamięci operacyjnej na identyfikatorach użytkowników i ich pozycjach.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Podział na warstwy i moduły:
+1. **Warstwa dostępu do danych:** Odpowiada za logikę bazy SQLite i wykorzystuje *Eloquent ORM* do obsługi głównych encji.
+2. **Warstwa prezentacji:** Zbudowana za pomocą szablonów *Blade* w Laravelu oraz komponentów Vue, wyświetla dane i obsługuje formularze dynamiczne.
+3. **Warstwa logiki sterowania:** Kontrolery pośredniczące w wymianie danych pomiędzy modelem a widokiem.
+4. **Moduły funkcjonalne:** Moduł uwierzytelniania i autoryzacji (sesje, ochrona zasobów), moduł kolejki, moduł zarządzania wydarzeniami i miejscami oraz moduł transakcji i bilansu (Stripe API, integracja z Chart.js do rysowania wykresów).
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Analiza wymagań
 
-### Premium Partners
+### Wymagania niefunkcjonalne
+* **Wydajność:** System reaguje na akcje użytkownika nie później niż po upływie 1 sekundy.
+* **Skalowalność:** Stabilna obsługa co najmniej 10 użytkowników jednocześnie (łącznie z oczekującymi w poczekalni).
+* **Bezpieczeństwo:** Szyfrowanie haseł użytkowników oraz obsługa wyjątków i błędów za pomocą komunikatów zwrotnych.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Analiza MoSCoW
+* **MUST (Wymagane):** Przeglądanie dostępnych wydarzeń, wybór, zakup lub rezerwacja biletów, rejestracja i logowanie (klient/organizator), dynamiczna zmiana liczby biletów po transakcji.
+* **SHOULD (Powinny być):** Logowanie administratora, historia zakupów na koncie klienta, płatności przez bramkę, edycja/usuwanie wydarzeń przez organizatora, zwrot biletów i środków, weryfikacja danych przez administratora.
+* **COULD (Mogą być):** Wybór poszczególnych miejsc w sektorze, poczekalnia/kolejka przy obciążeniu, automatyczne usuwanie nieopłaconych rezerwacji, filtrowanie po gatunkach, system raportowania statystyk.
+* **WON'T (Nie tym razem):** Tryb dzienny/nocny, udogodnienia dla niepełnosprawnych (powiększenie czcionki), dokładna fizyczna mapa lokacji, graficzne przedstawienie rozmieszczenia sektorów.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Specyfikacja zewnętrzna i uruchomienie
 
-## Code of Conduct
+### Wymagania programowe
+Do poprawnego uruchomienia aplikacji niezbędne jest zainstalowanie poniższych środowisk:
+* **XAMPP** (do obsługi serwera bazodanowego MySQL)
+* **Composer** (menedżer pakietów PHP dla frameworka Laravel)
+* **Node.js**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Instrukcja
+1. Uruchom moduł **MySQL** w środowisku **XAMPP**, aby zapewnić działanie bazy danych obsługującej kolejkę.
+2. Otwórz terminal w ścieżce projektu.
+3. Wprowadź i wykonaj poniższe polecenie w celu zainicjalizowania serwera aplikacji:
+   ```composer run dev```
